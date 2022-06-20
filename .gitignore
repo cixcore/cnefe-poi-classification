@@ -6,3 +6,4 @@ lib64
 share/
 pyvenv.cfg
 .idea
+labeling/__pycache__
