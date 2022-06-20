@@ -1,0 +1,8 @@
+bin/
+commit-author-fix.sh
+include/
+lib/
+lib64
+share/
+pyvenv.cfg
+.idea
