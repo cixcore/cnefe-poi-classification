@@ -1,10 +1,12 @@
 bin/
-commit-author-fix.sh
 include/
 lib/
 lib64
 share/
 pyvenv.cfg
 .idea
+commit-author-fix.sh
 labeling/__pycache__
-sampling/data*
+sampling/data/
+sampling/data-raw/
+sampling/BR.csv

@@ -9,7 +9,7 @@ def parse_args():
     parser.add_argument('-d', '--data_path', type=str, default='./data', help='path to states csv')
     parser.add_argument('-g', '--rerun_geobr', action='store_const', const=True,
                         help='reruns geobr.read_state instead of using hardcoded abbreviations')
-    parser.add_argument('-o', '--output_file', type=str, default='sample-br-0.05.csv',
+    parser.add_argument('-o', '--output_file', type=str, default='sample-BR-0.05.csv',
                         help='csv filename with the samples from all states')
     parser.add_argument('-a', '--do_states_append', action='store_const', const=True,
                         help='append all states in a single .csv')
@@ -35,10 +35,10 @@ def import_csv(path, state):
 
 def get_sample(percentage, seed, data_frame):
     if seed != 0:
-        print(f'Sampling {percentage * 100}% of filtered rows.')
+        print(f'Sampling {percentage * 100}% of filtered rows (seed={seed}).')
         return data_frame.sample(frac=percentage, random_state=seed)
     else:
-        print(f'Sampling {percentage * 100}% of filtered rows (seed={seed}).')
+        print(f'Sampling {percentage * 100}% of filtered rows.')
         return data_frame.sample(frac=percentage)
 
 
