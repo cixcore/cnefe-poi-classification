@@ -1,6 +1,7 @@
 """
-POINTS OF INTEREST CLASSIFICATION SCHEME
+ORDNANCE SURVEY POINTS OF INTEREST CLASSIFICATION SCHEME
 December 2020
+https://www.ordnancesurvey.co.uk/documents/product-support/support/points-of-interest-classification-scheme.pdf
 """
 
 # 01 Accommodation, eating and drinking
@@ -71,3 +72,5 @@ road_and_rail = 54
 water = 56
 public_transport_stations_and_infrastructure = 57
 bus_transport = 59
+
+religious_organizations = 61
