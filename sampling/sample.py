@@ -10,7 +10,9 @@ def parse_args():
     parser.add_argument('-g', '--rerun_geobr', action='store_const', const=True,
                         help='reruns geobr.read_state instead of using hardcoded abbreviations')
     parser.add_argument('-o', '--output_file', type=str, default='sample-br-0.05.csv',
-                        help='csv filename with the sampĺes from all states')
+                        help='csv filename with the samples from all states')
+    parser.add_argument('-a', '--do_states_append', action='store_const', const=True,
+                        help='append all states in a single .csv')
     parser.add_argument('-p', '--percentage', type=float, default=0.05,
                         help='percentage of each data file to form the complete sample')
     parser.add_argument('-s', '--seed', type=int, default=0,
@@ -48,9 +50,8 @@ def filter_by_landuse_id(data_frame):
     return filtered
 
 
-def add_to_csv(sample, filepath):
+def add_to_csv(sample, filepath, used_columns):
     print(f'Appending to {filepath}.')
-    used_columns = ['uf', 'municipality', 'district', 'sub_district', 'urban_rural', 'landuse_id', 'landuse_description']
     with open(filepath, 'a') as f:
         sample.to_csv(f, mode='a', header=f.tell() == 0, columns=used_columns, index=False)
 
@@ -69,9 +70,13 @@ def main():
 
     for state in states(args.rerun_geobr):
         state_data = import_csv(args.data_path, state)
-        filtered = filter_by_landuse_id(state_data)
-        state_sample = get_sample(args.percentage, args.seed, filtered)
-        add_to_csv(state_sample, args.output_file)
+        if args.do_states_append:
+            add_to_csv(state_data, 'BR.csv', state_data.columns.tolist())
+        else:
+            filtered = filter_by_landuse_id(state_data)
+            state_sample = get_sample(args.percentage, args.seed, filtered)
+            h = ['uf', 'municipality', 'district', 'sub_district', 'urban_rural', 'landuse_id', 'landuse_description']
+            add_to_csv(state_sample, args.output_file, h)
 
 
 # python3 sample.py -s 37625 -o sample-BR-0.05-37625.csv

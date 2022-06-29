@@ -7,4 +7,4 @@ share/
 pyvenv.cfg
 .idea
 labeling/__pycache__
-sampling/data/
+sampling/data*
