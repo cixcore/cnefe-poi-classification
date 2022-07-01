@@ -17,6 +17,8 @@ def parse_args():
                         help='percentage of each data file to form the complete sample')
     parser.add_argument('-s', '--seed', type=int, default=0,
                         help='defines seed to be used in sample.random_state to reproduce results')
+    parser.add_argument('-r', '--randomize', action='store_const', const=True,
+                        help='shuffle the results after generating sample to a new csv')
     return parser.parse_args()
 
 
@@ -51,9 +53,15 @@ def filter_by_landuse_id(data_frame):
 
 
 def add_to_csv(sample, filepath, used_columns):
-    print(f'Appending to {filepath}.')
+    print(f'Appending to "./{filepath}".')
     with open(filepath, 'a') as f:
         sample.to_csv(f, mode='a', header=f.tell() == 0, columns=used_columns, index=False)
+
+
+def shuffle(filename):
+    print(f'Creating shuffle-{filename} file with shuffled rows.')
+    df = pd.read_csv(filename, encoding='latin-1')
+    df.sample(frac=1).to_csv(f'shuffle-{filename}', index=False)
 
 
 def states(rerun_geobr):
@@ -70,13 +78,16 @@ def main():
 
     for state in states(args.rerun_geobr):
         state_data = import_csv(args.data_path, state)
+        filtered = filter_by_landuse_id(state_data)
         if args.do_states_append:
-            add_to_csv(state_data, 'BR.csv', state_data.columns.tolist())
+            add_to_csv(filtered, 'BR.csv', state_data.columns.tolist())
         else:
-            filtered = filter_by_landuse_id(state_data)
             state_sample = get_sample(args.percentage, args.seed, filtered)
             h = ['uf', 'municipality', 'district', 'sub_district', 'urban_rural', 'landuse_id', 'landuse_description']
             add_to_csv(state_sample, args.output_file, h)
+
+    if args.randomize:
+        shuffle(args.output_file)
 
 
 # python3 sample.py -s 37625 -o sample-BR-0.05-37625.csv
