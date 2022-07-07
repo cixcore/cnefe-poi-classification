@@ -46,8 +46,6 @@ def vacant_keywords(x):
 
 @labeling_function()
 def education_keywords(x):
-    # 'educação' generated too many false positives (syndicates, governmental institutions, etc)
-    # and cases covered in the other conditions
     if "escola" in str(x.landuse_description).lower() \
             or "colegio" in str(x.landuse_description).lower() \
             or "ensino" in str(x.landuse_description).lower() \
@@ -61,22 +59,22 @@ def education_keywords(x):
 
 
 """ 
-'educacao' ('educação') generated too many false positives 
-(syndicates, governmental institutions, etc) and some true positives already covered in the other conditions
-------------------------------------------------------------
-landuse_id      landuse_description
-------------------------------------------------------------
-6               EDUCACAO INFANTIL COLEGIO LONDRINENSE
-6               SECRETARIA DE EDUCACAO
-4               UNIDADE EDUCACAO BASICA HAYDEE CHAVES
-6               SECRETARIA DE EDUCACAO
-4               CENTRO DE EDUCACAO PROFISSIONAL EM ARTES
-6               DEPOSITO PREF EDUCACAO
-6               SECRETARIA DE EDUCACAO
-4               UNIDADE DE EDUCACAO INFANTIL EDNA LIMA M
-6               ESCOLA DE EDUCACAO INFANTIL
-4               INTEGRADO DE EDUCACAO ESPECIAL
-------------------------------------------------------------
+'educacao' ('educação') generated too many false positives (syndicates, 
+governmental institutions, etc) and some true positives already covered in the other conditions
+--------------------------------------------------------------
+| landuse_id     | landuse_description                       |
+--------------------------------------------------------------
+| 6              | EDUCACAO INFANTIL COLEGIO LONDRINENSE     |
+| 6              | SECRETARIA DE EDUCACAO                    | 
+| 4              | UNIDADE EDUCACAO BASICA HAYDEE CHAVES     |
+| 6              | SECRETARIA DE EDUCACAO                    |
+| 4              | CENTRO DE EDUCACAO PROFISSIONAL EM ARTES  |
+| 6              | DEPOSITO PREF EDUCACAO                    |
+| 6              | SECRETARIA DE EDUCACAO                    |
+| 4              | UNIDADE DE EDUCACAO INFANTIL EDNA LIMA M  |
+| 6              | ESCOLA DE EDUCACAO INFANTIL               |
+| 4              | INTEGRADO DE EDUCACAO ESPECIAL           [...]
+--------------------------------------------------------------
 @labeling_function()
 def education_word(x):
     if "educacao" in str(x.landuse_description).lower():
