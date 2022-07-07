@@ -119,7 +119,7 @@ class SchemeCNAE:
         self._dict["NÃO DEFINIDO"] = -1
 
         # Rough translation
-        self.farming = 1
+        self.farming = 1  # farming_keywords
         self.extractive_industries = 2
         self.manufacturing_industry = 3
         self.gas_and_electricity = 4
