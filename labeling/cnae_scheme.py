@@ -125,9 +125,9 @@ class SchemeCNAE:
         self.gas_and_electricity = 4
         self.water_treatment = 5
         self.construction = 6
-        self.retail_and_motor_vehicle_repair_general = 7
-        self.motor_vehicle_repair_and_retail = 8
-        self.wholesale_trade_except_motor_vehicles = 9
+        self.retail_and_motor_vehicle_repair_general = 7  # general_retail_keyword
+        self.motor_vehicle_repair_and_retail = 8  # motor_vehicle_repair_and_retail_keywords
+        self.wholesale_trade_except_motor_vehicles = 9  # wholesale_trade_keyword
         self.retail = 10
         self.non_specialized_retail_trade = 11
         self.non_specialized_retail_foodstuffs_supermarkets = 12
@@ -146,19 +146,19 @@ class SchemeCNAE:
         self.mail_and_other_delivery_services = 25
         self.accommodation_and_eating_places = 26
         self.accommodation = 27
-        self.eating_places = 28
+        self.eating_places = 28  # eating_places_keywords
         self.information_and_communication = 29
         self.financial_activities_insurance = 30
         self.real_estate_activities = 31
         self.administrative_activities_complementary_services = 32
         self.public_administration_social_security_defence = 33
-        self.education = 34
+        self.education = 34  # education_keywords
         self.human_health_social_services = 35
         self.arts_culture_sport_recreation = 36
         self.international_organisms_other_extraterritorial_institutions = 37
         self.other_service_activities = 38
-        self.churches_temples_religious_activities = 39
-        self.vacant = 40
+        self.churches_temples_religious_activities = 39  # churches_temples_religious_activities_keywords
+        self.vacant = 40  # vacant_keywords
         self.undefined = -1
 
 
