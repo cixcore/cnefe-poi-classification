@@ -7,6 +7,10 @@ import argparse
 import re
 
 
+URBAN = 1
+RURAL = 2
+
+
 def parse_args():
     parser = argparse.ArgumentParser()
 
@@ -18,10 +22,27 @@ def parse_args():
 
 @labeling_function()
 def farming_keywords(x):
-    keywords = ['fazenda', 'plantio', 'plantacao', 'pecuaria', 'cultura de']
+    keywords = ['fazenda', 'plantio', 'plantacao', 'pecuaria', 'de corte', 'curral', 'ovelha']
     if (re.search(r'\bsitio\b', str(x.landuse_description), flags=re.I)
-            or re.search(r'\bcriacao\b', str(x.landuse_description), flags=re.I)
+            or re.search(r'\bagric[uo]la\b', str(x.landuse_description), flags=re.I)
+            or re.search(r'\bcria(s|ss|c)ao\b', str(x.landuse_description), flags=re.I)
             or re.search(r'\bcultivo\b', str(x.landuse_description), flags=re.I)
+            or re.search(r'\bcult(ura)? de\b', str(x.landuse_description), flags=re.I)
+            or re.search(r'\bcul(llt|l|it)?ivo\b', str(x.landuse_description), flags=re.I)
+            or re.search(r'\bcriame\b', str(x.landuse_description), flags=re.I)
+            or re.search(r'\bcriatorio\b', str(x.landuse_description), flags=re.I)
+            or re.search(r'\bgado', str(x.landuse_description), flags=re.I)
+            or re.search(r'\bboi[s]?\b', str(x.landuse_description), flags=re.I)
+            or re.search(r'\bvaca[s]?\b', str(x.landuse_description), flags=re.I)
+            or re.search(r'\bsuino[s]?\b', str(x.landuse_description), flags=re.I)
+            or re.search(r'\bporco[s]?\b', str(x.landuse_description), flags=re.I)
+            or re.search(r'\babelha[s]?\b', str(x.landuse_description), flags=re.I)
+            or re.search(r'\b[b]?ovin[oa][s]?\b', str(x.landuse_description), flags=re.I)
+            or re.search(r'\bpeixe[s]?\b', str(x.landuse_description), flags=re.I)
+            or re.search(r'\bbode[s]?\b', str(x.landuse_description), flags=re.I)
+            or re.search(r'\bcabra[s]?\b', str(x.landuse_description), flags=re.I)
+            or re.search(r'\bave[s]?\b', str(x.landuse_description), flags=re.I)
+            or re.search(r'\bgalinha[s]?\b', str(x.landuse_description), flags=re.I)
             or re.search(r'[a-z]+cultura\b', str(x.landuse_description), flags=re.I)
             or any(keyword in str(x.landuse_description).lower() for keyword in keywords)
             or cnefe_landuse_ids.farming_establishment == int(x.landuse_id)):
@@ -48,7 +69,7 @@ def wholesale_trade_keyword(x):
 
 @labeling_function()
 def motor_vehicle_repair_and_retail_keywords(x):
-    if any(place in str(x.landuse_description).lower() for place in ['oficina', 'mecanica']):
+    if any(place in str(x.landuse_description).lower() for place in ['oficina', 'mecanica', '0ficina']):
         return poi_labels.scheme.motor_vehicle_repair_and_retail
     else:
         return poi_labels.scheme.undefined
@@ -133,8 +154,17 @@ def churches_temples_religious_activities_keywords(x):
 @labeling_function()
 def vacant_keywords(x):
     if 'desocupad' in str(x.landuse_description).lower() \
-            or re.search(r'\b(vag|vazi)[oa]\b', str(x.landuse_description), flags=re.I):
+            or re.search(r'\b(vag|vazi)[oa]\b', str(x.landuse_description), flags=re.I) \
+            or re.search(r'\bfechad[oa]\b', str(x.landuse_description), flags=re.I):
         return poi_labels.scheme.vacant
+    else:
+        return poi_labels.scheme.undefined
+
+
+@labeling_function()
+def undefined(x):
+    if re.fullmatch(r'[0-9]*', str(x.landuse_description), flags=re.I):
+        return poi_labels.scheme.undefined
     else:
         return poi_labels.scheme.undefined
 
@@ -146,7 +176,7 @@ def main():
 
     lfs = [farming_keywords, general_retail_keyword, motor_vehicle_repair_and_retail_keywords, wholesale_trade_keyword,
            eating_places_keywords, education_keywords, churches_temples_religious_activities_keywords,
-           vacant_keywords]
+           vacant_keywords, undefined]
 
     applier = PandasLFApplier(lfs=lfs)
     L_train = applier.apply(df=df_train)
