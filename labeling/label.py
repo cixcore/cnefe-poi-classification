@@ -7,8 +7,8 @@ import argparse
 import re
 
 
-URBAN = 1
-RURAL = 2
+URBAN_LABEL = 1
+RURAL_LABEL = 2
 
 
 def parse_args():
@@ -31,6 +31,7 @@ def farming_keywords(x):
             or re.search(r'\bcul(llt|l|it)?ivo\b', str(x.landuse_description), flags=re.I)
             or re.search(r'\bcriame\b', str(x.landuse_description), flags=re.I)
             or re.search(r'\bcriatorio\b', str(x.landuse_description), flags=re.I)
+            or re.search(r'\bacude\b', str(x.landuse_description), flags=re.I)
             or re.search(r'\bgado', str(x.landuse_description), flags=re.I)
             or re.search(r'\bboi[s]?\b', str(x.landuse_description), flags=re.I)
             or re.search(r'\bvaca[s]?\b', str(x.landuse_description), flags=re.I)
@@ -46,7 +47,30 @@ def farming_keywords(x):
             or re.search(r'[a-z]+cultura\b', str(x.landuse_description), flags=re.I)
             or any(keyword in str(x.landuse_description).lower() for keyword in keywords)
             or cnefe_landuse_ids.farming_establishment == int(x.landuse_id)):
-        return poi_labels.scheme.eating_places
+        return poi_labels.scheme.farming
+    else:
+        return poi_labels.scheme.undefined
+
+
+@labeling_function()
+def manufacturing_industries_keywords(x):
+    keywords = ['abatedouro', 'frigorifico', 'abatedor', 'fabrica']
+    if (re.search(r'\babate\b', str(x.landuse_description), flags=re.I)
+            or re.search(r'\bconfec(c)?a[o0]\b', str(x.landuse_description), flags=re.I)
+            or re.search(r'\bbarca(c|ss)a\b', str(x.landuse_description), flags=re.I)
+            or any(keyword in str(x.landuse_description).lower() for keyword in keywords)):
+        return poi_labels.scheme.manufacturing_industries
+    else:
+        return poi_labels.scheme.undefined
+
+
+@labeling_function()
+def water_treatment_keywords(x):
+    keywords = ['esgoto', 'tratamento de agua', 'departamento de agua', 'estacao de tratamento', 'distribuidora de agua']
+    treatment_station_acronyms = ['dmae', 'corsan', 'agespisa', 'caesb']
+    if (any(keyword in str(x.landuse_description).lower() for keyword in keywords)
+            or any(acronym in str(x.landuse_description).lower() for acronym in treatment_station_acronyms)):
+        return poi_labels.scheme.water_treatment
     else:
         return poi_labels.scheme.undefined
 
@@ -60,6 +84,15 @@ def general_retail_keyword(x):
 
 
 @labeling_function()
+def motor_vehicle_repair_and_retail_keywords(x):
+    places = ['oficina', '0ficina', '0fissina', 'ofissina', 'mecanica']
+    if any(place in str(x.landuse_description).lower() for place in places):
+        return poi_labels.scheme.motor_vehicle_repair_and_retail
+    else:
+        return poi_labels.scheme.undefined
+
+
+@labeling_function()
 def wholesale_trade_keyword(x):
     if 'atacado' in str(x.landuse_description).lower():
         return poi_labels.scheme.wholesale_trade_except_motor_vehicles
@@ -68,9 +101,49 @@ def wholesale_trade_keyword(x):
 
 
 @labeling_function()
-def motor_vehicle_repair_and_retail_keywords(x):
-    if any(place in str(x.landuse_description).lower() for place in ['oficina', 'mecanica', '0ficina']):
-        return poi_labels.scheme.motor_vehicle_repair_and_retail
+def ground_transportation_keywords(x):
+    keywords = ['estacao de trem', 'estacao de metro', 'estacao rodoviaria', 'teleferico', 'moto taxi', 'mototaxi']
+    if (any(keyword in str(x.landuse_description).lower() for keyword in keywords)
+            or re.search(r'\btaxi\b', str(x.landuse_description), flags=re.I)):
+        return poi_labels.scheme.ground_transportation
+    else:
+        return poi_labels.scheme.undefined
+
+
+@labeling_function()
+def water_transportation_keywords(x):
+    keywords = ['catamara']
+    if (any(keyword in str(x.landuse_description).lower() for keyword in keywords)
+            or re.search(r'\bbalsa\b', str(x.landuse_description), flags=re.I)
+            or re.search(r'\bbarc[oa]\b', str(x.landuse_description), flags=re.I)):
+        return poi_labels.scheme.water_transportation
+    else:
+        return poi_labels.scheme.undefined
+
+
+@labeling_function()
+def air_transportation_keywords(x):
+    keywords = ['aeroporto']
+    if any(keyword in str(x.landuse_description).lower() for keyword in keywords):
+        return poi_labels.scheme.air_transportation
+    else:
+        return poi_labels.scheme.undefined
+
+
+@labeling_function()
+def storage_auxiliary_transport_activities_keywords(x):
+    keywords = ['estacionamento']
+    if any(keyword in str(x.landuse_description).lower() for keyword in keywords):
+        return poi_labels.scheme.storage_auxiliary_transport_activities
+    else:
+        return poi_labels.scheme.undefined
+
+
+@labeling_function()
+def mail_and_other_delivery_services_keywords(x):
+    keywords = ['correio']
+    if any(keyword in str(x.landuse_description).lower() for keyword in keywords):
+        return poi_labels.scheme.mail_and_other_delivery_services
     else:
         return poi_labels.scheme.undefined
 
@@ -153,9 +226,9 @@ def churches_temples_religious_activities_keywords(x):
 
 @labeling_function()
 def vacant_keywords(x):
-    if 'desocupad' in str(x.landuse_description).lower() \
-            or re.search(r'\b(vag|vazi)[oa]\b', str(x.landuse_description), flags=re.I) \
-            or re.search(r'\bfechad[oa]\b', str(x.landuse_description), flags=re.I):
+    if re.search(r'\b(vag|vazi)[oa](s)?\b', str(x.landuse_description), flags=re.I) \
+            or re.search(r'\bfechad[oa](s)?\b', str(x.landuse_description), flags=re.I) \
+            or re.search(r'\bdesocupad[oa](s)?\b', str(x.landuse_description), flags=re.I):
         return poi_labels.scheme.vacant
     else:
         return poi_labels.scheme.undefined
@@ -176,7 +249,7 @@ def main():
 
     lfs = [farming_keywords, general_retail_keyword, motor_vehicle_repair_and_retail_keywords, wholesale_trade_keyword,
            eating_places_keywords, education_keywords, churches_temples_religious_activities_keywords,
-           vacant_keywords, undefined]
+           vacant_keywords, undefined, vacant_keywords]
 
     applier = PandasLFApplier(lfs=lfs)
     L_train = applier.apply(df=df_train)

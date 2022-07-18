@@ -121,9 +121,9 @@ class SchemeCNAE:
         # Rough translation
         self.farming = 1  # farming_keywords
         self.extractive_industries = 2
-        self.manufacturing_industry = 3
+        self.manufacturing_industries = 3  # manufacturing_industries_keywords
         self.gas_and_electricity = 4
-        self.water_treatment = 5
+        self.water_treatment = 5  # water_treatment_keywords
         self.construction = 6
         self.retail_and_motor_vehicle_repair_general = 7  # general_retail_keyword
         self.motor_vehicle_repair_and_retail = 8  # motor_vehicle_repair_and_retail_keywords
@@ -139,11 +139,11 @@ class SchemeCNAE:
         self.retail_sport_culture_recreation_articles = 18
         self.retail_pharmaceuticals_perfumery_cosmetics_optical_orthopedic_medical_articles = 19
         self.transport_warehousing_mail = 20
-        self.ground_transportation = 21
-        self.water_transportation = 22
-        self.air_transportation = 23
-        self.storage_auxiliary_transport_activities = 24
-        self.mail_and_other_delivery_services = 25
+        self.ground_transportation = 21  # ground_transportation_keywords
+        self.water_transportation = 22  # water_transportation_keywords
+        self.air_transportation = 23  # air_transportation_keywords
+        self.storage_auxiliary_transport_activities = 24  # storage_auxiliary_transport_activities_keywords
+        self.mail_and_other_delivery_services = 25  # mail_and_other_delivery_services_keywords
         self.accommodation_and_eating_places = 26
         self.accommodation = 27
         self.eating_places = 28  # eating_places_keywords
