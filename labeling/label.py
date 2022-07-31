@@ -516,7 +516,7 @@ def main():
            public_administration_social_security_defence_keywords, education_keywords, human_health_social_services_keywords,
            arts_culture_sport_recreation_keywords, international_organisms_other_extraterritorial_institutions_keywords,
            other_service_activities_keywords, churches_temples_religious_activities_keywords,
-           vacant_keywords, undefined, vacant_keywords]
+           vacant_keywords, undefined]
 
     applier = PandasLFApplier(lfs=lfs)
     L_train = applier.apply(df=df_train)
