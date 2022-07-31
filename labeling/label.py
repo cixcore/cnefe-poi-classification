@@ -131,14 +131,6 @@ def construction_keywords(x):
 
 
 @labeling_function()
-def general_retail_keyword(x):
-    if 'loja' == str(x.landuse_description).lower():
-        return poi_labels.scheme.retail_and_motor_vehicle_repair_general
-    else:
-        return poi_labels.scheme.undefined
-
-
-@labeling_function()
 def motor_vehicle_repair_and_retail_keywords(x):
     places = ['oficina', '0ficina', '0fissina', 'ofissina', 'mecanica']
     keywords = ['martelinho de ouro', 'automotivo', 'motor', 'funilaria']
@@ -160,7 +152,9 @@ def wholesale_trade_keyword(x):
 
 @labeling_function()
 def non_specialized_retail_trade_keyword(x):
-    if match_all_items(['loja', 'departamento'], x) or 'variedade' in str(x.landuse_description).lower():
+    if (match_all_items(['loja', 'departamento'], x)
+            or 'variedade' in str(x.landuse_description).lower()
+            or 'loja' == str(x.landuse_description).lower()):
         return poi_labels.scheme.non_specialized_retail_trade
     else:
         return poi_labels.scheme.undefined
@@ -267,7 +261,7 @@ def ground_transportation_keywords(x):
 @labeling_function()
 def water_transportation_keywords(x):
     keywords = ['catamara']
-    if (match_any_item_in_list(keywords, x) or regex_match_word(balsa, x)
+    if (match_any_item_in_list(keywords, x) or regex_match_word('balsa', x)
             or re.search(r'\bbarc[oa]\b', str(x.landuse_description), flags=re.I)):
         return poi_labels.scheme.water_transportation
     else:
@@ -507,8 +501,21 @@ def main():
     df_train = pd.read_csv('shuffle-sample-BR-0.05-37625.csv', encoding='latin-1')
     print()
 
-    lfs = [farming_keywords, general_retail_keyword, motor_vehicle_repair_and_retail_keywords, wholesale_trade_keyword,
-           eating_places_keywords, education_keywords, churches_temples_religious_activities_keywords,
+    lfs = [farming_keywords, extractive_industries_keywords, manufacturing_industries_keywords,
+           gas_and_electricity_keywords, water_treatment_keywords, construction_keywords,
+           motor_vehicle_repair_and_retail_keywords, wholesale_trade_keyword, non_specialized_retail_trade_keyword,
+           non_specialized_retail_foodstuffs_supermarkets_keyword, non_specialized_retail_foodstuffs_grocery_stores_keyword,
+           retail_food_beverages_tobacco_keyword, retail_fuel_keyword, retail_building_material_keyword,
+           retail_computer_communication_household_equipment_keyword, retail_sport_culture_recreation_articles_keyword,
+           retail_pharmaceuticals_perfumery_cosmetics_optical_orthopedic_medical_articles_keyword,
+           retail_new_products_non_specified_previously_and_second_hand_keyword, ground_transportation_keywords,
+           water_transportation_keywords, air_transportation_keywords, storage_auxiliary_transport_activities_keywords,
+           mail_and_other_delivery_services_keywords, accommodation_keywords, eating_places_keywords,
+           information_and_communication_keywords, financial_activities_insurance_keywords, real_estate_activities_keywords,
+           professional_scientific_and_technic_activities_keywords, administrative_activities_complementary_services_keywords,
+           public_administration_social_security_defence_keywords, education_keywords, human_health_social_services_keywords,
+           arts_culture_sport_recreation_keywords, international_organisms_other_extraterritorial_institutions_keywords,
+           other_service_activities_keywords, churches_temples_religious_activities_keywords,
            vacant_keywords, undefined, vacant_keywords]
 
     applier = PandasLFApplier(lfs=lfs)
