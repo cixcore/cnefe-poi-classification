@@ -165,7 +165,10 @@ class SchemeCNAE:
         self.other_service_activities = 40
         self.churches_temples_religious_activities = 41  # churches_temples_religious_activities_keywords
         self.vacant = 42  # vacant_keywords
+        self.undefined_labeled = 43
         self.undefined = -1
+
+        self.name_to_label_2way = self._dict
 
 
 scheme = SchemeCNAE()

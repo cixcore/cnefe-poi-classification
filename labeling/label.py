@@ -2,6 +2,7 @@ import cnae_scheme as poi_labels
 import cnefe_landuse_id_descriptions as cnefe_landuse_ids
 import pandas as pd
 from snorkel.labeling import labeling_function, PandasLFApplier, LFAnalysis
+from snorkel.labeling.model import LabelModel, MajorityLabelVoter
 from snorkel.analysis import get_label_buckets
 import argparse
 import re
@@ -33,6 +34,18 @@ def match_any_item_in_list(keywords, x):
 
 def match_all_items(keywords, x):
     return all(keyword in str(x.landuse_description).lower() for keyword in keywords)
+
+
+def import_csv(path, filename):
+    print(f'\nReading from file "{path}/{filename}.csv"...')
+    dtype = {'ordem': int, 'uf': int, 'municipality': int, 'district': int, 'sub_district': int, 'urban_rural': int,
+             'landuse_id': int, 'landuse_description': str, 'categoria_cnae': str}
+    df = pd.read_csv(f'{path}/{filename}.csv', encoding='latin-1',
+                     usecols=['ordem', 'uf', 'municipality', 'district', 'sub_district', 'urban_rural', 'landuse_id',
+                              'landuse_description', 'categoria_cnae'], dtype=dtype)
+    df.columns = ['order', 'uf', 'municipality', 'district', 'sub_district', 'urban_rural',
+                  'landuse_id', 'landuse_description', 'cnae_category']
+    return df
 
 
 @labeling_function()
@@ -123,7 +136,7 @@ def water_treatment_keywords(x):
 
 @labeling_function()
 def construction_keywords(x):
-    keywords = ['empresa de construcao', 'incorporadora', 'contrucoes', 'incorporacao', 'empreiteira']
+    keywords = ['empresa de construcao', 'incorporadora', 'construcoes', 'incorporacao', 'empreiteira']
     if match_all_items(['construcao', 'engenharia'], x) or match_any_item_in_list(keywords, x):
         return poi_labels.scheme.construction
     else:
@@ -134,7 +147,7 @@ def construction_keywords(x):
 def motor_vehicle_repair_and_retail_keywords(x):
     places = ['oficina', '0ficina', '0fissina', 'ofissina', 'mecanica']
     keywords = ['martelinho de ouro', 'automotivo', 'motor', 'funilaria']
-    if (match_any_item_in_list(places, x) or match_any_item_in_list(keywords, x)
+    if (match_any_item_in_list(places, x) or match_any_item_in_list(keywords, x) or regex_match_word('auto', x)
             or re.search(r'\bpneu[s]?\b', str(x.landuse_description), flags=re.I)
             or re.search(r'\brodas[s]?\b', str(x.landuse_description), flags=re.I)):
         return poi_labels.scheme.motor_vehicle_repair_and_retail
@@ -172,7 +185,8 @@ def non_specialized_retail_foodstuffs_supermarkets_keyword(x):
 @labeling_function()
 def non_specialized_retail_foodstuffs_grocery_stores_keyword(x):
     keywords = ['mercearia', 'armazem']
-    if match_any_item_in_list(keywords, x) or re.search(r'\b(min[ie]\s?)?mercado', str(x.landuse_description), flags=re.I):
+    if match_any_item_in_list(keywords, x) or re.search(r'\b(min[ie]\s?)?mercado', str(x.landuse_description),
+                                                        flags=re.I):
         return poi_labels.scheme.non_specialized_retail_foodstuffs_grocery_stores
     else:
         return poi_labels.scheme.undefined
@@ -209,7 +223,7 @@ def retail_building_material_keyword(x):
 
 @labeling_function()
 def retail_computer_communication_household_equipment_keyword(x):
-    keywords = ['armarinho', 'mesa e banho', 'eletrodomesticos']
+    keywords = ['armarinho', 'mesa e banho', 'eletrodomesticos', 'moveis']
     if match_any_item_in_list(keywords, x):
         return poi_labels.scheme.retail_computer_communication_household_equipment
     else:
@@ -236,7 +250,7 @@ def retail_pharmaceuticals_perfumery_cosmetics_optical_orthopedic_medical_articl
 
 @labeling_function()
 def retail_new_products_non_specified_previously_and_second_hand_keyword(x):
-    keywords = ['roupas', 'roupas intimas', 'bijoux', 'fashion', 'presentes', 'calcados', 'bazar',
+    keywords = ['roupas', 'roupas intimas', 'bijoux', 'fashion', 'presentes', 'calcados', 'bazar', 'jeans',
                 'brecho', 'loja de relogios', 'joalheria', 'floricultura', 'antiquario', 'antiguidades']
     if (match_any_item_in_list(keywords, x)
             or re.search(r'\bro(u|p|up)a(s)?\b', str(x.landuse_description), flags=re.I)
@@ -306,7 +320,7 @@ def accommodation_keywords(x):
 
 @labeling_function()
 def eating_places_keywords(x):
-    common_foods = ['pizza', 'hamburgue', 'sushi', 'pastel', 'pasteis', 'sorvete']
+    common_foods = ['pizza', 'hamburgue', 'sushi', 'pastel', 'pasteis', 'sorvete', 'churrasc']
     common_places = ['lanche', 'lanchonete', 'boteco', 'cafeteria', 'restaurante']
     if (regex_match_word('bar', x)
             or match_any_item_in_list(common_places, x) or match_any_item_in_list(common_foods, x)):
@@ -443,7 +457,8 @@ def other_service_activities_keywords(x):
     keywords = ['cabeleireiro', 'barbearia', 'manicure', 'tatuagem', 'alfaiate',
                 'costureira', 'fotografo', 'salao de', 'hotel para ']
     if (match_any_item_in_list(keywords, x)
-            or re.search(r'\bcabe[rl]e(i)?[lr]e(i)?r[oa](s)?\b', str(x.landuse_description), flags=re.I)  # cabeleireiro, cabelerero, cabeleleiro, cabelelero
+            or re.search(r'\bcabe[rl]e(i)?[lr]e(i)?r[oa](s)?\b', str(x.landuse_description),
+                         flags=re.I)  # cabeleireiro, cabelerero, cabeleleiro, cabelelero
             or re.search(r'\bcabe[rl]e(i)?r[oa](s)?\b', str(x.landuse_description), flags=re.I)  # cabeleiro
             or re.search(r'\bbele[sz]a?\b', str(x.landuse_description), flags=re.I)
             or re.search(r'\bta(t)*oo\b', str(x.landuse_description), flags=re.I)):
@@ -468,7 +483,8 @@ def churches_temples_religious_activities_keywords(x):
                  or 'umbanda' in str(x.landuse_description).lower() or 'candomble' in str(x.landuse_description).lower()
                  or 'judaica' in str(x.landuse_description).lower() or 'batista' in str(x.landuse_description).lower()
                  or 'capela' in str(x.landuse_description).lower() or 'catedral' in str(x.landuse_description).lower()
-                 or 'sinagoga' in str(x.landuse_description).lower() or 'catequetico' in str(x.landuse_description).lower()
+                 or 'sinagoga' in str(x.landuse_description).lower() or 'catequetico' in str(
+                        x.landuse_description).lower()
                  or 'evangel' in str(x.landuse_description).lower() or has_entities)):
         return poi_labels.scheme.churches_temples_religious_activities
     else:
@@ -491,40 +507,78 @@ def vacant_keywords(x):
 @labeling_function()
 def undefined(x):
     if re.fullmatch(r'[0-9]*', str(x.landuse_description), flags=re.I):
-        return poi_labels.scheme.undefined
+        return poi_labels.scheme.undefined_labeled
     else:
         return poi_labels.scheme.undefined
 
 
+@labeling_function()
+def use_manual_label(x):
+    if not str(x.cnae_category):
+        return poi_labels.scheme.undefined
+    else:
+        for key in poi_labels.scheme.name_to_label_2way:
+            if type(key) is str:
+                if key in str(x.cnae_category):
+                    return poi_labels.scheme.name_to_label_2way[key]
+    return poi_labels.scheme.undefined
+
+
+@labeling_function()
+def use_manual_label_1(x):
+    return use_manual_label(x)
+
+
+@labeling_function()
+def use_manual_label_2(x):
+    return use_manual_label(x)
+
+
+@labeling_function()
+def use_manual_label_3(x):
+    return use_manual_label(x)
+
+
 def main():
     args = parse_args()
-    df_train = pd.read_csv('shuffle-sample-BR-0.05-37625.csv', encoding='latin-1')
+    # df_train = pd.read_csv('shuffle-sample-BR-0.05-37625.csv', encoding='latin-1')
+    df_train = import_csv('.', 'sample-br-0.05-37625-semduplic')
     print()
 
-    lfs = [farming_keywords, extractive_industries_keywords, manufacturing_industries_keywords,
-           gas_and_electricity_keywords, water_treatment_keywords, construction_keywords,
+    lfs = [use_manual_label_1, use_manual_label_2, use_manual_label_3, farming_keywords, extractive_industries_keywords,
+           manufacturing_industries_keywords, gas_and_electricity_keywords, water_treatment_keywords,
+           construction_keywords,
            motor_vehicle_repair_and_retail_keywords, wholesale_trade_keyword, non_specialized_retail_trade_keyword,
-           non_specialized_retail_foodstuffs_supermarkets_keyword, non_specialized_retail_foodstuffs_grocery_stores_keyword,
+           non_specialized_retail_foodstuffs_supermarkets_keyword,
+           non_specialized_retail_foodstuffs_grocery_stores_keyword,
            retail_food_beverages_tobacco_keyword, retail_fuel_keyword, retail_building_material_keyword,
            retail_computer_communication_household_equipment_keyword, retail_sport_culture_recreation_articles_keyword,
            retail_pharmaceuticals_perfumery_cosmetics_optical_orthopedic_medical_articles_keyword,
            retail_new_products_non_specified_previously_and_second_hand_keyword, ground_transportation_keywords,
            water_transportation_keywords, air_transportation_keywords, storage_auxiliary_transport_activities_keywords,
            mail_and_other_delivery_services_keywords, accommodation_keywords, eating_places_keywords,
-           information_and_communication_keywords, financial_activities_insurance_keywords, real_estate_activities_keywords,
-           professional_scientific_and_technic_activities_keywords, administrative_activities_complementary_services_keywords,
-           public_administration_social_security_defence_keywords, education_keywords, human_health_social_services_keywords,
+           information_and_communication_keywords, financial_activities_insurance_keywords,
+           real_estate_activities_keywords,
+           professional_scientific_and_technic_activities_keywords,
+           administrative_activities_complementary_services_keywords,
+           public_administration_social_security_defence_keywords, education_keywords,
+           human_health_social_services_keywords,
            arts_culture_sport_recreation_keywords, international_organisms_other_extraterritorial_institutions_keywords,
-           other_service_activities_keywords, churches_temples_religious_activities_keywords,
-           vacant_keywords, undefined]
+           other_service_activities_keywords, churches_temples_religious_activities_keywords, vacant_keywords,
+           undefined]
 
     applier = PandasLFApplier(lfs=lfs)
     L_train = applier.apply(df=df_train)
     # print(L_train)
+    # majority_model = MajorityLabelVoter()
+    # preds_train = majority_model.predict(L=L_train)
 
     print(LFAnalysis(L=L_train, lfs=lfs).lf_summary())
     # print(df_train.iloc[L_train[:, 2] == poi_labels.scheme.wholesale_trade_except_motor_vehicles].sample(10, random_state=args.seed))
 
+    label_model = LabelModel(cardinality=2, verbose=True)
+    label_model.fit(L_train=L_train, n_epochs=500, log_freq=100, seed=args.seed)
 
-# python3 sample.py -s 37625 -d shuffle-sample-BR-0.05-37625.csv
+
+# python3 label.py -s 37625 -d shuffle-sample-BR-0.05-37625.csv
 main()
