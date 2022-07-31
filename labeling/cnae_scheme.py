@@ -69,58 +69,58 @@ class TwoWayDict(dict):
 class SchemeCNAE:
     def __init__(self):
         self._dict = TwoWayDict()
-        self._dict["AGRICULTURA, PECUÁRIA, PRODUÇÃO FLORESTAL, PESCA E AQUICULTURA"] = 1
-        self._dict["INDÚSTRIAS EXTRATIVAS"] = 2
-        self._dict["INDÚSTRIAS DE TRANSFORMAÇÃO"] = 3
+        self._dict["AGRICULTURA, PECUÁRIA, PRODUÇÃO FLORESTAL, PESCA E AQUICULTURA".encode(encoding='latin-1')] = 1
+        self._dict["INDÚSTRIAS EXTRATIVAS".encode(encoding='latin-1')] = 2
+        self._dict["INDÚSTRIAS DE TRANSFORMAÇÃO".encode(encoding='latin-1')] = 3
 
-        self._dict["ELETRICIDADE E GÁS"] = 4
-        self._dict["ÁGUA, ESGOTO, ATIVIDADES DE GESTÃO DE RESÍDUOS E DESCONTAMINAÇÃO"] = 5
-        self._dict["CONSTRUÇÃO"] = 6
+        self._dict["ELETRICIDADE E GÁS".encode(encoding='latin-1')] = 4
+        self._dict["ÁGUA, ESGOTO, ATIVIDADES DE GESTÃO DE RESÍDUOS E DESCONTAMINAÇÃO".encode(encoding='latin-1')] = 5
+        self._dict["CONSTRUÇÃO".encode(encoding='latin-1')] = 6
 
-        self._dict["COMÉRCIO; REPARAÇÃO DE VEÍCULOS AUTOMOTORES E MOTOCICLETAS"] = 7
-        self._dict["COMÉRCIO E REPARAÇÃO DE VEÍCULOS AUTOMOTORES E MOTOCICLETAS"] = 8
-        self._dict["COMÉRCIO POR ATACADO, EXCETO VEÍCULOS AUTOMOTORES E MOTOCICLETAS"] = 9
-        self._dict["COMÉRCIO VAREJISTA"] = 10
+        self._dict["COMÉRCIO; REPARAÇÃO DE VEÍCULOS AUTOMOTORES E MOTOCICLETAS".encode(encoding='latin-1')] = 7
+        self._dict["- COMÉRCIO E REPARAÇÃO DE VEÍCULOS AUTOMOTORES E MOTOCICLETAS".encode(encoding='latin-1')] = 8
+        self._dict["- COMÉRCIO POR ATACADO, EXCETO VEÍCULOS AUTOMOTORES E MOTOCICLETAS".encode(encoding='latin-1')] = 9
+        self._dict["- COMÉRCIO VAREJISTA".encode(encoding='latin-1')] = 10
 
-        self._dict["COMÉRCIO VAREJISTA NÃO ESPECIALIZADO"] = 11
+        self._dict["- - COMÉRCIO VAREJISTA NÃO ESPECIALIZADO".encode(encoding='latin-1')] = 11
         self._dict[
-            "COMÉRCIO VAREJISTA DE MERCADORIAS EM GERAL, COM PREDOMINÂNCIA DE PRODUTOS ALIMENTÍCIOS - HIPERMERCADOS E SUPERMERCADOS"] = 12
+            "- - - COMÉRCIO VAREJISTA DE MERCADORIAS EM GERAL, COM PREDOMINÂNCIA DE PRODUTOS ALIMENTÍCIOS - HIPERMERCADOS E SUPERMERCADOS".encode(encoding='latin-1')] = 12
         self._dict[
-            "COMÉRCIO VAREJISTA DE MERCADORIAS EM GERAL, COM PREDOMINÂNCIA DE PRODUTOS ALIMENTÍCIOS - MINIMERCADOS, MERCEARIAS E ARMAZÉNS"] = 13
+            "- - - COMÉRCIO VAREJISTA DE MERCADORIAS EM GERAL, COM PREDOMINÂNCIA DE PRODUTOS ALIMENTÍCIOS - MINIMERCADOS, MERCEARIAS E ARMAZÉNS".encode(encoding='latin-1')] = 13
 
-        self._dict["COMÉRCIO VAREJISTA DE PRODUTOS ALIMENTÍCIOS, BEBIDAS E FUMO"] = 14
-        self._dict["COMÉRCIO VAREJISTA DE COMBUSTÍVEIS PARA VEÍCULOS AUTOMOTORES"] = 15
-        self._dict["COMÉRCIO VAREJISTA DE MATERIAL DE CONSTRUÇÃO"] = 16
-        self._dict["COMÉRCIO VAREJISTA DE EQUIPAMENTOS DE INFORMÁTICA E COMUNICAÇÃO; EQUIPAMENTOS E ARTIGOS DE USO DOMÉSTICO"] = 17
-        self._dict["COMÉRCIO VAREJISTA DE ARTIGOS CULTURAIS, RECREATIVOS E ESPORTIVOS"] = 18
-        self._dict["COMÉRCIO VAREJISTA DE PRODUTOS FARMACÊUTICOS, PERFUMARIA E COSMÉTICOS E ARTIGOS MÉDICOS, ÓPTICOS E ORTOPÉDICOS"] = 19
-        self._dict["COMÉRCIO VAREJISTA DE PRODUTOS NOVOS NÃO ESPECIFICADOS ANTERIORMENTE E DE PRODUTOS USADOS"] = 20
+        self._dict["- - COMÉRCIO VAREJISTA DE PRODUTOS ALIMENTÍCIOS, BEBIDAS E FUMO".encode(encoding='latin-1')] = 14
+        self._dict["- - COMÉRCIO VAREJISTA DE COMBUSTÍVEIS PARA VEÍCULOS AUTOMOTORES".encode(encoding='latin-1')] = 15
+        self._dict["- - COMÉRCIO VAREJISTA DE MATERIAL DE CONSTRUÇÃO".encode(encoding='latin-1')] = 16
+        self._dict["- - COMÉRCIO VAREJISTA DE EQUIPAMENTOS DE INFORMÁTICA E COMUNICAÇÃO; EQUIPAMENTOS E ARTIGOS DE USO DOMÉSTICO".encode(encoding='latin-1')] = 17
+        self._dict["- - COMÉRCIO VAREJISTA DE ARTIGOS CULTURAIS, RECREATIVOS E ESPORTIVOS".encode(encoding='latin-1')] = 18
+        self._dict["- - COMÉRCIO VAREJISTA DE PRODUTOS FARMACÊUTICOS, PERFUMARIA E COSMÉTICOS E ARTIGOS MÉDICOS, ÓPTICOS E ORTOPÉDICOS".encode(encoding='latin-1')] = 19
+        self._dict["- - COMÉRCIO VAREJISTA DE PRODUTOS NOVOS NÃO ESPECIFICADOS ANTERIORMENTE E DE PRODUTOS USADOS".encode(encoding='latin-1')] = 20
 
-        self._dict["TRANSPORTE, ARMAZENAGEM E CORREIO"] = 21
-        self._dict["TRANSPORTE TERRESTRE"] = 22
-        self._dict["TRANSPORTE AQUAVIÁRIO"] = 23
-        self._dict["TRANSPORTE AÉREO"] = 24
-        self._dict["ARMAZENAMENTO E ATIVIDADES AUXILIARES DOS TRANSPORTES"] = 25
-        self._dict["CORREIO E OUTRAS ATIVIDADES DE ENTREGA"] = 26
+        self._dict["TRANSPORTE, ARMAZENAGEM E CORREIO".encode(encoding='latin-1')] = 21
+        self._dict["- TRANSPORTE TERRESTRE".encode(encoding='latin-1')] = 22
+        self._dict["- TRANSPORTE AQUAVIÁRIO".encode(encoding='latin-1')] = 23
+        self._dict["- TRANSPORTE AÉREO".encode(encoding='latin-1')] = 24
+        self._dict["- ARMAZENAMENTO E ATIVIDADES AUXILIARES DOS TRANSPORTES".encode(encoding='latin-1')] = 25
+        self._dict["- CORREIO E OUTRAS ATIVIDADES DE ENTREGA".encode(encoding='latin-1')] = 26
 
-        self._dict["ALOJAMENTO E ALIMENTAÇÃO"] = 27
-        self._dict["ALOJAMENTO"] = 28
-        self._dict["ALIMENTAÇÃO"] = 29
+        self._dict["ALOJAMENTO E ALIMENTAÇÃO".encode(encoding='latin-1')] = 27
+        self._dict["- ALOJAMENTO".encode(encoding='latin-1')] = 28
+        self._dict["- ALIMENTAÇÃO".encode(encoding='latin-1')] = 29
 
-        self._dict["INFORMAÇÃO E COMUNICAÇÃO"] = 30
-        self._dict["ATIVIDADES FINANCEIRAS, DE SEGUROS E SERVIÇOS RELACIONADOS"] = 31
-        self._dict["ATIVIDADES IMOBILIÁRIAS"] = 32
-        self._dict["ATIVIDADES PROFISSIONAIS, CIENTÍFICAS E TÉCNICAS"] = 33
-        self._dict["ATIVIDADES ADMINISTRATIVAS E SERVIÇOS COMPLEMENTARES"] = 34
-        self._dict["ADMINISTRAÇÃO PÚBLICA, DEFESA E SEGURIDADE SOCIAL"] = 35
-        self._dict["EDUCAÇÃO"] = 36
-        self._dict["SAÚDE HUMANA E SERVIÇOS SOCIAIS"] = 37
-        self._dict["ARTES, CULTURA, ESPORTE E RECREAÇÃO"] = 38
-        self._dict["ORGANISMOS INTERNACIONAIS E OUTRAS INSTITUIÇÕES EXTRATERRITORIAIS"] = 39
-        self._dict["OUTRAS ATIVIDADES DE SERVIÇOS"] = 40
-        self._dict["IGREJAS, TEMPLOS E ATIVIDADES RELIGIOSAS"] = 41
-        self._dict["DESOCUPADO"] = 42
-        self._dict["NÃO DEFINIDO"] = -1
+        self._dict["INFORMAÇÃO E COMUNICAÇÃO".encode(encoding='latin-1')] = 30
+        self._dict["ATIVIDADES FINANCEIRAS, DE SEGUROS E SERVIÇOS RELACIONADOS".encode(encoding='latin-1')] = 31
+        self._dict["ATIVIDADES IMOBILIÁRIAS".encode(encoding='latin-1')] = 32
+        self._dict["ATIVIDADES PROFISSIONAIS, CIENTÍFICAS E TÉCNICAS".encode(encoding='latin-1')] = 33
+        self._dict["ATIVIDADES ADMINISTRATIVAS E SERVIÇOS COMPLEMENTARES".encode(encoding='latin-1')] = 34
+        self._dict["ADMINISTRAÇÃO PÚBLICA, DEFESA E SEGURIDADE SOCIAL".encode(encoding='latin-1')] = 35
+        self._dict["EDUCAÇÃO".encode(encoding='latin-1')] = 36
+        self._dict["SAÚDE HUMANA E SERVIÇOS SOCIAIS".encode(encoding='latin-1')] = 37
+        self._dict["ARTES, CULTURA, ESPORTE E RECREAÇÃO".encode(encoding='latin-1')] = 38
+        self._dict["ORGANISMOS INTERNACIONAIS E OUTRAS INSTITUIÇÕES EXTRATERRITORIAIS".encode(encoding='latin-1')] = 39
+        self._dict["OUTRAS ATIVIDADES DE SERVIÇOS".encode(encoding='latin-1')] = 40
+        self._dict["IGREJAS, TEMPLOS E ATIVIDADES RELIGIOSAS".encode(encoding='latin-1')] = 41
+        self._dict["DESOCUPADO".encode(encoding='latin-1')] = 42
+        self._dict["NÃO DEFINIDO".encode(encoding='latin-1')] = -1
 
         # Rough translation
         self.farming = 1  # farming_keywords
@@ -169,6 +169,9 @@ class SchemeCNAE:
         self.undefined = -1
 
         self.name_to_label_2way = self._dict
+
+    def get_label_with(self, key):
+        return self._dict[key]
 
 
 scheme = SchemeCNAE()
