@@ -10,7 +10,7 @@ import lf
 def parse_args():
     parser = argparse.ArgumentParser()
 
-    filename_open = 'sample-br-0.05-37625-semduplic'  # 'shuffle-sample-BR-0.05-37625.csv'
+    filename_open = 'sample-br-0.05-37625-semdup'  # 'shuffle-sample-BR-0.05-37625.csv', 'sample-br-0.05-37625-semduplic-reduced'
     filename_close = f'labeled-{filename_open}'
 
     parser.add_argument('-f', '--write_lfs', action='store_const', const=True, default=False,
@@ -27,7 +27,7 @@ def import_csv(filepath):
     print(f'\nReading from file "{filepath}"...')
     dtype = {'ordem': int, 'uf': int, 'municipality': int, 'district': int, 'sub_district': int, 'urban_rural': int,
              'landuse_id': int, 'landuse_description': str, 'categoria_cnae': str}
-    df = pd.read_csv(f'{filepath}', encoding='latin-1',
+    df = pd.read_csv(f'{filepath}', encoding='utf-8',
                      usecols=['ordem', 'uf', 'municipality', 'district', 'sub_district', 'urban_rural', 'landuse_id',
                               'landuse_description', 'categoria_cnae'], dtype=dtype)
     df.columns = ['order', 'uf', 'municipality', 'district', 'sub_district', 'urban_rural',

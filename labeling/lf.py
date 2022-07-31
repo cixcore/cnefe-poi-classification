@@ -388,7 +388,7 @@ def education_word(x):
 
 @labeling_function()
 def education_keywords(x):
-    keywords = ['escola', 'colegio', 'faculdade', 'universidade', 'creche', 'ensino']
+    keywords = ['escola', 'colegio', 'faculdade', 'universidade', 'creche', 'ensino', 'formacao', 'formacao de condutores']
     if (match_any_item_in_list(keywords, x)
             or cnefe_landuse_ids.educational_establishment == int(x.landuse_id)):
         return poi_labels.scheme.education
@@ -488,12 +488,12 @@ def undefined(x):
 
 @labeling_function()
 def use_manual_label(x):
-    if not str(x.cnae_category):
+    if str(x.cnae_category) == 'nan':
         return poi_labels.scheme.undefined
     else:
         for key in poi_labels.scheme.name_to_label_2way:
             if type(key) is str:
-                if key in str(x.cnae_category):
+                if str(key).lower() in str(x.cnae_category).lower():
                     return poi_labels.scheme.name_to_label_2way[key]
     return poi_labels.scheme.undefined
 
