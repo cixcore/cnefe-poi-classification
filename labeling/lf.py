@@ -403,7 +403,7 @@ def education_keywords(x):
 @labeling_function()
 def human_health_social_services_keywords(x):
     keywords = ['consultorio', 'cardiologista', 'dentista', 'odonto', 'psicolog', 'fisioterap', 'terapia'
-                'diagnostico', 'pronto socorro', 'hospital', 'hospicio', 'medic', 'assistencia']
+                'diagnostico', 'pronto socorro', 'hospital', 'hospicio', 'medic', 'de assistencia']
     if (match_any_item_in_list(keywords, x)
             or cnefe_landuse_ids.health_establishment == int(x.landuse_id)):
         return poi_labels.scheme.human_health_social_services
@@ -440,6 +440,7 @@ def other_service_activities_keywords(x):
             or re.search(r'\bcabe[rl]e(i)?r[oa](s)?\b', str(x.landuse_description), flags=re.I)  # cabeleiro
             or re.search(r'\bbele[sz]a?\b', str(x.landuse_description), flags=re.I)
             or re.search(r'\bta(t)*oo\b', str(x.landuse_description), flags=re.I)
+            or re.search(r'assist(encia)? tec(nica)?', str(x.landuse_description), flags=re.I)
             or re.search(r'\bpet\s?shop\b', str(x.landuse_description), flags=re.I)):
         return poi_labels.scheme.other_service_activities
     else:

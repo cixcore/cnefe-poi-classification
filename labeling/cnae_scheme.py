@@ -80,7 +80,7 @@ class SchemeCNAE:
         self._dict["COMÉRCIO; REPARAÇÃO DE VEÍCULOS AUTOMOTORES E MOTOCICLETAS"] = 7
         self._dict["- COMÉRCIO E REPARAÇÃO DE VEÍCULOS AUTOMOTORES E MOTOCICLETAS"] = 8
         self._dict["- COMÉRCIO POR ATACADO, EXCETO VEÍCULOS AUTOMOTORES E MOTOCICLETAS"] = 9
-        self._dict["- COMÉRCIO VAREJISTA"] = 10
+        # self._dict["- COMÉRCIO VAREJISTA"] = 10
 
         self._dict["- - COMÉRCIO VAREJISTA NÃO ESPECIALIZADO"] = 11
         self._dict[
