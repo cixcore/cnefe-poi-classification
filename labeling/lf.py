@@ -493,12 +493,12 @@ def undefined(x):
 
 @labeling_function()
 def use_manual_label(x):
-    if str(x.cnae_category) == 'nan':
+    if str(x.manual_label) == 'nan':
         return poi_labels.scheme.undefined
     else:
         for key in poi_labels.scheme.name_to_label_2way:
             if type(key) is str:
-                if str(key).lower() in str(x.cnae_category).lower():
+                if str(key).lower() in str(x.manual_label).lower():
                     return poi_labels.scheme.name_to_label_2way[key]
     return poi_labels.scheme.undefined
 

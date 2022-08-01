@@ -31,7 +31,7 @@ def import_csv(filepath):
                      usecols=['ordem', 'uf', 'municipality', 'district', 'sub_district', 'urban_rural', 'landuse_id',
                               'landuse_description', 'categoria_cnae'], dtype=dtype)
     df.columns = ['order', 'uf', 'municipality', 'district', 'sub_district', 'urban_rural',
-                  'landuse_id', 'landuse_description', 'cnae_category']
+                  'landuse_id', 'landuse_description', 'manual_label']
     return df
 
 
@@ -39,7 +39,6 @@ def get_label_name(int_key: int):
     if int_key in [cnae_scheme.scheme.undefined, cnae_scheme.scheme.undefined_labeled]:
         return "NÃO DEFINIDO"
     return cnae_scheme.scheme.get_label_with(int_key)
-
 
 
 def main():
@@ -58,7 +57,7 @@ def main():
             for index, row in df_train.iterrows():
                 file.write(f'order: {row["order"]} | outputs: {L_train[index]}\n')
 
-    print(LFAnalysis(L=L_train, lfs=lfs).lf_summary())
+    print(f'LFAnalysis(L=L_train, lfs=lfs).lf_summary():\n{LFAnalysis(L=L_train, lfs=lfs).lf_summary()}\n')
     # print(df_train.iloc[L_train[:, 2] == poi_labels.scheme.wholesale_trade_except_motor_vehicles].sample(10, random_state=args.seed))
 
     # majority_model = MajorityLabelVoter()
