@@ -57,7 +57,7 @@ def main():
             for index, row in df_train.iterrows():
                 file.write(f'order: {row["order"]} | outputs: {L_train[index]}\n')
 
-    print(f'LFAnalysis(L=L_train, lfs=lfs).lf_summary():\n{LFAnalysis(L=L_train, lfs=lfs).lf_summary()}\n')
+    print(f'{LFAnalysis(L=L_train, lfs=lfs).lf_summary()}\n')
     # print(df_train.iloc[L_train[:, 2] == poi_labels.scheme.wholesale_trade_except_motor_vehicles].sample(10, random_state=args.seed))
 
     # majority_model = MajorityLabelVoter()
