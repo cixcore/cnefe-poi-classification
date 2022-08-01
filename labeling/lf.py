@@ -74,7 +74,7 @@ def extractive_industries_keywords(x):
 
 @labeling_function()
 def manufacturing_industries_keywords(x):
-    keywords = ['abatedouro', 'frigorifico', 'abatedor', 'fabrica']
+    keywords = ['abatedouro', 'frigorifico', 'abatedor', 'fabrica', 'confeccoes']
     if (regex_match_word('abate', x) or match_any_item_in_list(keywords, x)
             or re.search(r'\bconfec(c)?a[o0]\b', str(x.landuse_description), flags=re.I)
             or re.search(r'\bbarca(c|ss)a\b', str(x.landuse_description), flags=re.I)):
@@ -120,10 +120,11 @@ def construction_keywords(x):
 @labeling_function()
 def motor_vehicle_repair_and_retail_keywords(x):
     places = ['oficina', '0ficina', '0fissina', 'ofissina', 'mecanica']
-    keywords = ['martelinho de ouro', 'automotivo', 'motor', 'funilaria']
+    keywords = ['martelinho de ouro', 'automotivo', 'motor', 'veiculo']
     if (match_any_item_in_list(places, x) or match_any_item_in_list(keywords, x) or regex_match_word('auto', x)
             or re.search(r'\bpneu[s]?\b', str(x.landuse_description), flags=re.I)
-            or re.search(r'\brodas[s]?\b', str(x.landuse_description), flags=re.I)):
+            or re.search(r'\brodas[s]?\b', str(x.landuse_description), flags=re.I)
+            or re.search(r'\bfun[ei]laria[s]?\b', str(x.landuse_description), flags=re.I)):
         return poi_labels.scheme.motor_vehicle_repair_and_retail
     else:
         return poi_labels.scheme.undefined
@@ -141,6 +142,7 @@ def wholesale_trade_keyword(x):
 def non_specialized_retail_trade_keyword(x):
     if (match_all_items(['loja', 'departamento'], x)
             or 'variedade' in str(x.landuse_description).lower()
+            or 'utilidade' in str(x.landuse_description).lower()
             or 'loja' == str(x.landuse_description).lower()):
         return poi_labels.scheme.non_specialized_retail_trade
     else:
@@ -159,8 +161,8 @@ def non_specialized_retail_foodstuffs_supermarkets_keyword(x):
 @labeling_function()
 def non_specialized_retail_foodstuffs_grocery_stores_keyword(x):
     keywords = ['mercearia', 'armazem']
-    if match_any_item_in_list(keywords, x) or re.search(r'\b(min[ie]\s?)?mercado', str(x.landuse_description),
-                                                        flags=re.I):
+    if (match_any_item_in_list(keywords, x)
+            or re.search(r'\b(min[ie]\s?)?mercado', str(x.landuse_description), flags=re.I)):
         return poi_labels.scheme.non_specialized_retail_foodstuffs_grocery_stores
     else:
         return poi_labels.scheme.undefined
@@ -168,7 +170,7 @@ def non_specialized_retail_foodstuffs_grocery_stores_keyword(x):
 
 @labeling_function()
 def retail_food_beverages_tobacco_keyword(x):
-    keywords = ['padaria', 'acougue', 'casa de carne', 'tabacaria']
+    keywords = ['padaria', 'acougue', 'casa de carne', 'tabacaria', 'bebidas']
     if (match_any_item_in_list(keywords, x) or match_all_items(['distribuidora', 'bebidas'], x)
             or re.search(r'\bconfe(i)?taria\b', str(x.landuse_description), flags=re.I)
             or re.search(r'\bpe(i)?xaria\b', str(x.landuse_description), flags=re.I)):
@@ -179,7 +181,7 @@ def retail_food_beverages_tobacco_keyword(x):
 
 @labeling_function()
 def retail_fuel_keyword(x):
-    keywords = ['gasolina', 'ipiranga', 'auto posto', 'texaco']
+    keywords = ['gasolina', 'ipiranga', 'auto posto', 'texaco', 'diesel']
     if (match_any_item_in_list(keywords, x) or regex_match_word('br', x) or regex_match_word('shell', x)
             or re.search(r'\bcombustive(l|is)\b', str(x.landuse_description), flags=re.I)):
         return poi_labels.scheme.retail_fuel
@@ -267,7 +269,7 @@ def air_transportation_keywords(x):
 
 @labeling_function()
 def storage_auxiliary_transport_activities_keywords(x):
-    keywords = ['estacionamento', 'galpao', 'paiol', 'tulha', 'deposito']
+    keywords = ['estacionamento', 'galpao', 'paiol', 'tulha', 'deposito', 'logistica', 'armazena']
     if match_any_item_in_list(keywords, x):
         return poi_labels.scheme.storage_auxiliary_transport_activities
     else:
@@ -305,9 +307,10 @@ def eating_places_keywords(x):
 
 @labeling_function()
 def information_and_communication_keywords(x):
-    keywords = ['software', 'estúdio']
+    keywords = ['software', 'estudio', 'informatica']
     internet_providers = ['oi', 'tim', 'net', 'claro', 'vivo', 'gvt', 'embratel']
-    if (regex_match_word('grafica', x) or match_all_items(['lan', 'house'], x)
+    if (regex_match_word('grafica', x)
+            or re.search(r'\blan\s?house\b', str(x.landuse_description), flags=re.I)
             or match_any_item_in_list(keywords, x) or regex_match_in_list(internet_providers, x)):
         return poi_labels.scheme.information_and_communication
     else:
@@ -335,7 +338,8 @@ def real_estate_activities_keywords(x):
 
 @labeling_function()
 def professional_scientific_and_technic_activities_keywords(x):
-    keywords = ['cartorio', 'tabeliao', 'tabelionato', 'registro civil', 'juizado', 'oficio de notas', 'despachante']
+    keywords = ['cartorio', 'tabeliao', 'tabelionato', 'registro civil', 'juizado'
+                'oficio de notas', 'despachante', 'escritorio de', 'advocacia', 'advogad', 'contador']
     if match_any_item_in_list(keywords, x):
         return poi_labels.scheme.professional_scientific_and_technic_activities
     else:
@@ -353,8 +357,8 @@ def administrative_activities_complementary_services_keywords(x):
 
 @labeling_function()
 def public_administration_social_security_defence_keywords(x):
-    keywords = ['prefeitura', 'delegacia', 'batalhao', 'centro administrativo', 'militar', 'policia']
-    if match_any_item_in_list(keywords, x) or regex_match_in_list(['dp', 'bpm'], x):
+    keywords = ['prefeitura', 'delegacia', 'batalhao', 'centro administrativo', 'militar', 'policia', 'vara civel', 'civil']
+    if match_any_item_in_list(keywords, x) or regex_match_in_list(['dp', 'bpm', 'detran', 'contran', 'ciretran'], x):
         return poi_labels.scheme.public_administration_social_security_defence
     else:
         return poi_labels.scheme.undefined
@@ -389,7 +393,7 @@ def education_word(x):
 @labeling_function()
 def education_keywords(x):
     keywords = ['escola', 'colegio', 'faculdade', 'universidade', 'creche', 'ensino', 'formacao', 'formacao de condutores']
-    if (match_any_item_in_list(keywords, x)
+    if (match_any_item_in_list(keywords, x) or regex_match_word('cfc', x)
             or cnefe_landuse_ids.educational_establishment == int(x.landuse_id)):
         return poi_labels.scheme.education
     else:
@@ -398,8 +402,8 @@ def education_keywords(x):
 
 @labeling_function()
 def human_health_social_services_keywords(x):
-    keywords = ['consultorio', 'cardiologista', 'dentista', 'odonto', 'psicolog', 'fisioterap',
-                'diagnostico', 'pronto socorro', 'hospital', 'hospicio']
+    keywords = ['consultorio', 'cardiologista', 'dentista', 'odonto', 'psicolog', 'fisioterap', 'terapia'
+                'diagnostico', 'pronto socorro', 'hospital', 'hospicio', 'medic', 'assistencia']
     if (match_any_item_in_list(keywords, x)
             or cnefe_landuse_ids.health_establishment == int(x.landuse_id)):
         return poi_labels.scheme.human_health_social_services
@@ -429,13 +433,14 @@ def international_organisms_other_extraterritorial_institutions_keywords(x):
 @labeling_function()
 def other_service_activities_keywords(x):
     keywords = ['cabeleireiro', 'barbearia', 'manicure', 'tatuagem', 'alfaiate',
-                'costureira', 'fotografo', 'salao de', 'hotel para ']
+                'costureira', 'fotografo', 'salao de', 'hotel para ', 'reparo']
     if (match_any_item_in_list(keywords, x)
             or re.search(r'\bcabe[rl]e(i)?[lr]e(i)?r[oa](s)?\b', str(x.landuse_description),
                          flags=re.I)  # cabeleireiro, cabelerero, cabeleleiro, cabelelero
             or re.search(r'\bcabe[rl]e(i)?r[oa](s)?\b', str(x.landuse_description), flags=re.I)  # cabeleiro
             or re.search(r'\bbele[sz]a?\b', str(x.landuse_description), flags=re.I)
-            or re.search(r'\bta(t)*oo\b', str(x.landuse_description), flags=re.I)):
+            or re.search(r'\bta(t)*oo\b', str(x.landuse_description), flags=re.I)
+            or re.search(r'\bpet\s?shop\b', str(x.landuse_description), flags=re.I)):
         return poi_labels.scheme.other_service_activities
     else:
         return poi_labels.scheme.undefined

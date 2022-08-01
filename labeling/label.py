@@ -72,7 +72,7 @@ def main():
     # print(f'\npreds_model:\n{preds_model}')
 
     print(f'Saving labeling to {args.data_path}...')
-    df_train.assign(label=preds_model_readable, snorkel_category=preds_model).to_csv(args.output_path, index=False, encoding='latin-1')
+    df_train.assign(label=preds_model_readable, snorkel_category=preds_model).to_csv(args.output_path, index=False, encoding='utf-8')
 
     print('Done!')
 
