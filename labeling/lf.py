@@ -27,7 +27,7 @@ def match_all_items(keywords, x):
 def farming_keywords(x):
     keywords = ['fazenda', 'plantio', 'plantacao', 'pecuaria',
                 'de corte', 'curral', 'ovelha', 'aviario', 'galpao', 'granja']
-    if (re.search(r'\bagric[uo]la\b', str(x.landuse_description), flags=re.I)
+    if (re.search(r'\bagric[uo]la(s)?\b', str(x.landuse_description), flags=re.I)
             or re.search(r'\bcria(s|ss|c)ao\b', str(x.landuse_description), flags=re.I)
             or regex_match_word('criame', x) or regex_match_word('cultivo', x)
             or regex_match_word('criatorio', x) or regex_match_word('acude', x)
@@ -52,7 +52,8 @@ def farming_keywords(x):
             or re.search(r'\b(ch|x)iqueiro[s]?\b', str(x.landuse_description), flags=re.I)
             or re.search(r'[a-z]+cultura\b', str(x.landuse_description), flags=re.I)
             or match_any_item_in_list(keywords, x)
-            or cnefe_landuse_ids.farming_establishment == int(x.landuse_id)):
+            or cnefe_landuse_ids.farming_establishment == int(x.landuse_id)
+            or match_with_word_distance_2(keywords, x)):
         return poi_labels.scheme.farming
     else:
         return poi_labels.scheme.undefined
