@@ -170,10 +170,11 @@ def non_specialized_retail_foodstuffs_grocery_stores_keyword(x):
 
 @labeling_function()
 def retail_food_beverages_tobacco_keyword(x):
-    keywords = ['padaria', 'acougue', 'casa de carne', 'tabacaria', 'bebidas']
+    keywords = ['padaria', 'casa de carne', 'tabacaria', 'bebidas']
     if (match_any_item_in_list(keywords, x) or match_all_items(['distribuidora', 'bebidas'], x)
             or re.search(r'\bconfe(i)?taria\b', str(x.landuse_description), flags=re.I)
-            or re.search(r'\bpe(i)?xaria\b', str(x.landuse_description), flags=re.I)):
+            or re.search(r'\bpe(i)?xaria\b', str(x.landuse_description), flags=re.I)
+            or re.search(r'\bac(o)?ugue\b', str(x.landuse_description), flags=re.I)):
         return poi_labels.scheme.retail_food_beverages_tobacco
     else:
         return poi_labels.scheme.undefined
@@ -218,7 +219,8 @@ def retail_sport_culture_recreation_articles_keyword(x):
 @labeling_function()
 def retail_pharmaceuticals_perfumery_cosmetics_optical_orthopedic_medical_articles_keyword(x):
     keywords = ['boticario', 'cosmetico', 'farmacia', 'drogaria', 'oculos', 'otica', 'ortopedico']
-    if match_any_item_in_list(keywords, x):
+    if (match_any_item_in_list(keywords, x)
+            or re.search(r'\bo(p)?tic[a0o]\b', str(x.landuse_description), flags=re.I)):
         return poi_labels.scheme.retail_pharmaceuticals_perfumery_cosmetics_optical_orthopedic_medical_articles
     else:
         return poi_labels.scheme.undefined
@@ -227,7 +229,7 @@ def retail_pharmaceuticals_perfumery_cosmetics_optical_orthopedic_medical_articl
 @labeling_function()
 def retail_new_products_non_specified_previously_and_second_hand_keyword(x):
     keywords = ['roupas', 'roupas intimas', 'bijoux', 'fashion', 'presentes', 'calcados', 'bazar', 'jeans',
-                'brecho', 'loja de relogios', 'joalheria', 'floricultura', 'antiquario', 'antiguidades']
+                'brecho', 'loja de relogios', 'joalheria', 'floricultura', 'antiquario', 'antiguidades', 'emporio']
     if (match_any_item_in_list(keywords, x)
             or re.search(r'\bro(u|p|up)a(s)?\b', str(x.landuse_description), flags=re.I)
             or re.search(r'\bmalha(s)?\b', str(x.landuse_description), flags=re.I)
@@ -329,8 +331,7 @@ def financial_activities_insurance_keywords(x):
 
 @labeling_function()
 def real_estate_activities_keywords(x):
-    keywords = ['imobiliaria']
-    if match_any_item_in_list(keywords, x):
+    if re.search(r'\bimobiliari[ao0]\b', str(x.landuse_description), flags=re.I):
         return poi_labels.scheme.real_estate_activities
     else:
         return poi_labels.scheme.undefined
@@ -413,7 +414,7 @@ def human_health_social_services_keywords(x):
 
 @labeling_function()
 def arts_culture_sport_recreation_keywords(x):
-    keywords = ['teatro', 'museu', 'biblioteca', 'clube social', 'cassino',
+    keywords = ['teatro', 'museu', 'biblioteca', 'clube social', 'cassino', 'academia', 'esporte',
                 'complexo esportivo', 'ginasio', 'esportivo', 'brinquedoteca']
     if match_any_item_in_list(keywords, x) or regex_match_in_list(['praca', 'parque'], x):
         return poi_labels.scheme.arts_culture_sport_recreation
