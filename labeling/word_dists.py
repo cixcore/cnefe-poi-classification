@@ -14,7 +14,7 @@ class WordDistanceMeasurer:
     def sanitize(sentence):
         return sentence.replace("0", "o").replace("1", "i").replace("3", "e")
 
-    def match_with_levenshtein_distance_2(self, list_of_words, x):
+    def has_any_similar_char_seq(self, list_of_words, x):
         return self.match_with_levenshtein_distance(list_of_words, x, 2)
 
     def match_with_levenshtein_distance(self, list_of_words, x, dist):
@@ -24,7 +24,7 @@ class WordDistanceMeasurer:
                     return True
         return False
 
-    def match_phonetic_distance(self, list_of_words, x):
+    def has_any_similar_phonetic_word(self, list_of_words, x):
         for word_in_description in self.string_to_list(x):
             for word in list_of_words:
                 if metaphoneptbr.phonetic(word) == metaphoneptbr.phonetic(word_in_description):

@@ -2,6 +2,7 @@ import cnae_scheme as poi_labels
 import cnefe_landuse_id_descriptions as cnefe_landuse_ids
 import re
 from snorkel.labeling import labeling_function
+from word_dists import has_any_similar_char_seq, has_any_similar_phonetic_word
 
 URBAN_LABEL = 1
 RURAL_LABEL = 2
