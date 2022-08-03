@@ -14,7 +14,7 @@ def parse_args():
     filename_open = 'sample-br-0.05-37625-semdup'  # 'shuffle-sample-BR-0.05-37625.csv', 'sample-br-0.05-37625-semduplic-reduced'
     filename_close = f'labeled-{filename_open}'
 
-    parser.add_argument('-f', '--write_lfs', action='store_const', const=True, default=False,
+    parser.add_argument('-w', '--write_lfs', action='store_const', const=True, default=False,
                         help='write labeling funcs output to file')
     parser.add_argument('-d', '--data_path', type=str, default=f'./{filename_open}.csv', help='path to csv')
     parser.add_argument('-o', '--output_path', type=str, default=f'./{filename_close}.csv',

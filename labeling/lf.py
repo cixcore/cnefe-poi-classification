@@ -770,8 +770,8 @@ def accommodation_sound_dist(x):
 
 @labeling_function()
 def eating_places_keywords(x):
-    common_foods = ['pizza', 'hamburgue', 'sushi', 'pastel', 'pasteis', 'sorvete', 'churras', 'bebidas', 'beer']
-    common_places = ['lanche', 'lanchonete', 'boteco', 'cafeteria', 'restaurante', 'buffet']
+    common_foods = ['pizza', 'hamburgue', 'sushi', 'pastel', 'pasteis', 'sorvete', 'churras', 'bebidas', 'beer', 'bauru']
+    common_places = ['lanche', 'lanchonete', 'boteco', 'cafeteria', 'restaurante', 'buffet', 'espetinho', 'grill']
     if (regex_match_word('bar', x) or re.search(r'\bdoce(s)?\b', description(x), flags=re.I)
             or match_any_item_in_list(common_places, x) or match_any_item_in_list(common_foods, x)):
         return poi_labels.scheme.eating_places
@@ -782,7 +782,7 @@ def eating_places_keywords(x):
 @labeling_function()
 def eating_places_word_dist(x):
     keywords = ['pizza', 'hamburguer', 'sushi', 'pastel', 'pasteis', 'sorvete', 'churrasco', 'doces', 'bebidas',
-                'lanche', 'lancheria', 'lanchonete', 'boteco', 'cafeteria', 'restaurante', 'buffet']
+                'lanche', 'lancheria', 'lanchonete', 'boteco', 'cafeteria', 'restaurante', 'buffet', 'espetinho']
     if dists.has_any_similar_char_seq(keywords, description(x)):
         return poi_labels.scheme.eating_places
     else:
@@ -792,7 +792,7 @@ def eating_places_word_dist(x):
 @labeling_function()
 def eating_places_sound_dist(x):
     keywords = ['pizza', 'hamburguer', 'sushi', 'pastel', 'pasteis', 'sorvete', 'churrasco', 'doces', 'bebidas',
-                'lanche', 'lancheria', 'lanchonete', 'boteco', 'cafeteria', 'restaurante', 'buffet']
+                'lanche', 'lancheria', 'lanchonete', 'boteco', 'cafeteria', 'restaurante', 'buffet', 'espetinho']
     if dists.has_any_similar_phonetic_word(keywords, description(x)):
         return poi_labels.scheme.eating_places
     else:
@@ -804,7 +804,7 @@ def information_and_communication_keywords(x):
     keywords = ['software', 'estudio', 'informatica']
     internet_providers = ['oi', 'tim', 'net', 'claro', 'vivo', 'gvt', 'embratel']
     if (regex_match_word('grafica', x)
-            or re.search(r'\blan\s?house\b', description(x), flags=re.I)
+            or re.search(r'\blan\s?h[ao]use\b', description(x), flags=re.I)
             or match_any_item_in_list(keywords, x) or regex_match_in_list(internet_providers, x)):
         return poi_labels.scheme.information_and_communication
     else:
@@ -918,7 +918,7 @@ def professional_scientific_and_technic_activities_sound_dist(x):
 
 @labeling_function()
 def administrative_activities_complementary_services_keywords(x):
-    keywords = ['loteria', 'loterica', 'aluguel de carro', 'locacao de automove', 'turismo']
+    keywords = ['loteria', 'loterica', 'aluguel de carro', 'locadora', 'locacao de automove', 'turismo']
     if match_any_item_in_list(keywords, x):
         return poi_labels.scheme.administrative_activities_complementary_services
     else:
@@ -927,7 +927,7 @@ def administrative_activities_complementary_services_keywords(x):
 
 @labeling_function()
 def administrative_activities_complementary_services_word_dist(x):
-    keywords = ['loteria', 'loterica', 'aluguel', 'locacao', 'turismo']
+    keywords = ['loteria', 'loterica', 'aluguel', 'locacao', 'locadora', 'turismo']
     if dists.has_any_similar_char_seq(keywords, description(x)):
         return poi_labels.scheme.administrative_activities_complementary_services
     else:
@@ -936,7 +936,7 @@ def administrative_activities_complementary_services_word_dist(x):
 
 @labeling_function()
 def administrative_activities_complementary_services_sound_dist(x):
-    keywords = ['loteria', 'loterica', 'aluguel', 'locacao', 'turismo']
+    keywords = ['loteria', 'loterica', 'aluguel', 'locacao', 'locadora', 'turismo']
     if dists.has_any_similar_phonetic_word(keywords, description(x)):
         return poi_labels.scheme.administrative_activities_complementary_services
     else:
@@ -1039,7 +1039,7 @@ def education_id(x):
 @labeling_function()
 def human_health_social_services_keywords(x):
     keywords = ['consultorio', 'cardiologista', 'dentista', 'odonto', 'psicolog', 'fisioterap', 'terapia', 'dermatolog'
-                'diagnostico', 'pronto socorro', 'hospital', 'hospicio', 'medic', 'de assistencia', 'oftalmo']
+                'diagnostico', 'pronto socorro', 'hospital', 'hospicio', 'medic', 'de assistencia', 'oftalmo', 'laboratorio']
     if (match_any_item_in_list(keywords, x)
             or cnefe_landuse_ids.health_establishment == int(x.landuse_id)):
         return poi_labels.scheme.human_health_social_services
@@ -1051,7 +1051,7 @@ def human_health_social_services_keywords(x):
 def human_health_social_services_word_dist(x):
     keywords = ['consultorio', 'cardiologista', 'dentista', 'odontologista', 'odontologico', 'odontologia',
                 'psicologia', 'psicologo', 'fisioterapia', 'fisioterapeuta', 'terapia', 'diagnostico',
-                'socorro', 'hospital', 'hospicio', 'medico']
+                'socorro', 'hospital', 'hospicio', 'medico', 'laboratorio']
     if dists.has_any_similar_char_seq(keywords, description(x)):
         return poi_labels.scheme.human_health_social_services
     else:
@@ -1062,7 +1062,7 @@ def human_health_social_services_word_dist(x):
 def human_health_social_services_sound_dist(x):
     keywords = ['consultorio', 'cardiologista', 'dentista', 'odontologista', 'odontologico', 'odontologia',
                 'psicologia', 'psicologo', 'fisioterapia', 'fisioterapeuta', 'terapia', 'diagnostico',
-                'socorro', 'hospital', 'hospicio', 'medico']
+                'socorro', 'hospital', 'hospicio', 'medico', 'laboratorio']
     if dists.has_any_similar_phonetic_word(keywords, description(x)):
         return poi_labels.scheme.human_health_social_services
     else:
@@ -1137,7 +1137,7 @@ def international_organisms_other_extraterritorial_institutions_sound_dist(x):
 @labeling_function()
 def other_service_activities_keywords(x):
     keywords = ['cabeleireiro', 'barbearia', 'manicure', 'tatuagem', 'alfaiate', 'unhas', 'biju', 'estetica',
-                'costureira', 'salao de', 'hotel para ', 'reparo', 'caes', 'gatos', 'animais']
+                'costureira', 'salao de', 'hotel para ', 'reparo', 'caes', 'gatos', 'animais', 'sindica']
     if (match_any_item_in_list(keywords, x)
             or re.search(r'\bcabe[rl]e(i)?[lr]e(i)?r[oa](s)?\b', description(x), flags=re.I)  # cabeleireiro, cabelerero, cabeleleiro, cabelelero
             or re.search(r'\bcabe[rl]e(i)?r[oa](s)?\b', description(x), flags=re.I)  # cabeleiro
