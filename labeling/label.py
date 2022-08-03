@@ -16,8 +16,8 @@ def parse_args():
 
     parser.add_argument('-w', '--write_lfs', action='store_const', const=True, default=False,
                         help='write labeling funcs output to file')
-    parser.add_argument('-d', '--data_path', type=str, default=f'./{filename_open}.csv', help='path to csv')
-    parser.add_argument('-o', '--output_path', type=str, default=f'./{filename_close}.csv',
+    parser.add_argument('-d', '--data_path', type=str, default=f'./input/{filename_open}.csv', help='path to csv')
+    parser.add_argument('-o', '--output_path', type=str, default=f'./output/{filename_close}.csv',
                         help='file to save labeling')
     parser.add_argument('-l', '--label_method', type=str, default='f',
                         help='label method to apply, can be <f>irst match, <s>norkel model, <m>ajority')
@@ -28,13 +28,10 @@ def parse_args():
 
 def import_csv(filepath):
     print(f'\nReading from file "{filepath}"...')
-    dtype = {'ordem': int, 'uf': int, 'municipality': int, 'district': int, 'sub_district': int, 'urban_rural': int,
-             'landuse_id': int, 'landuse_description': str, 'categoria_cnae': str}
-    df = pd.read_csv(f'{filepath}', encoding='utf-8',
-                     usecols=['ordem', 'uf', 'municipality', 'district', 'sub_district', 'urban_rural', 'landuse_id',
-                              'landuse_description', 'categoria_cnae'], dtype=dtype)
-    df.columns = ['order', 'uf', 'municipality', 'district', 'sub_district', 'urban_rural',
-                  'landuse_id', 'landuse_description', 'manual_label']
+    dtype = {'ordem': int, 'urban_rural': int, 'landuse_id': int, 'landuse_description': str, 'categoria_cnae': str}
+    df = pd.read_csv(f'{filepath}', encoding='utf-8', dtype=dtype, usecols=['ordem', 'urban_rural', 'landuse_id',
+                                                                            'landuse_description', 'categoria_cnae'])
+    df.columns = ['order', 'urban_rural', 'landuse_id', 'landuse_description', 'manual_label']
     return df
 
 
@@ -71,12 +68,13 @@ def main():
     df_train = import_csv(args.data_path)
     lfs = lf.lfs_list
 
+    print('Applying labeling functions...')
     applier = PandasLFApplier(lfs=lfs)
     L_train = applier.apply(df=df_train)
 
     if args.write_lfs:
         print('Writing labeling_funcs_output.txt...')
-        with open('labeling_funcs_output.txt', 'a+') as file:
+        with open('./output/labeling_funcs_output.txt', 'a+') as file:
             for index, row in df_train.iterrows():
                 file.write(f'order: {row["order"]} | outputs: {L_train[index]}\n')
 
@@ -87,10 +85,11 @@ def main():
     preds_readable = [get_label_name(p) for p in preds]
 
     print(f'Saving labeling to {args.data_path}...')
-    df_train.assign(label=preds_readable, snorkel_category=preds).to_csv(args.output_path, index=False, encoding='utf-8')
+    df_train.assign(label=preds_readable, snorkel_category=preds).to_csv(args.output_path, index=False,
+                                                                         encoding='utf-8')
 
     print('Done!')
 
 
-# python3 label.py -s 37625 -d shuffle-sample-BR-0.05-37625.csv -l f
+# python3 label.py -w -l f -s 37625 -d input/sample-br-0.05-37625-semdup.csv -o output/labeled-sample-br-0.05-37625-semdup.csv
 main()

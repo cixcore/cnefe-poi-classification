@@ -11,7 +11,6 @@ class WordDistanceMeasurer:
         return sentence.replace("0", "o").replace("1", "i").replace("3", "e")
 
     def string_to_list(self, x):
-        # print(self.sanitize(x).split())
         return self.sanitize(x).split()
 
     def has_any_similar_char_seq(self, list_of_words, x):
