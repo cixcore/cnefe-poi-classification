@@ -80,7 +80,7 @@ class SchemeCNAE:
         self._dict["COMÉRCIO; REPARAÇÃO DE VEÍCULOS AUTOMOTORES E MOTOCICLETAS"] = 7
         self._dict["- COMÉRCIO E REPARAÇÃO DE VEÍCULOS AUTOMOTORES E MOTOCICLETAS"] = 8
         self._dict["- COMÉRCIO POR ATACADO, EXCETO VEÍCULOS AUTOMOTORES E MOTOCICLETAS"] = 9
-        # self._dict["- COMÉRCIO VAREJISTA"] = 10
+        self._dict["- COMÉRCIO VAREJISTA"] = 10
 
         self._dict["- - COMÉRCIO VAREJISTA NÃO ESPECIALIZADO"] = 11
         self._dict[
@@ -123,15 +123,15 @@ class SchemeCNAE:
         self._dict["NÃO DEFINIDO"] = -1
 
         # Rough translation
-        self.farming = 1  # farming_keywords
+        self.farming = 1
         self.extractive_industries = 2
-        self.manufacturing_industries = 3  # manufacturing_industries_keywords
+        self.manufacturing_industries = 3
         self.gas_and_electricity = 4
-        self.water_treatment = 5  # water_treatment_keywords
+        self.water_treatment = 5
         self.construction = 6
-        self.retail_and_motor_vehicle_repair_general = 7  # general_retail_keyword
-        self.motor_vehicle_repair_and_retail = 8  # motor_vehicle_repair_and_retail_keywords
-        self.wholesale_trade_except_motor_vehicles = 9  # wholesale_trade_keyword
+        self.retail_and_motor_vehicle_repair_general = 7
+        self.motor_vehicle_repair_and_retail = 8
+        self.wholesale_trade_except_motor_vehicles = 9
         self.retail = 10
         self.non_specialized_retail_trade = 11
         self.non_specialized_retail_foodstuffs_supermarkets = 12
@@ -144,27 +144,27 @@ class SchemeCNAE:
         self.retail_pharmaceuticals_perfumery_cosmetics_optical_orthopedic_medical_articles = 19
         self.retail_new_products_non_specified_previously_and_second_hand = 20
         self.transport_warehousing_mail = 21
-        self.ground_transportation = 22  # ground_transportation_keywords
-        self.water_transportation = 23  # water_transportation_keywords
-        self.air_transportation = 24  # air_transportation_keywords
-        self.storage_auxiliary_transport_activities = 25  # storage_auxiliary_transport_activities_keywords
-        self.mail_and_other_delivery_services = 26  # mail_and_other_delivery_services_keywords
+        self.ground_transportation = 22
+        self.water_transportation = 23
+        self.air_transportation = 24
+        self.storage_auxiliary_transport_activities = 25
+        self.mail_and_other_delivery_services = 26
         self.accommodation_and_eating_places = 27
         self.accommodation = 28
-        self.eating_places = 29  # eating_places_keywords
+        self.eating_places = 29
         self.information_and_communication = 30
         self.financial_activities_insurance = 31
         self.real_estate_activities = 32
         self.professional_scientific_and_technic_activities = 33
         self.administrative_activities_complementary_services = 34
         self.public_administration_social_security_defence = 35
-        self.education = 36  # education_keywords
+        self.education = 36
         self.human_health_social_services = 37
         self.arts_culture_sport_recreation = 38
         self.international_organisms_other_extraterritorial_institutions = 39
         self.other_service_activities = 40
-        self.churches_temples_religious_activities = 41  # churches_temples_religious_activities_keywords
-        self.vacant = 42  # vacant_keywords
+        self.churches_temples_religious_activities = 41
+        self.vacant = 42
         self.undefined_labeled = 43
         self.undefined = -1
 

@@ -1,5 +1,5 @@
 clavier==0.1.2
-Metaphone-ptbr @ git+https://github.com/carlosjordao/metaphone-ptbr@e5dae5f160f56298ef143241fbefcf72d78a3300#subdirectory=python
 geobr==0.1.10
 pandas==1.1.5
 snorkel==0.9.8
+Metaphone-ptbr @ git+https://github.com/carlosjordao/metaphone-ptbr@e5dae5f160f56298ef143241fbefcf72d78a3300#subdirectory=python
