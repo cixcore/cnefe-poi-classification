@@ -10,14 +10,13 @@ retail_keywords = ["comercio", "varej", "venda", "loja"]
 
 
 def description(x):
-    string = (str(x.landuse_description).lower()
-              .replace("á", "a").replace("ã", "a").replace("â", "a").replace("à", "a")
-              .replace("é", "e").replace("ẽ", "e").replace("ê", "e").replace("3", "e")
-              .replace("í", "i").replace("ĩ", "i").replace("î", "i").replace("1", "i")
-              .replace("ó", "o").replace("õ", "o").replace("ô", "o").replace("0", "o")
-              .replace("ú", "u").replace("ũ", "u").replace("û", "u").replace("ü", "u")
-              .replace("ç", "c"))
-    return re.sub(r'[^a-zA-Z0-9\s]', '', string)
+    return re.sub(r'[^a-zA-Z0-9\s]', '',
+                  re.sub(r'[áãâà]', 'a',
+                         re.sub(r'[éẽê3]', 'e',
+                                re.sub(r'[íĩî1]', 'i',
+                                       re.sub(r'[óõô0]', 'o',
+                                              re.sub(r'[úũûü]', 'u',
+                                                     re.sub(r'[ç]', 'c', str(x.landuse_description).lower())))))))
 
 
 def regex_match_in_list(items_list, x):

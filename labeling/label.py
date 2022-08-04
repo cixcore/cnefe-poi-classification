@@ -88,7 +88,7 @@ def main():
     preds = label_data(L_train, args.label_method)
     preds_readable = [get_label_name(p) for p in preds]
 
-    print(f'Saving labeling to {args.data_path}...')
+    print(f'Saving labeling to {args.output_path}...')
     df_train.assign(label=preds_readable, snorkel_category=preds).to_csv(args.output_path, index=False,
                                                                          encoding='utf-8')
 
