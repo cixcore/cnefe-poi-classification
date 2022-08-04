@@ -6,10 +6,18 @@ from word_dists import dists
 
 URBAN_LABEL = 1
 RURAL_LABEL = 2
+retail_keywords = ["comercio", "varej", "venda", "loja"]
 
 
 def description(x):
-    return str(x.landuse_description).lower()
+    string = (str(x.landuse_description).lower()
+              .replace("á", "a").replace("ã", "a").replace("â", "a").replace("à", "a")
+              .replace("é", "e").replace("ẽ", "e").replace("ê", "e").replace("3", "e")
+              .replace("í", "i").replace("ĩ", "i").replace("î", "i").replace("1", "i")
+              .replace("ó", "o").replace("õ", "o").replace("ô", "o").replace("0", "o")
+              .replace("ú", "u").replace("ũ", "u").replace("û", "u").replace("ü", "u")
+              .replace("ç", "c"))
+    return re.sub(r'[^a-zA-Z0-9\s]', '', string)
 
 
 def regex_match_in_list(items_list, x):
@@ -262,9 +270,6 @@ def construction_sound_dist(x):
         return poi_labels.scheme.undefined
 
 
-sale_keywords = ["comercio", "varej", "venda", "loja"]
-
-
 @labeling_function()
 def motor_vehicle_repair_and_retail_keywords(x):
     places = ['oficina', '0ficina', '0fissina', 'ofissina', 'mecanica', 'ferragem', 'borracha']
@@ -480,10 +485,9 @@ def retail_building_material_keyword(x):
 def retail_building_material_word_dist(x):
     keywords = ['marcenaria', 'vidracaria', 'telhas', 'telhados']
     if (dists.has_any_similar_char_seq(keywords, description(x))
-            or (dists.has_any_similar_phonetic_word(['material'], description(x) or
-                                                                  dists.has_any_similar_phonetic_word(['materiais'],
-                                                                                                      description(x)))
-                and dists.has_any_similar_phonetic_word(['construcao'], description(x)))):
+            or (dists.has_any_similar_phonetic_word(['material'], description(x)) or
+                dists.has_any_similar_phonetic_word(['materiais'], description(x)))
+                and dists.has_any_similar_phonetic_word(['construcao'], description(x))):
         return poi_labels.scheme.retail_building_material
     else:
         return poi_labels.scheme.undefined
@@ -501,10 +505,9 @@ def retail_computer_communication_household_equipment_keyword(x):
 @labeling_function()
 def retail_computer_communication_household_equipment_word_dist(x):
     keywords = ['armarinho', 'eletrodomesticos', 'eletro', 'domesticos', 'moveis']
-    if (dists.has_any_similar_char_seq(keywords, description(x)
-                                                 or dists.has_any_similar_char_seq(['mesa'], description(x)
-                                                                                             and dists.has_any_similar_char_seq(
-        ['banho'], description(x))))):
+    if (dists.has_any_similar_char_seq(keywords, description(x))
+            or dists.has_any_similar_char_seq(['mesa'], description(x))
+            and dists.has_any_similar_char_seq(['banho'], description(x))):
         return poi_labels.scheme.retail_computer_communication_household_equipment
     else:
         return poi_labels.scheme.undefined
@@ -550,7 +553,7 @@ def retail_sport_culture_recreation_articles_sound_dist(x):
 @labeling_function()
 def retail_pharmaceuticals_perfumery_cosmetics_optical_orthopedic_medical_articles_keyword(x):
     keywords = ['boticario', 'cosmetico', 'farmacia', 'drogaria', 'oculos', 'otica', 'ortopedico']
-    if (match_any_item_in_list(keywords, x) or re.search(r'\bo(p)?tic[a0o]\b', description(x), flags=re.I)):
+    if match_any_item_in_list(keywords, x) or re.search(r'\bo(p)?tic[a0o]\b', description(x), flags=re.I):
         return poi_labels.scheme.retail_pharmaceuticals_perfumery_cosmetics_optical_orthopedic_medical_articles
     else:
         return poi_labels.scheme.undefined
@@ -579,7 +582,7 @@ def retail_new_products_non_specified_previously_and_second_hand_keyword(x):
     keywords = ['roupas', 'roupas intimas', 'bijoux', 'fashion', 'presentes', 'calcados', 'bazar', 'jeans', 'vestuario',
                 'brecho', 'loja de relogios', 'joalheria', 'floricultura', 'antiquario', 'antiguidades', 'emporio',
                 'estabelecimento comercial']
-    if (match_any_item_in_list(keywords, x) or match_any_item_in_list(sale_keywords, x)
+    if (match_any_item_in_list(keywords, x) or match_any_item_in_list(retail_keywords, x)
             or aviamentos_urban_rural(x, URBAN_LABEL)
             or re.search(r'\bro(u|p|up)a(s)?\b', description(x), flags=re.I)
             or re.search(r'\bmalha(s)?\b', description(x), flags=re.I)
@@ -1148,15 +1151,14 @@ def international_organisms_other_extraterritorial_institutions_sound_dist(x):
 def other_service_activities_keywords(x):
     keywords = ['cabeleireiro', 'barbearia', 'manicure', 'tatuagem', 'alfaiate', 'unhas', 'biju', 'estetica',
                 'costureira', 'salao de', 'hotel para ', 'reparo', 'caes', 'gatos', 'animais', 'sindica']
-    if (match_any_item_in_list(keywords, x)
-            or re.search(r'\bcabe[rl]e(i)?[lr]e(i)?r[oa](s)?\b', description(x),
-                         flags=re.I)  # cabeleireiro, cabelerero, cabeleleiro, cabelelero
+    if (re.search(r'\bcabe[rl]e(i)?[lr]e(i)?r[oa](s)?\b', description(x), flags=re.I)  # cabeleireiro, cabelerero, cabeleleiro, cabelelero
             or re.search(r'\bcabe[rl]e(i)?r[oa](s)?\b', description(x), flags=re.I)  # cabeleiro
             or re.search(r'\bbele[sz]a?\b', description(x), flags=re.I)
             or re.search(r'\bta(t)*oo\b', description(x), flags=re.I)
             or re.search(r'assist(encia)? tec(nica)?', description(x), flags=re.I)
             or re.search(r'foto(s|graf(o|ia))', description(x), flags=re.I)
-            or re.search(r'\bpet\s?shop\b', description(x), flags=re.I)):
+            or re.search(r'\bpet\s?shop\b', description(x), flags=re.I)
+            or match_any_item_in_list(keywords, x)):
         return poi_labels.scheme.other_service_activities
     else:
         return poi_labels.scheme.undefined
@@ -1315,89 +1317,85 @@ def get_lfs_list(word_dists, sound_dists):
         undefined
     ]
     if word_dists:
-        lfs.append([
-            farming_word_dist,
-            extractive_industries_word_dist,
-            manufacturing_industries_word_dist,
-            gas_and_electricity_word_dist,
-            water_treatment_word_dist,
-            construction_word_dist,
-            motor_vehicle_repair_and_retail_word_dist,
-            wholesale_word_dist,
-            non_specialized_retail_trade_word_dist,
-            non_specialized_retail_foodstuffs_supermarkets_word_dist,
-            non_specialized_retail_foodstuffs_grocery_stores_word_dist,
-            retail_food_beverages_tobacco_word_dist,
-            retail_fuel_word_dist,
-            retail_building_material_word_dist,
-            retail_computer_communication_household_equipment_word_dist,
-            retail_sport_culture_recreation_articles_word_dist,
-            retail_pharmaceuticals_perfumery_cosmetics_optical_orthopedic_medical_articles_word_dist,
-            retail_new_products_non_specified_previously_and_second_hand_word_dist,
-            ground_transportation_word_dist,
-            water_transportation_word_dist,
-            air_transportation_word_dist,
-            storage_auxiliary_transport_activities_word_dist,
-            mail_and_other_delivery_services_word_dist,
-            accommodation_word_dist,
-            eating_places_word_dist,
-            information_and_communication_word_dist,
-            financial_activities_insurance_word_dist,
-            real_estate_activities_word_dist,
-            professional_scientific_and_technic_activities_word_dist,
-            administrative_activities_complementary_services_word_dist,
-            public_administration_social_security_defence_word_dist,
-            education_word_dist,
-            human_health_social_services_word_dist,
-            arts_culture_sport_recreation_word_dist,
-            international_organisms_other_extraterritorial_institutions_word_dist,
-            other_service_activities_word_dist,
-            churches_temples_religious_activities_word_dist
-        ])
+        lfs.append(farming_word_dist)
+        lfs.append(extractive_industries_word_dist)
+        lfs.append(manufacturing_industries_word_dist)
+        lfs.append(gas_and_electricity_word_dist)
+        lfs.append(water_treatment_word_dist)
+        lfs.append(construction_word_dist)
+        lfs.append(motor_vehicle_repair_and_retail_word_dist)
+        lfs.append(wholesale_word_dist)
+        lfs.append(non_specialized_retail_trade_word_dist)
+        lfs.append(non_specialized_retail_foodstuffs_supermarkets_word_dist)
+        lfs.append(non_specialized_retail_foodstuffs_grocery_stores_word_dist)
+        lfs.append(retail_food_beverages_tobacco_word_dist)
+        lfs.append(retail_fuel_word_dist)
+        lfs.append(retail_building_material_word_dist)
+        lfs.append(retail_computer_communication_household_equipment_word_dist)
+        lfs.append(retail_sport_culture_recreation_articles_word_dist)
+        lfs.append(retail_pharmaceuticals_perfumery_cosmetics_optical_orthopedic_medical_articles_word_dist)
+        lfs.append(retail_new_products_non_specified_previously_and_second_hand_word_dist)
+        lfs.append(ground_transportation_word_dist)
+        lfs.append(water_transportation_word_dist)
+        lfs.append(air_transportation_word_dist)
+        lfs.append(storage_auxiliary_transport_activities_word_dist)
+        lfs.append(mail_and_other_delivery_services_word_dist)
+        lfs.append(accommodation_word_dist)
+        lfs.append(eating_places_word_dist)
+        lfs.append(information_and_communication_word_dist)
+        lfs.append(financial_activities_insurance_word_dist)
+        lfs.append(real_estate_activities_word_dist)
+        lfs.append(professional_scientific_and_technic_activities_word_dist)
+        lfs.append(administrative_activities_complementary_services_word_dist)
+        lfs.append(public_administration_social_security_defence_word_dist)
+        lfs.append(education_word_dist)
+        lfs.append(human_health_social_services_word_dist)
+        lfs.append(arts_culture_sport_recreation_word_dist)
+        lfs.append(international_organisms_other_extraterritorial_institutions_word_dist)
+        lfs.append(other_service_activities_word_dist)
+        lfs.append(churches_temples_religious_activities_word_dist)
 
-        if sound_dists:
-            lfs.append([
-                farming_sound_dist,
-                extractive_industries_sound_dist,
-                manufacturing_industries_sound_dist,
-                gas_and_electricity_sound_dist,
-                water_treatment_sound_dist,
-                construction_sound_dist,
-                motor_vehicle_repair_and_retail_sound_dist,
-                wholesale_sound_dist,
-                non_specialized_retail_trade_sound_dist,
-                non_specialized_retail_foodstuffs_supermarkets_sound_dist,
-                non_specialized_retail_foodstuffs_grocery_stores_sound_dist,
-                retail_food_beverages_tobacco_sound_dist,
-                retail_fuel_sound_dist,
-                retail_computer_communication_household_equipment_sound_dist,
-                retail_sport_culture_recreation_articles_sound_dist,
-                retail_pharmaceuticals_perfumery_cosmetics_optical_orthopedic_medical_articles_sound_dist,
-                retail_new_products_non_specified_previously_and_second_hand_sound_dist,
-                ground_transportation_sound_dist,
-                water_transportation_sound_dist,
-                air_transportation_sound_dist,
-                storage_auxiliary_transport_activities_sound_dist,
-                mail_and_other_delivery_services_sound_dist,
-                accommodation_sound_dist,
-                eating_places_sound_dist,
-                information_and_communication_sound_dist,
-                financial_activities_insurance_sound_dist,
-                real_estate_activities_sound_dist,
-                professional_scientific_and_technic_activities_sound_dist,
-                administrative_activities_complementary_services_sound_dist,
-                public_administration_social_security_defence_sound_dist,
-                education_sound_dist,
-                human_health_social_services_sound_dist,
-                arts_culture_sport_recreation_sound_dist,
-                international_organisms_other_extraterritorial_institutions_sound_dist,
-                other_service_activities_sound_dist,
-                churches_temples_religious_activities_sound_dist
-            ])
+    if sound_dists:
+        lfs.append(farming_sound_dist)
+        lfs.append(extractive_industries_sound_dist)
+        lfs.append(manufacturing_industries_sound_dist)
+        lfs.append(gas_and_electricity_sound_dist)
+        lfs.append(water_treatment_sound_dist)
+        lfs.append(construction_sound_dist)
+        lfs.append(motor_vehicle_repair_and_retail_sound_dist)
+        lfs.append(wholesale_sound_dist)
+        lfs.append(non_specialized_retail_trade_sound_dist)
+        lfs.append(non_specialized_retail_foodstuffs_supermarkets_sound_dist)
+        lfs.append(non_specialized_retail_foodstuffs_grocery_stores_sound_dist)
+        lfs.append(retail_food_beverages_tobacco_sound_dist)
+        lfs.append(retail_fuel_sound_dist)
+        lfs.append(retail_computer_communication_household_equipment_sound_dist)
+        lfs.append(retail_sport_culture_recreation_articles_sound_dist)
+        lfs.append(retail_pharmaceuticals_perfumery_cosmetics_optical_orthopedic_medical_articles_sound_dist)
+        lfs.append(retail_new_products_non_specified_previously_and_second_hand_sound_dist)
+        lfs.append(ground_transportation_sound_dist)
+        lfs.append(water_transportation_sound_dist)
+        lfs.append(air_transportation_sound_dist)
+        lfs.append(storage_auxiliary_transport_activities_sound_dist)
+        lfs.append(mail_and_other_delivery_services_sound_dist)
+        lfs.append(accommodation_sound_dist)
+        lfs.append(eating_places_sound_dist)
+        lfs.append(information_and_communication_sound_dist)
+        lfs.append(financial_activities_insurance_sound_dist)
+        lfs.append(real_estate_activities_sound_dist)
+        lfs.append(professional_scientific_and_technic_activities_sound_dist)
+        lfs.append(administrative_activities_complementary_services_sound_dist)
+        lfs.append(public_administration_social_security_defence_sound_dist)
+        lfs.append(education_sound_dist)
+        lfs.append(human_health_social_services_sound_dist)
+        lfs.append(arts_culture_sport_recreation_sound_dist)
+        lfs.append(international_organisms_other_extraterritorial_institutions_sound_dist)
+        lfs.append(other_service_activities_sound_dist)
+        lfs.append(churches_temples_religious_activities_sound_dist)
     return lfs
 
 
-lfs_list = [
+all_lfs_list = [
     vacant_keywords,
     human_health_id,
     education_id,

@@ -11,11 +11,16 @@ import lf
 def parse_args():
     parser = argparse.ArgumentParser()
 
-    filename_open = 'sample-br-0.05-37625-semdup'  # 'shuffle-sample-BR-0.05-37625.csv', 'sample-br-0.05-37625-semduplic-reduced'
+    # 'shuffle-sample-BR-0.05-37625.csv', 'sample-br-0.05-37625-semduplic-reduced'
+    filename_open = 'sample-br-0.05-37625-semdup'
     filename_close = f'labeled-{filename_open}'
 
     parser.add_argument('-w', '--write_lfs', action='store_const', const=True, default=False,
                         help='write labeling funcs output to file')
+    parser.add_argument('-e', '--edition_dist', action='store_const', const=True, default=False,
+                        help='use levenshtein distance with qwerty wights functions')
+    parser.add_argument('-p', '--phonetic_dist', action='store_const', const=True, default=False,
+                        help='use portuguese soundex distance functions')
     parser.add_argument('-d', '--data_path', type=str, default=f'./input/{filename_open}.csv', help='path to csv')
     parser.add_argument('-o', '--output_path', type=str, default=f'./output/{filename_close}.csv',
                         help='file to save labeling')
@@ -52,13 +57,12 @@ def label_data(L_train, label_method):
     else:
         preds = []
         for row in L_train:
-            size = len(preds)
-            for lf_output in row:
-                if lf_output != -1:
-                    preds.append(lf_output)
-                    break
-            if len(preds) == size:
-                preds.append(-1)
+            lf_output = -1
+            lbl_func = 0
+            while lf_output == -1 and lbl_func < len(row):
+                lf_output = row[lbl_func]
+                lbl_func += 1
+            preds.append(lf_output)
         return preds
 
 
@@ -66,7 +70,7 @@ def main():
     # dists.test_dists()
     args = parse_args()
     df_train = import_csv(args.data_path)
-    lfs = lf.lfs_list
+    lfs = lf.get_lfs_list(args.edition_dist, args.phonetic_dist)
 
     print('Applying labeling functions...')
     applier = PandasLFApplier(lfs=lfs)
@@ -91,5 +95,5 @@ def main():
     print('Done!')
 
 
-# python3 label.py -w -l f -s 37625 -d input/sample-br-0.05-37625-semdup.csv -o output/labeled-sample-br-0.05-37625-semdup.csv
+# python3 label.py -w -e -p -l f -s 37625 -d input/sample-br-0.05-37625-semdup.csv -o output/labeled-sample-br-0.05-37625-semdup.csv
 main()
