@@ -212,7 +212,7 @@ def gas_and_electricity_sound_dist(x):
 @labeling_function()
 def water_treatment_keywords(x):
     keywords = ['esgoto', 'tratamento de agua', 'departamento de agua', 'estacao de tratamento',
-                'distribuidora de agua']
+                'distribuidora de agua', 'elevatori']
     treatment_station_acronyms = ['dmae', 'corsan', 'agespisa', 'caesb']
     if match_any_item_in_list(keywords, x) or regex_match_in_list(treatment_station_acronyms, x):
         return poi_labels.scheme.water_treatment
@@ -222,7 +222,7 @@ def water_treatment_keywords(x):
 
 @labeling_function()
 def water_treatment_word_dist(x):
-    keywords = ['esgoto', 'tratamento', 'departamento', 'estacao']
+    keywords = ['esgoto', 'tratamento', 'departamento', 'estacao', 'elevatorio']
     if dists.has_any_similar_char_seq(keywords, description(x)):
         return poi_labels.scheme.water_treatment
     else:
@@ -231,7 +231,7 @@ def water_treatment_word_dist(x):
 
 @labeling_function()
 def water_treatment_sound_dist(x):
-    keywords = ['esgoto', 'tratamento', 'departamento', 'estacao']
+    keywords = ['esgoto', 'tratamento', 'departamento', 'estacao', 'elevatorio']
     if dists.has_any_similar_phonetic_word(keywords, description(x)):
         return poi_labels.scheme.water_treatment
     else:
