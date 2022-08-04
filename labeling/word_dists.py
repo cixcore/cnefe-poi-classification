@@ -3,17 +3,20 @@ import metaphoneptbr
 
 
 class WordDistanceMeasurer:
-    def __init__(self):
+    def __init__(self, percentage_change_allowed=0.25):
         self.keyboard = clavier.load_qwerty()
+        self.percentage_change_allowed = percentage_change_allowed
 
     def has_any_similar_char_seq(self, list_of_words, x):
-        return self.match_with_levenshtein_distance(list_of_words, x, 2.0)
+        return self.match_with_levenshtein_distance(list_of_words, x, self.percentage_change_allowed)
 
-    def match_with_levenshtein_distance(self, list_of_words, x, dist):
+    def match_with_levenshtein_distance(self, list_of_words, x, percentage_change_allowed):
         for word_in_description in x.split():
             for word in list_of_words:
-                # print(f'word: "{word}" | word from descr: "{word_in_description}".')
-                if self.keyboard.word_distance(word, word_in_description) <= dist:
+                dist = self.keyboard.word_distance(word, word_in_description)
+                longest_word_len = max(len(word), len(word_in_description))
+                # print(f'word: "{word}" | word from descr: "{word_in_description}" | dist: {dist} | change: {dist/longest_word_len}.')
+                if dist/longest_word_len <= percentage_change_allowed:
                     return True
         return False
 
@@ -43,3 +46,4 @@ class WordDistanceMeasurer:
 
 
 dists = WordDistanceMeasurer()
+

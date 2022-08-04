@@ -82,15 +82,16 @@ def main():
             for index, row in df_train.iterrows():
                 file.write(f'order: {row["order"]} | outputs: {L_train[index]}\n')
 
-    print(f'{LFAnalysis(L=L_train, lfs=lfs).lf_summary()}\n')
+    with open('lfs-summary.txt', 'w') as f:
+        with pd.option_context('display.max_rows', None, 'display.max_columns', None):
+            print(f'{LFAnalysis(L=L_train, lfs=lfs).lf_summary()}\n', file=f)
     # print(df_train.iloc[L_train[:, 2] == poi_labels.scheme.wholesale_trade_except_motor_vehicles].sample(10, random_state=args.seed))
 
     preds = label_data(L_train, args.label_method)
     preds_readable = [get_label_name(p) for p in preds]
 
     print(f'Saving labeling to {args.output_path}...')
-    df_train.assign(label=preds_readable, snorkel_category=preds).to_csv(args.output_path, index=False,
-                                                                         encoding='utf-8')
+    df_train.assign(label=preds_readable, snorkel_category=preds).to_csv(args.output_path, index=False, encoding='utf-8')
 
     print('Done!')
 

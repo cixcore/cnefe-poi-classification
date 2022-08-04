@@ -1315,6 +1315,43 @@ def get_lfs_list(word_dists, sound_dists):
         churches_temples_religious_activities_keywords,
         undefined
     ]
+    if sound_dists:
+        lfs.append(farming_sound_dist)
+        lfs.append(extractive_industries_sound_dist)
+        lfs.append(manufacturing_industries_sound_dist)
+        lfs.append(gas_and_electricity_sound_dist)
+        lfs.append(water_treatment_sound_dist)
+        lfs.append(construction_sound_dist)
+        lfs.append(motor_vehicle_repair_and_retail_sound_dist)
+        lfs.append(wholesale_sound_dist)
+        lfs.append(non_specialized_retail_trade_sound_dist)
+        lfs.append(non_specialized_retail_foodstuffs_supermarkets_sound_dist)
+        lfs.append(non_specialized_retail_foodstuffs_grocery_stores_sound_dist)
+        lfs.append(retail_food_beverages_tobacco_sound_dist)
+        lfs.append(retail_fuel_sound_dist)
+        lfs.append(retail_computer_communication_household_equipment_sound_dist)
+        lfs.append(retail_sport_culture_recreation_articles_sound_dist)
+        lfs.append(retail_pharmaceuticals_perfumery_cosmetics_optical_orthopedic_medical_articles_sound_dist)
+        lfs.append(retail_new_products_non_specified_previously_and_second_hand_sound_dist)
+        lfs.append(ground_transportation_sound_dist)
+        lfs.append(water_transportation_sound_dist)
+        lfs.append(air_transportation_sound_dist)
+        lfs.append(storage_auxiliary_transport_activities_sound_dist)
+        lfs.append(mail_and_other_delivery_services_sound_dist)
+        lfs.append(accommodation_sound_dist)
+        lfs.append(eating_places_sound_dist)
+        lfs.append(information_and_communication_sound_dist)
+        lfs.append(financial_activities_insurance_sound_dist)
+        lfs.append(real_estate_activities_sound_dist)
+        lfs.append(professional_scientific_and_technic_activities_sound_dist)
+        lfs.append(administrative_activities_complementary_services_sound_dist)
+        lfs.append(public_administration_social_security_defence_sound_dist)
+        lfs.append(education_sound_dist)
+        lfs.append(human_health_social_services_sound_dist)
+        lfs.append(arts_culture_sport_recreation_sound_dist)
+        lfs.append(international_organisms_other_extraterritorial_institutions_sound_dist)
+        lfs.append(other_service_activities_sound_dist)
+        lfs.append(churches_temples_religious_activities_sound_dist)
     if word_dists:
         lfs.append(farming_word_dist)
         lfs.append(extractive_industries_word_dist)
@@ -1353,44 +1390,6 @@ def get_lfs_list(word_dists, sound_dists):
         lfs.append(international_organisms_other_extraterritorial_institutions_word_dist)
         lfs.append(other_service_activities_word_dist)
         lfs.append(churches_temples_religious_activities_word_dist)
-
-    if sound_dists:
-        lfs.append(farming_sound_dist)
-        lfs.append(extractive_industries_sound_dist)
-        lfs.append(manufacturing_industries_sound_dist)
-        lfs.append(gas_and_electricity_sound_dist)
-        lfs.append(water_treatment_sound_dist)
-        lfs.append(construction_sound_dist)
-        lfs.append(motor_vehicle_repair_and_retail_sound_dist)
-        lfs.append(wholesale_sound_dist)
-        lfs.append(non_specialized_retail_trade_sound_dist)
-        lfs.append(non_specialized_retail_foodstuffs_supermarkets_sound_dist)
-        lfs.append(non_specialized_retail_foodstuffs_grocery_stores_sound_dist)
-        lfs.append(retail_food_beverages_tobacco_sound_dist)
-        lfs.append(retail_fuel_sound_dist)
-        lfs.append(retail_computer_communication_household_equipment_sound_dist)
-        lfs.append(retail_sport_culture_recreation_articles_sound_dist)
-        lfs.append(retail_pharmaceuticals_perfumery_cosmetics_optical_orthopedic_medical_articles_sound_dist)
-        lfs.append(retail_new_products_non_specified_previously_and_second_hand_sound_dist)
-        lfs.append(ground_transportation_sound_dist)
-        lfs.append(water_transportation_sound_dist)
-        lfs.append(air_transportation_sound_dist)
-        lfs.append(storage_auxiliary_transport_activities_sound_dist)
-        lfs.append(mail_and_other_delivery_services_sound_dist)
-        lfs.append(accommodation_sound_dist)
-        lfs.append(eating_places_sound_dist)
-        lfs.append(information_and_communication_sound_dist)
-        lfs.append(financial_activities_insurance_sound_dist)
-        lfs.append(real_estate_activities_sound_dist)
-        lfs.append(professional_scientific_and_technic_activities_sound_dist)
-        lfs.append(administrative_activities_complementary_services_sound_dist)
-        lfs.append(public_administration_social_security_defence_sound_dist)
-        lfs.append(education_sound_dist)
-        lfs.append(human_health_social_services_sound_dist)
-        lfs.append(arts_culture_sport_recreation_sound_dist)
-        lfs.append(international_organisms_other_extraterritorial_institutions_sound_dist)
-        lfs.append(other_service_activities_sound_dist)
-        lfs.append(churches_temples_religious_activities_sound_dist)
     return lfs
 
 
@@ -1440,6 +1439,43 @@ all_lfs_list = [
     churches_temples_religious_activities_keywords,
     undefined,
 
+    farming_sound_dist,
+    extractive_industries_sound_dist,
+    manufacturing_industries_sound_dist,
+    gas_and_electricity_sound_dist,
+    water_treatment_sound_dist,
+    construction_sound_dist,
+    motor_vehicle_repair_and_retail_sound_dist,
+    wholesale_sound_dist,
+    non_specialized_retail_trade_sound_dist,
+    non_specialized_retail_foodstuffs_supermarkets_sound_dist,
+    non_specialized_retail_foodstuffs_grocery_stores_sound_dist,
+    retail_food_beverages_tobacco_sound_dist,
+    retail_fuel_sound_dist,
+    retail_computer_communication_household_equipment_sound_dist,
+    retail_sport_culture_recreation_articles_sound_dist,
+    retail_pharmaceuticals_perfumery_cosmetics_optical_orthopedic_medical_articles_sound_dist,
+    retail_new_products_non_specified_previously_and_second_hand_sound_dist,
+    ground_transportation_sound_dist,
+    water_transportation_sound_dist,
+    air_transportation_sound_dist,
+    storage_auxiliary_transport_activities_sound_dist,
+    mail_and_other_delivery_services_sound_dist,
+    accommodation_sound_dist,
+    eating_places_sound_dist,
+    information_and_communication_sound_dist,
+    financial_activities_insurance_sound_dist,
+    real_estate_activities_sound_dist,
+    professional_scientific_and_technic_activities_sound_dist,
+    administrative_activities_complementary_services_sound_dist,
+    public_administration_social_security_defence_sound_dist,
+    education_sound_dist,
+    human_health_social_services_sound_dist,
+    arts_culture_sport_recreation_sound_dist,
+    international_organisms_other_extraterritorial_institutions_sound_dist,
+    other_service_activities_sound_dist,
+    churches_temples_religious_activities_sound_dist,
+
     farming_word_dist,
     extractive_industries_word_dist,
     manufacturing_industries_word_dist,
@@ -1476,42 +1512,5 @@ all_lfs_list = [
     arts_culture_sport_recreation_word_dist,
     international_organisms_other_extraterritorial_institutions_word_dist,
     other_service_activities_word_dist,
-    churches_temples_religious_activities_word_dist,
-
-    farming_sound_dist,
-    extractive_industries_sound_dist,
-    manufacturing_industries_sound_dist,
-    gas_and_electricity_sound_dist,
-    water_treatment_sound_dist,
-    construction_sound_dist,
-    motor_vehicle_repair_and_retail_sound_dist,
-    wholesale_sound_dist,
-    non_specialized_retail_trade_sound_dist,
-    non_specialized_retail_foodstuffs_supermarkets_sound_dist,
-    non_specialized_retail_foodstuffs_grocery_stores_sound_dist,
-    retail_food_beverages_tobacco_sound_dist,
-    retail_fuel_sound_dist,
-    retail_computer_communication_household_equipment_sound_dist,
-    retail_sport_culture_recreation_articles_sound_dist,
-    retail_pharmaceuticals_perfumery_cosmetics_optical_orthopedic_medical_articles_sound_dist,
-    retail_new_products_non_specified_previously_and_second_hand_sound_dist,
-    ground_transportation_sound_dist,
-    water_transportation_sound_dist,
-    air_transportation_sound_dist,
-    storage_auxiliary_transport_activities_sound_dist,
-    mail_and_other_delivery_services_sound_dist,
-    accommodation_sound_dist,
-    eating_places_sound_dist,
-    information_and_communication_sound_dist,
-    financial_activities_insurance_sound_dist,
-    real_estate_activities_sound_dist,
-    professional_scientific_and_technic_activities_sound_dist,
-    administrative_activities_complementary_services_sound_dist,
-    public_administration_social_security_defence_sound_dist,
-    education_sound_dist,
-    human_health_social_services_sound_dist,
-    arts_culture_sport_recreation_sound_dist,
-    international_organisms_other_extraterritorial_institutions_sound_dist,
-    other_service_activities_sound_dist,
-    churches_temples_religious_activities_sound_dist
+    churches_temples_religious_activities_word_dist
 ]
