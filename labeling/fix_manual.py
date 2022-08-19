@@ -10,12 +10,6 @@ def import_csv(filepath, dtype, usecols, finalcols):
     return df
 
 
-def get_label_name(int_key: int):
-    if int_key in [cnae_scheme.scheme.undefined, cnae_scheme.scheme.undefined_labeled]:
-        return "NÃO DEFINIDO"
-    return cnae_scheme.scheme.get_label_with(int_key)
-
-
 def main():
     finalcols = ['order', 'urban_rural', 'landuse_id', 'landuse_description', 'manual_label']
     cols_original = ['ordem', 'urban_rural', 'landuse_id', 'landuse_description', 'categoria_cnae']
