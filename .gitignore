@@ -10,3 +10,4 @@ labeling/__pycache__
 sampling/data/
 sampling/data-raw/
 sampling/BR.csv
+labeling/fix/

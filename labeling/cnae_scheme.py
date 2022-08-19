@@ -60,7 +60,7 @@ class SchemeCNAE:
         self._dict["- ARMAZENAMENTO E ATIVIDADES AUXILIARES DOS TRANSPORTES"] = 25
         self._dict["- CORREIO E OUTRAS ATIVIDADES DE ENTREGA"] = 26
 
-        self._dict["ALOJAMENTO E ALIMENTAÇÃO"] = 27
+        # self._dict["ALOJAMENTO E ALIMENTAÇÃO"] = 27
         self._dict["- ALOJAMENTO"] = 28
         self._dict["- ALIMENTAÇÃO"] = 29
 
@@ -78,6 +78,7 @@ class SchemeCNAE:
         self._dict["IGREJAS, TEMPLOS E ATIVIDADES RELIGIOSAS"] = 41
         self._dict["DESOCUPADO"] = 42
         self._dict["NÃO DEFINIDO"] = -1
+        self._dict["OBRAS"] = 50
 
         # Rough translation
         self.farming = 1
@@ -106,7 +107,7 @@ class SchemeCNAE:
         self.air_transportation = 24
         self.storage_auxiliary_transport_activities = 25
         self.mail_and_other_delivery_services = 26
-        self.accommodation_and_eating_places = 27
+        # self.accommodation_and_eating_places = 27
         self.accommodation = 28
         self.eating_places = 29
         self.information_and_communication = 30
@@ -124,6 +125,8 @@ class SchemeCNAE:
         self.vacant = 42
         self.undefined_labeled = 43
         self.undefined = -1
+
+        self.ongoing_construction = 50
 
         self.name_to_label_2way = self._dict
 

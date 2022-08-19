@@ -12,7 +12,7 @@ def parse_args():
     parser = argparse.ArgumentParser()
 
     # 'shuffle-sample-BR-0.05-37625.csv', 'sample-br-0.05-37625-semduplic-reduced'
-    filename_open = 'sample-br-0.05-37625-semdup'
+    filename_open = 'sample-br-0.05-37625-semdup-manual-fix'
     filename_close = f'labeled-{filename_open}'
 
     parser.add_argument('-w', '--write_lfs', action='store_const', const=True, default=False,
@@ -33,10 +33,13 @@ def parse_args():
 
 def import_csv(filepath):
     print(f'\nReading from file "{filepath}"...')
-    dtype = {'ordem': int, 'urban_rural': int, 'landuse_id': int, 'landuse_description': str, 'categoria_cnae': str}
-    df = pd.read_csv(f'{filepath}', encoding='utf-8', dtype=dtype, usecols=['ordem', 'urban_rural', 'landuse_id',
-                                                                            'landuse_description', 'categoria_cnae'])
-    df.columns = ['order', 'urban_rural', 'landuse_id', 'landuse_description', 'manual_label']
+    cols = ['order', 'urban_rural', 'landuse_id', 'landuse_description', 'manual_label']
+    dtype = {'order': int, 'urban_rural': int, 'landuse_id': int, 'landuse_description': str, 'manual_label': str}
+    # cols = ['ordem', 'urban_rural', 'landuse_id', 'landuse_description', 'categoria_cnae']
+    # dtype = {'ordem': int, 'urban_rural': int, 'landuse_id': int, 'landuse_description': str, 'categoria_cnae': str}
+
+    df = pd.read_csv(f'{filepath}', encoding='utf-8', dtype=dtype, usecols=cols)
+    # df.columns = ['order', 'urban_rural', 'landuse_id', 'landuse_description', 'manual_label']
     return df
 
 
@@ -78,11 +81,11 @@ def main():
 
     if args.write_lfs:
         print('Writing labeling_funcs_output.txt...')
-        with open('./output/labeling_funcs_output.txt', 'a+') as file:
+        with open('./output/0.25edition/labeling_funcs_output.txt', 'a+') as file:
             for index, row in df_train.iterrows():
                 file.write(f'order: {row["order"]} | outputs: {L_train[index]}\n')
 
-    with open('lfs-summary.txt', 'w') as f:
+    with open('output/0.25edition/lfs-summary.txt', 'w') as f:
         with pd.option_context('display.max_rows', None, 'display.max_columns', None):
             print(f'{LFAnalysis(L=L_train, lfs=lfs).lf_summary()}\n', file=f)
     # print(df_train.iloc[L_train[:, 2] == poi_labels.scheme.wholesale_trade_except_motor_vehicles].sample(10, random_state=args.seed))
@@ -96,5 +99,5 @@ def main():
     print('Done!')
 
 
-# python3 label.py -w -e -p -l f -s 37625 -d input/sample-br-0.05-37625-semdup.csv -o output/labeled-sample-br-0.05-37625-semdup.csv
+# python3 label.py -w -e -p -l f -s 37625 -d input/sample-br-0.05-37625-semdup-manual-fix.csv -o output/labeled-sample-br-0.05-37625-semdup-manual-fix.csv
 main()
