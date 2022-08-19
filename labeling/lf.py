@@ -644,7 +644,7 @@ def retail_new_products_non_specified_previously_and_second_hand_keyword(x):
                 'estabelecimento comercial', 'presentes', 'usado', 'shop', 'artesanato', 'camisaria', 'hair', 'magazine']
     if (match_any_item_in_list(keywords, x) or match_any_item_in_list(retail_keywords, x)
             or aviamentos_urban_rural(x, URBAN_LABEL)
-            or (match_any_item_in_list(['enxovais', 'enxoval'], x) and match_any_item_in_list(['bebe'], c))
+            or (match_any_item_in_list(['enxovais', 'enxoval'], x) and match_any_item_in_list(['bebe'], x))
             or re.search(r'\bro(u|p|up)a(s)?\b', description(x), flags=re.I)
             or re.search(r'\bmalha(s)?\b', description(x), flags=re.I)
             or re.search(r'\bmoda(s)?\b', description(x), flags=re.I)
