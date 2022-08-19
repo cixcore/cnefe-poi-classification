@@ -551,7 +551,7 @@ def retail_computer_communication_household_equipment_keyword(x):
     keywords = ['armarinho', 'mesa e banho', 'eletrodomesticos', 'moveis', 'computador', 'celular', 'cartucho',
                 'colchoes', 'colchao', 'tecidos']
     if (match_any_item_in_list(keywords, x)
-            or (match_any_item_in_list(['enxovais', 'enxoval'], x) and not match_any_item_in_list(['bebe'], c))):
+            or (match_any_item_in_list(['enxovais', 'enxoval'], x) and not match_any_item_in_list(['bebe'], x))):
         return poi_labels.scheme.retail_computer_communication_household_equipment
     else:
         return poi_labels.scheme.undefined
