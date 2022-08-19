@@ -529,7 +529,7 @@ def retail_fuel_sound_dist(x):
 def retail_building_material_keyword(x):
     keywords = ['vidracaria', 'telhas', 'telhados', 'piscinas']
     if (match_any_item_in_list(keywords, x)
-            or re.search(r'\bmat(eria(l|is))?\.? de con(s)?trucao\b', description(x), flags=re.I)):
+            or re.search(r'\bmat(eria(l|is))?\.? (de )?con(s)?trucao\b', description(x), flags=re.I)):
         return poi_labels.scheme.retail_building_material
     else:
         return poi_labels.scheme.undefined
@@ -966,7 +966,8 @@ def financial_activities_insurance_sound_dist(x):
 
 @labeling_function()
 def real_estate_activities_keywords(x):
-    if re.search(r'\bimobiliari[ao0]\b', description(x), flags=re.I):
+    if (re.search(r'\bimobiliari[ao0]\b', description(x), flags=re.I)
+            or re.search(r'\bimove(l|is)\b', description(x), flags=re.I)):
         return poi_labels.scheme.real_estate_activities
     else:
         return poi_labels.scheme.undefined
@@ -1411,7 +1412,6 @@ def get_lfs_list(word_dists, sound_dists):
         manufacturing_industries_keywords,
         gas_and_electricity_keywords,
         water_treatment_keywords,
-        construction_keywords,
         motor_vehicle_repair_and_retail_keywords,
         wholesale_trade_keyword,
         non_specialized_retail_trade_keyword,
@@ -1445,6 +1445,8 @@ def get_lfs_list(word_dists, sound_dists):
         international_organisms_other_extraterritorial_institutions_keywords,
         churches_temples_religious_activities_keywords,
         manufacturing_industries_empresa_keyword,
+        ongoing_construction,
+        construction_keywords,
         construction_word,
         retail_keyword,
         extractive_industries_industria_keyword,
@@ -1541,7 +1543,6 @@ all_lfs_list = [
     manufacturing_industries_keywords,
     gas_and_electricity_keywords,
     water_treatment_keywords,
-    construction_keywords,
     motor_vehicle_repair_and_retail_keywords,
     wholesale_trade_keyword,
     non_specialized_retail_trade_keyword,
@@ -1573,6 +1574,8 @@ all_lfs_list = [
     arts_culture_sport_recreation_keywords,
     international_organisms_other_extraterritorial_institutions_keywords,
     churches_temples_religious_activities_keywords,
+    construction_keywords,
+    ongoing_construction,
     construction_word,
     retail_keyword,
     extractive_industries_industria_keyword,
