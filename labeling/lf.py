@@ -49,7 +49,7 @@ def farming_keywords(x):
             or re.search(r'\bcria(s|ss|c)ao\b', description(x), flags=re.I)
             or regex_match_word('criame', x) or regex_match_word('cultivo', x)
             or regex_match_word('criatorio', x) or regex_match_word('acude', x)
-            or regex_match_word('gado', x) or regex_match_word('sitio', x)
+            or regex_match_word('gado', x) or regex_match_word('sitio', x) or regex_match_word('faz', x)
             or regex_match_word('fumo', x) or regex_match_word('estufa', x)
             or re.search(r'\bcult(ura)? de\b', description(x), flags=re.I)
             or re.search(r'\bcul(llt|l|it)?ivo\b', description(x), flags=re.I)
@@ -88,8 +88,8 @@ def farming_id(x):
 def farming_word_dist(x):
     keywords = ['fazenda', 'plantio', 'plantacao', 'pecuaria', 'agricola', 'criacao', 'criame', 'acude', 'fumo',
                 'sitio', 'corte', 'curral', 'ovelha', 'aviario', 'galpao', 'granja', 'cultivo', 'criatorio', 'gado',
-                'estufa', 'cultura', 'cultivo', 'boi', 'vaca', 'suino', 'porco', 'abelha', 'ovino', 'peixe', 'bode',
-                'cabra', 'aves', 'galinha', 'galinheiro', 'chiqueiro', 'cavalo', 'egua', 'curral']
+                'estufa', 'cultura', 'cultivo', 'vaca', 'suino', 'porco', 'abelha', 'ovino', 'peixe', 'bode',
+                'cabra', 'galinha', 'galinheiro', 'chiqueiro', 'cavalo', 'egua', 'curral']
     if dists.has_any_similar_char_seq(keywords, description(x)):
         return poi_labels.scheme.farming
     else:
@@ -100,8 +100,8 @@ def farming_word_dist(x):
 def farming_sound_dist(x):
     keywords = ['fazenda', 'plantio', 'plantacao', 'pecuaria', 'agricola', 'criacao', 'criame', 'acude', 'fumo',
                 'sitio', 'corte', 'curral', 'ovelha', 'aviario', 'galpao', 'granja', 'cultivo', 'criatorio', 'gado',
-                'estufa', 'cultura', 'cultivo', 'boi', 'vaca', 'suino', 'porco', 'abelha', 'ovino', 'peixe', 'bode',
-                'cabra', 'aves', 'galinha', 'galinheiro', 'chiqueiro', 'cavalo', 'egua', 'curral']
+                'estufa', 'cultura', 'cultivo', 'vaca', 'suino', 'porco', 'abelha', 'ovino', 'peixe', 'bode',
+                'cabra', 'galinha', 'galinheiro', 'chiqueiro', 'cavalo', 'egua', 'curral']
     if dists.has_any_similar_phonetic_word(keywords, description(x)):
         return poi_labels.scheme.farming
     else:
@@ -473,7 +473,7 @@ def retail_food_beverages_tobacco_keyword(x):
     if (match_any_item_in_list(keywords, x) or match_all_items(['distribuidora', 'bebidas'], x)
             or re.search(r'\bconfe(i)?taria\b', description(x), flags=re.I)
             or re.search(r'\bpe(i)?xaria\b', description(x), flags=re.I)
-            or re.search(r'\bac(o)?ugue\b', description(x), flags=re.I)):
+            or re.search(r'\ba[gc](o)?ugue\b', description(x), flags=re.I)):
         return poi_labels.scheme.retail_food_beverages_tobacco
     else:
         return poi_labels.scheme.undefined
@@ -993,8 +993,7 @@ def real_estate_activities_sound_dist(x):
 
 @labeling_function()
 def professional_scientific_and_technic_activities_keywords(x):
-    keywords = ['cartorio', 'tabeliao', 'tabelionato', 'registro civil', 'juizado', 'escritorio', 'adestra'
-                                                                                                  'consultoria',
+    keywords = ['cartorio', 'tabeliao', 'tabelionato', 'registro civil', 'juizado', 'escritorio', 'adestra', 'consultoria',
                 'oficio de notas', 'despachante', 'escritorio de', 'advocacia', 'publici', 'propaganda',
                 'advogad', 'contador', 'contab', 'arquitet', 'engenh', 'publici', 'pronto vet', 'prontovet']
     if (match_any_item_in_list(keywords, x)
@@ -1008,8 +1007,7 @@ def professional_scientific_and_technic_activities_keywords(x):
 def professional_scientific_and_technic_activities_word_dist(x):
     keywords = ['cartorio', 'tabeliao', 'tabelionato', 'registro', 'juizado', 'escritorio', 'consultoria', 'adestrador',
                 'despachante', 'advocacia', 'advogado', 'contador', 'contabilidade', 'contaveis', 'arquiteto',
-                'adestramento',
-                'arqiutetura', 'engenharia', 'engenheiro', 'veterinaria', 'publicidade', 'publicitario']
+                'adestramento', 'arquitetura', 'engenharia', 'engenheiro', 'veterinaria', 'publicidade', 'publicitario']
     if dists.has_any_similar_char_seq(keywords, description(x)):
         return poi_labels.scheme.professional_scientific_and_technic_activities
     else:
@@ -1018,9 +1016,9 @@ def professional_scientific_and_technic_activities_word_dist(x):
 
 @labeling_function()
 def professional_scientific_and_technic_activities_sound_dist(x):
-    keywords = ['cartorio', 'tabeliao', 'tabelionato', 'registro', 'juizado', 'escritorio', 'consultoria',
+    keywords = ['cartorio', 'tabeliao', 'tabelionato', 'registro', 'juizado', 'escritorio', 'consultoria', 'adestrador',
                 'despachante', 'advocacia', 'advogado', 'contador', 'contabilidade', 'contaveis', 'arquiteto',
-                'arqiutetura', 'engenharia', 'engenheiro', 'veterinaria', 'publicidade', 'publicitario']
+                'adestramento', 'arquitetura', 'engenharia', 'engenheiro', 'veterinaria', 'publicidade', 'publicitario']
     if dists.has_any_similar_phonetic_word(keywords, description(x)):
         return poi_labels.scheme.professional_scientific_and_technic_activities
     else:
@@ -1031,7 +1029,7 @@ def professional_scientific_and_technic_activities_sound_dist(x):
 def administrative_activities_complementary_services_keywords(x):
     keywords = ['loteria', 'loterica', 'aluguel de carro', 'locadora', 'locacao de automove', 'turismo',
                 'aluguel', 'alugueis', 'festas']
-    if match_any_item_in_list(keywords, x) or re.search(r'(agencia)? (de)? via[gj]e(m|ns)', description(x), flags=re.I):
+    if match_any_item_in_list(keywords, x) or re.search(r'(agencia )?(de )?via[gj]e(m|ns)', description(x), flags=re.I):
         return poi_labels.scheme.administrative_activities_complementary_services
     else:
         return poi_labels.scheme.undefined
@@ -1344,7 +1342,7 @@ def churches_temples_religious_activities_sound_dist(x):
 @labeling_function()
 def vacant_keywords(x):
     if (match_any_item_in_list(['baldio', 'inoperante', 'falida', 'falido', 'para alugar', 'alugase'], x)
-            or re.search(r'\b(vag|vazi)[oa](s)?\b', description(x), flags=re.I)
+            or re.search(r'\b(vag|va[sz]i)[oa](s)?\b', description(x), flags=re.I)
             or re.search(r'\bfechad[oa](s)?\b', description(x), flags=re.I)
             or re.search(r'\ba venda\b', description(x), flags=re.I)
             or re.search(r'\bdesocupad[oa](s)?\b', description(x), flags=re.I)
