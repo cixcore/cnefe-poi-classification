@@ -11,7 +11,5 @@ sampling/data/
 sampling/data-raw/
 sampling/BR.csv
 labeling/fix/
-labeling/output/0.25edition/
-labeling/output/2char/
+labeling/output/with-dists/
 labeling/output/no-dists/
-labeling/output/reduced/
