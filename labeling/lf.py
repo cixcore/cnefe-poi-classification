@@ -306,7 +306,8 @@ def construction_sound_dist(x):
 
 
 retail_keywords = ['comercio', 'varej', 'venda', 'loja', 'estabelecimento comercial', 'estabelecimentos comerciais',
-                   'sala comercial', 'salas comerciais', 'center', 'shopping', 'shoping', 'conjunto comercial', 'galeria']
+                   'sala comercial', 'salas comerciais', 'center', 'shopping', 'shoping', 'conjunto comercial',
+                   'galeria']
 
 
 @labeling_function()
@@ -559,7 +560,8 @@ def retail_computer_communication_household_equipment_keyword(x):
 
 @labeling_function()
 def retail_computer_communication_household_equipment_word_dist(x):
-    keywords = ['armarinho', 'eletrodomesticos', 'eletro', 'domesticos', 'moveis', 'computador', 'cartucho', 'colchoes', 'colchao']
+    keywords = ['armarinho', 'eletrodomesticos', 'eletro', 'domesticos', 'moveis', 'computador', 'cartucho', 'colchoes',
+                'colchao']
     if (dists.has_any_similar_char_seq(keywords, description(x))
             or dists.has_any_similar_char_seq(['mesa'], description(x))
             and dists.has_any_similar_char_seq(['banho'], description(x))):
@@ -608,7 +610,8 @@ def retail_sport_culture_recreation_articles_sound_dist(x):
 
 @labeling_function()
 def retail_pharmaceuticals_perfumery_cosmetics_optical_orthopedic_medical_articles_keyword(x):
-    keywords = ['boticario', 'cosmetico', 'farmacia', 'drogaria', 'oculos', 'otica', 'ortopedico', 'perfume', 'perfumaria']
+    keywords = ['boticario', 'cosmetico', 'farmacia', 'drogaria', 'oculos', 'otica', 'ortopedico', 'perfume',
+                'perfumaria']
     if (match_any_item_in_list(keywords, x) or re.search(r'\bo(p)?tic[a0o]\b', description(x), flags=re.I)
             or (match_any_item_in_list(['droga', 'farma', 'pharma'], x)
                 and not match_any_item_in_list(['distribuidora', 'industria'], x))
@@ -621,7 +624,8 @@ def retail_pharmaceuticals_perfumery_cosmetics_optical_orthopedic_medical_articl
 
 @labeling_function()
 def retail_pharmaceuticals_perfumery_cosmetics_optical_orthopedic_medical_articles_word_dist(x):
-    keywords = ['boticario', 'cosmetico', 'farmacia', 'drogaria', 'oculos', 'otica', 'ortopedico', 'perfume', 'perfumaria']
+    keywords = ['boticario', 'cosmetico', 'farmacia', 'drogaria', 'oculos', 'otica', 'ortopedico', 'perfume',
+                'perfumaria']
     if dists.has_any_similar_char_seq(keywords, description(x)):
         return poi_labels.scheme.retail_pharmaceuticals_perfumery_cosmetics_optical_orthopedic_medical_articles
     else:
@@ -630,7 +634,8 @@ def retail_pharmaceuticals_perfumery_cosmetics_optical_orthopedic_medical_articl
 
 @labeling_function()
 def retail_pharmaceuticals_perfumery_cosmetics_optical_orthopedic_medical_articles_sound_dist(x):
-    keywords = ['boticario', 'cosmetico', 'farmacia', 'drogaria', 'oculos', 'otica', 'ortopedico', 'perfume', 'perfumaria']
+    keywords = ['boticario', 'cosmetico', 'farmacia', 'drogaria', 'oculos', 'otica', 'ortopedico', 'perfume',
+                'perfumaria']
     if dists.has_any_similar_phonetic_word(keywords, description(x)):
         return poi_labels.scheme.retail_sport_culture_recreation_articles
     else:
@@ -641,7 +646,8 @@ def retail_pharmaceuticals_perfumery_cosmetics_optical_orthopedic_medical_articl
 def retail_new_products_non_specified_previously_and_second_hand_keyword(x):
     keywords = ['noiva', 'roupas intimas', 'bijoux', 'fashion', 'presentes', 'calcados', 'bazar', 'jeans', 'vestuario',
                 'brecho', 'loja de relogios', 'joalheria', 'floricultura', 'antiquario', 'antiguidades', 'emporio',
-                'estabelecimento comercial', 'presentes', 'usado', 'shop', 'artesanato', 'camisaria', 'hair', 'magazine']
+                'estabelecimento comercial', 'presentes', 'usado', 'shop', 'artesanato', 'camisaria', 'hair',
+                'magazine']
     if (match_any_item_in_list(keywords, x) or match_any_item_in_list(retail_keywords, x)
             or aviamentos_urban_rural(x, URBAN_LABEL)
             or (match_any_item_in_list(['enxovais', 'enxoval'], x) and match_any_item_in_list(['bebe'], x))
@@ -782,7 +788,8 @@ def storage_auxiliary_transport_activities_keywords(x):
 
 @labeling_function()
 def storage_auxiliary_transport_activities_word_dist(x):
-    keywords = ['estacionamento', 'galpao', 'paiol', 'tulha', 'deposito', 'logistica', 'armazenagem', 'armazenamento', 'garagem']
+    keywords = ['estacionamento', 'galpao', 'paiol', 'tulha', 'deposito', 'logistica', 'armazenagem', 'armazenamento',
+                'garagem']
     if dists.has_any_similar_char_seq(keywords, description(x)):
         return poi_labels.scheme.storage_auxiliary_transport_activities
     else:
@@ -791,7 +798,8 @@ def storage_auxiliary_transport_activities_word_dist(x):
 
 @labeling_function()
 def storage_auxiliary_transport_activities_sound_dist(x):
-    keywords = ['estacionamento', 'galpao', 'paiol', 'tulha', 'deposito', 'logistica', 'armazenagem', 'armazenamento', 'garagem']
+    keywords = ['estacionamento', 'galpao', 'paiol', 'tulha', 'deposito', 'logistica', 'armazenagem', 'armazenamento',
+                'garagem']
     if dists.has_any_similar_phonetic_word(keywords, description(x)):
         return poi_labels.scheme.storage_auxiliary_transport_activities
     else:
@@ -854,7 +862,8 @@ def accommodation_sound_dist(x):
 
 @labeling_function()
 def eating_places_keywords(x):
-    common_foods = ['pizza', 'hamburgue', 'sushi', 'pastel', 'pasteis', 'sorvete', 'churras', 'bebidas', 'beer', 'burger',
+    common_foods = ['pizza', 'hamburgue', 'sushi', 'pastel', 'pasteis', 'sorvete', 'churras', 'bebidas', 'beer',
+                    'burger',
                     'bauru', 'acaraje', 'vitamina', 'batida', 'salgado', 'salgadinho', 'galeto', 'esfiha']
     common_places = ['lanche', 'lanchonete', 'boteco', 'cafeteria', 'restaurante', 'buffet', 'espetinho', 'grill',
                      'vitaminosa', 'espeto', 'galeteria', 'barzinho']
@@ -868,9 +877,12 @@ def eating_places_keywords(x):
 
 @labeling_function()
 def eating_places_word_dist(x):
-    keywords = ['pizza', 'pizzaria', 'hamburguer', 'hamburgueria', 'burger', 'sushi', 'pastel', 'pastelaria', 'pasteis', 'barzinho',
-                'sorvete', 'sorveteria', 'churrasco', 'churrascaria', 'doces', 'bebidas', 'galeto', 'galeteria', 'vitaminosa',
-                'lanche', 'lancheria', 'lanchonete', 'boteco', 'cafeteria', 'restaurante', 'buffet', 'espetinho', 'esfiha']
+    keywords = ['pizza', 'pizzaria', 'hamburguer', 'hamburgueria', 'burger', 'sushi', 'pastel', 'pastelaria', 'pasteis',
+                'barzinho',
+                'sorvete', 'sorveteria', 'churrasco', 'churrascaria', 'doces', 'bebidas', 'galeto', 'galeteria',
+                'vitaminosa',
+                'lanche', 'lancheria', 'lanchonete', 'boteco', 'cafeteria', 'restaurante', 'buffet', 'espetinho',
+                'esfiha']
     if dists.has_any_similar_char_seq(keywords, description(x)):
         return poi_labels.scheme.eating_places
     else:
@@ -879,9 +891,12 @@ def eating_places_word_dist(x):
 
 @labeling_function()
 def eating_places_sound_dist(x):
-    keywords = ['pizza', 'pizzaria', 'hamburguer', 'hamburgueria', 'burger', 'sushi', 'pastel', 'pastelaria', 'pasteis', 'barzinho',
-                'sorvete', 'sorveteria', 'churrasco', 'churrascaria', 'doces', 'bebidas', 'galeto', 'galeteria', 'vitaminosa',
-                'lanche', 'lancheria', 'lanchonete', 'boteco', 'cafeteria', 'restaurante', 'buffet', 'espetinho', 'esfiha']
+    keywords = ['pizza', 'pizzaria', 'hamburguer', 'hamburgueria', 'burger', 'sushi', 'pastel', 'pastelaria', 'pasteis',
+                'barzinho',
+                'sorvete', 'sorveteria', 'churrasco', 'churrascaria', 'doces', 'bebidas', 'galeto', 'galeteria',
+                'vitaminosa',
+                'lanche', 'lancheria', 'lanchonete', 'boteco', 'cafeteria', 'restaurante', 'buffet', 'espetinho',
+                'esfiha']
     if dists.has_any_similar_phonetic_word(keywords, description(x)):
         return poi_labels.scheme.eating_places
     else:
@@ -978,7 +993,8 @@ def real_estate_activities_sound_dist(x):
 @labeling_function()
 def professional_scientific_and_technic_activities_keywords(x):
     keywords = ['cartorio', 'tabeliao', 'tabelionato', 'registro civil', 'juizado', 'escritorio', 'adestra'
-                'consultoria', 'oficio de notas', 'despachante', 'escritorio de', 'advocacia', 'publici', 'propaganda',
+                                                                                                  'consultoria',
+                'oficio de notas', 'despachante', 'escritorio de', 'advocacia', 'publici', 'propaganda',
                 'advogad', 'contador', 'contab', 'arquitet', 'engenh', 'publici', 'pronto vet', 'prontovet']
     if (match_any_item_in_list(keywords, x)
             or (match_any_item_in_list(['veterinari', 'agovet'], x) and not match_any_item_in_list(['produto'], x))):
@@ -990,7 +1006,8 @@ def professional_scientific_and_technic_activities_keywords(x):
 @labeling_function()
 def professional_scientific_and_technic_activities_word_dist(x):
     keywords = ['cartorio', 'tabeliao', 'tabelionato', 'registro', 'juizado', 'escritorio', 'consultoria', 'adestrador',
-                'despachante', 'advocacia', 'advogado', 'contador', 'contabilidade', 'contaveis', 'arquiteto', 'adestramento',
+                'despachante', 'advocacia', 'advogado', 'contador', 'contabilidade', 'contaveis', 'arquiteto',
+                'adestramento',
                 'arqiutetura', 'engenharia', 'engenheiro', 'veterinaria', 'publicidade', 'publicitario']
     if dists.has_any_similar_char_seq(keywords, description(x)):
         return poi_labels.scheme.professional_scientific_and_technic_activities
@@ -1175,7 +1192,7 @@ def human_health_id(x):
 @labeling_function()
 def arts_culture_sport_recreation_keywords(x):
     keywords = ['teatro', 'galeria de arte', 'cinema', 'museu', 'biblioteca', 'clube social', 'cassino',
-                'academia', 'esporte', 'jogo', 'lazer','bicicletaria', 'bike', 'zoologico',
+                'academia', 'esporte', 'jogo', 'lazer', 'bicicletaria', 'bike', 'zoologico',
                 'complexo esportivo', 'ginasio', 'esportivo', 'brinquedoteca', 'musica']
     if match_any_item_in_list(keywords, x) or regex_match_in_list(['praca', 'parque'], x):
         return poi_labels.scheme.arts_culture_sport_recreation
@@ -1235,15 +1252,16 @@ def other_service_activities_keywords(x):
     keywords = ['cabeleireiro', 'barbearia', 'manicure', 'tatuagem', 'alfaiate', 'unhas', 'biju', 'estetica',
                 'empresa de', 'alfaiat', 'relojoeiro', 'barba', 'coiffeur', 'maquiador', 'maquiagem',
                 'costureira', 'salao de', 'hotel para ', 'reparo', 'caes', 'gatos', 'animais', 'sindica', 'cabelo',
-                'bicicleta', 'lavanderia', 'tosa e banho', 'canil', 'gatil', 'funeraria', 'cemiterio', 'cremacao', 'sepultamento', 'funeral']
+                'bicicleta', 'lavanderia', 'tosa e banho', 'canil', 'gatil', 'funeraria', 'cemiterio', 'cremacao',
+                'sepultamento', 'funeral']
     if (re.search(r'\bcabe[rl]e(i)?[lr]e(i)?r[oa](s)?\b', description(x),
                   flags=re.I)  # cabeleireiro, cabelerero, cabeleleiro, cabelelero
-        or re.search(r'\bcabe[rl]e(i)?r[oa](s)?\b', description(x), flags=re.I)  # cabeleiro
-        or re.search(r'\bbele[sz]a?\b', description(x), flags=re.I)
-        or re.search(r'\bta(t)*oo\b', description(x), flags=re.I)
-        or re.search(r'assist(encia)? tec(nica)?', description(x), flags=re.I)
-        or re.search(r'foto(s|graf(o|ia|ica))', description(x), flags=re.I)
-        or match_any_item_in_list(keywords, x), regex_match_in_list(["oab", "crea", "crm", "cremers"], x)):
+            or re.search(r'\bcabe[rl]e(i)?r[oa](s)?\b', description(x), flags=re.I)  # cabeleiro
+            or re.search(r'\bbele[sz]a?\b', description(x), flags=re.I)
+            or re.search(r'\bta(t)*oo\b', description(x), flags=re.I)
+            or re.search(r'assist(encia)? tec(nica)?', description(x), flags=re.I)
+            or re.search(r'foto(s|graf(o|ia|ica))', description(x), flags=re.I)
+            or match_any_item_in_list(keywords, x) or regex_match_in_list(["oab", "crea", "crm", "cremers"], x)):
         return poi_labels.scheme.other_service_activities
     else:
         return poi_labels.scheme.undefined
@@ -1253,7 +1271,8 @@ def other_service_activities_keywords(x):
 def other_service_activities_word_dist(x):
     keywords = ['cabeleireiro', 'barbearia', 'manicure', 'tatuagem', 'tattoo', 'alfaiate', 'beleza', 'petshop',
                 'caes', 'costureira', 'fotografo', 'fotografia', 'fotos', 'salao', 'reparo', 'gatos', 'animais',
-                'unhas', 'biju', 'estetica', 'cabelo', 'bicicleta', 'maquiador', 'maquiagem', 'funeraria', 'cemiterio', 'cremacao', 'sepultamento', 'funeral']
+                'unhas', 'biju', 'estetica', 'cabelo', 'bicicleta', 'maquiador', 'maquiagem', 'funeraria', 'cemiterio',
+                'cremacao', 'sepultamento', 'funeral']
     if dists.has_any_similar_char_seq(keywords, description(x)):
         return poi_labels.scheme.other_service_activities
     else:
@@ -1264,7 +1283,8 @@ def other_service_activities_word_dist(x):
 def other_service_activities_sound_dist(x):
     keywords = ['cabeleireiro', 'barbearia', 'manicure', 'tatuagem', 'tattoo', 'alfaiate', 'beleza', 'petshop',
                 'caes', 'costureira', 'fotografo', 'fotografia', 'fotos', 'salao', 'reparo', 'gatos', 'animais',
-                'unhas', 'biju', 'estetica', 'cabelo', 'bicicleta', 'maquiador', 'maquiagem', 'funeraria', 'cemiterio', 'cremacao', 'sepultamento', 'funeral']
+                'unhas', 'biju', 'estetica', 'cabelo', 'bicicleta', 'maquiador', 'maquiagem', 'funeraria', 'cemiterio',
+                'cremacao', 'sepultamento', 'funeral']
     if dists.has_any_similar_phonetic_word(keywords, description(x)):
         return poi_labels.scheme.other_service_activities
     else:

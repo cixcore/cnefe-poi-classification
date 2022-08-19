@@ -14,6 +14,7 @@ def parse_args():
     # 'shuffle-sample-BR-0.05-37625.csv', 'sample-br-0.05-37625-semduplic-reduced'
     filename_open = 'sample-br-0.05-37625-semdup-manual-fix'
     filename_close = f'labeled-{filename_open}'
+    folder = 'dists'
 
     parser.add_argument('-w', '--write_lfs', action='store_const', const=True, default=False,
                         help='write labeling funcs output to file')
@@ -22,8 +23,9 @@ def parse_args():
     parser.add_argument('-p', '--phonetic_dist', action='store_const', const=True, default=False,
                         help='use portuguese soundex distance functions')
     parser.add_argument('-d', '--data_path', type=str, default=f'./input/{filename_open}.csv', help='path to csv')
-    parser.add_argument('-o', '--output_path', type=str, default=f'./output/{filename_close}.csv',
+    parser.add_argument('-o', '--output_path', type=str, default=f'./output/{folder}/{filename_close}.csv',
                         help='file to save labeling')
+    parser.add_argument('-f', '--folder_output_path', type=str, default=folder, help='dir to save auxilary outputs')
     parser.add_argument('-l', '--label_method', type=str, default='f',
                         help='label method to apply, can be <f>irst match, <s>norkel model, <m>ajority')
     parser.add_argument('-s', '--seed', type=int, default=37625,
@@ -81,11 +83,11 @@ def main():
 
     if args.write_lfs:
         print('Writing labeling_funcs_output.txt...')
-        with open('./output/0.25edition/labeling_funcs_output.txt', 'a+') as file:
+        with open(f'./output/{args.folder_output_path}/labeling_funcs_output.txt', 'a+') as file:
             for index, row in df_train.iterrows():
                 file.write(f'order: {row["order"]} | outputs: {L_train[index]}\n')
 
-    with open('output/0.25edition/lfs-summary.txt', 'w') as f:
+    with open(f'output/{args.folder_output_path}/lfs-summary.txt', 'w') as f:
         with pd.option_context('display.max_rows', None, 'display.max_columns', None):
             print(f'{LFAnalysis(L=L_train, lfs=lfs).lf_summary()}\n', file=f)
     # print(df_train.iloc[L_train[:, 2] == poi_labels.scheme.wholesale_trade_except_motor_vehicles].sample(10, random_state=args.seed))
@@ -98,6 +100,7 @@ def main():
 
     print('Done!')
 
+# python3 label.py -w -e -p -f with-dists -l f -s 37625 -d input/sample-br-0.05-37625-semdup-manual-fix.csv -o output/with-dists/labeled-sample-br-0.05-37625-semdup-manual-fix.csv
+# python3 label.py -w -f no-dists -l f -s 37625 -d input/sample-br-0.05-37625-semdup-manual-fix.csv -o output/no-dists/labeled-no-dists-semdup-manual-fix.csv
 
-# python3 label.py -w -e -p -l f -s 37625 -d input/sample-br-0.05-37625-semdup-manual-fix.csv -o output/labeled-sample-br-0.05-37625-semdup-manual-fix.csv
 main()
