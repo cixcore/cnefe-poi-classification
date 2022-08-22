@@ -2,7 +2,6 @@ import pandas as pd
 from snorkel.labeling import PandasLFApplier, LFAnalysis
 from snorkel.labeling.model import LabelModel, MajorityLabelVoter
 from snorkel.analysis import get_label_buckets
-from word_dists import dists
 import cnae_scheme
 import argparse
 import lf
@@ -72,7 +71,6 @@ def label_data(L_train, label_method):
 
 
 def main():
-    # dists.test_dists()
     args = parse_args()
     df_train = import_csv(args.data_path)
     lfs = lf.get_lfs_list(args.edition_dist, args.phonetic_dist)
