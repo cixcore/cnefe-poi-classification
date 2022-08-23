@@ -1001,7 +1001,8 @@ def real_estate_activities_sound_dist(x):
 
 @labeling_function()
 def professional_scientific_and_technic_activities_keywords(x):
-    keywords = ['cartorio', 'tabeliao', 'tabelionato', 'registro civil', 'juizado', 'escritorio', 'adestra', 'consultoria',
+    keywords = ['cartorio', 'tabeliao', 'tabelionato', 'registro civil', 'juizado', 'escritorio', 'adestra',
+                'consultoria',
                 'oficio de notas', 'despachante', 'escritorio de', 'advocacia', 'publici', 'propaganda',
                 'advogad', 'contador', 'contab', 'arquitet', 'engenh', 'publici', 'pronto vet', 'prontovet']
     if (match_any_item_in_list(keywords, x)

@@ -23,10 +23,14 @@ def main():
 
     with_dists = pd.read_csv('output/with-dists/labeled-sample-br-0.05-37625-semdup-manual-fix.csv', encoding='utf-8', dtype=dtype, usecols=cols)
     no_dists = pd.read_csv('output/no-dists/labeled-no-dists-semdup-manual-fix.csv', encoding='utf-8', dtype=dtype, usecols=cols)
+    just_edit = pd.read_csv('output/just-edit/labeled-just-edit-semdup-manual-fix.csv', encoding='utf-8', dtype=dtype, usecols=cols)
+    just_sound = pd.read_csv('output/just-sound/labeled-just-sound-semdup-manual-fix.csv', encoding='utf-8', dtype=dtype, usecols=cols)
 
     print(f'Labeled undefined => '
           f'no dists: {(no_dists["snorkel_category"] == -1).sum()} '
-          f'| with dists:{(with_dists["snorkel_category"] == -1).sum()}.')
+          f'| with dists:{(with_dists["snorkel_category"] == -1).sum()} '
+          f'| just edit dist:{(just_edit["snorkel_category"] == -1).sum()} '
+          f'| just sound dist:{(just_sound["snorkel_category"] == -1).sum()}.')
 
 
 main()
