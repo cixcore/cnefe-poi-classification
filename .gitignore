@@ -13,3 +13,5 @@ sampling/BR.csv
 labeling/fix/
 labeling/output/with-dists/
 labeling/output/no-dists/
+labeling/output/just-sound/
+labeling/output/just-edit
