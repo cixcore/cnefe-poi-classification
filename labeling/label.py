@@ -4,6 +4,7 @@ from snorkel.labeling.model import LabelModel, MajorityLabelVoter
 from snorkel.analysis import get_label_buckets
 import cnae_scheme
 import argparse
+import json
 import lf
 
 
@@ -79,12 +80,6 @@ def main():
     applier = PandasLFApplier(lfs=lfs)
     L_train = applier.apply(df=df_train)
 
-    if args.write_lfs:
-        print('Writing labeling_funcs_output.txt...')
-        with open(f'./output/{args.folder_output_path}/labeling_funcs_output.txt', 'a+') as file:
-            for index, row in df_train.iterrows():
-                file.write(f'order: {row["order"]} | outputs: {L_train[index]}\n')
-
     with open(f'output/{args.folder_output_path}/lfs-summary.txt', 'w') as f:
         with pd.option_context('display.max_rows', None, 'display.max_columns', None):
             print(f'{LFAnalysis(L=L_train, lfs=lfs).lf_summary()}\n', file=f)
@@ -96,9 +91,25 @@ def main():
     print(f'Saving labeling to {args.output_path}...')
     df_train.assign(label=preds_readable, snorkel_category=preds).to_csv(args.output_path, index=False, encoding='utf-8')
 
+    if args.write_lfs:
+        print('Writing labeling_funcs_output_readable.json...')
+        with open(f'./output/{args.folder_output_path}/labeling_funcs_output_readable.json', 'a+') as file:
+            json_arr = []
+            for index, row in df_train.iterrows():
+                outputs = []
+                for func_index, func_output in enumerate(L_train[index]):
+                    if func_output != -1:
+                        outputs.append({lf.all_lfs_dict[func_index+1]: int(func_output)})
+                json_obj = {
+                    'order': row['order'],
+                    'outputs': outputs
+                }
+                json_arr.append(json_obj)
+            file.write(json.dumps(json_arr))
     print('Done!')
 
 # python3 label.py -w -e -p -f with-dists -l f -s 37625 -d input/sample-br-0.05-37625-semdup-manual-fix.csv -o output/with-dists/labeled-sample-br-0.05-37625-semdup-manual-fix.csv
 # python3 label.py -w -f no-dists -l f -s 37625 -d input/sample-br-0.05-37625-semdup-manual-fix.csv -o output/no-dists/labeled-no-dists-semdup-manual-fix.csv
+
 
 main()
