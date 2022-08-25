@@ -25,6 +25,7 @@ class WordDistanceMeasurer:
         for word_in_description in x.split():
             # print(word_in_description)
             for word in list_of_words:
+                # print(word)
                 # soundex_word = metaphoneptbr.phonetic(word)
                 # soundex_word_in_description = metaphoneptbr.phonetic(word_in_description)
                 # print(f'word: "{soundex_word}" | word from descr: "{soundex_word_in_description}" | equals: {soundex_word == soundex_word_in_description}.')
