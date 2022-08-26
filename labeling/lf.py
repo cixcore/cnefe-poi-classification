@@ -44,7 +44,7 @@ def aviamentos_urban_rural(x, urban_rural):
 @labeling_function()
 def farming_keywords(x):
     keywords = ['fazenda', 'plantio', 'plantacao', 'pecuaria',
-                'de corte', 'curral', 'ovelha', 'aviario', 'galpao', 'granja']
+                'de corte', 'curral', 'ovelha', 'aviario', 'granja']
     if (re.search(r'\bagric[uo]la(s)?\b', description(x), flags=re.I)
             or re.search(r'\bcria(s|ss|c)ao\b', description(x), flags=re.I)
             or regex_match_word('criame', x) or regex_match_word('cultivo', x)
@@ -68,9 +68,9 @@ def farming_keywords(x):
             or re.search(r'\bcurral[s]?\b', description(x), flags=re.I)
             or re.search(r'\bgranja[s]?\b', description(x), flags=re.I)
             or re.search(r'\b(ch|x)iqueiro[s]?\b', description(x), flags=re.I)
-            or re.search(r'[a-z]+cultura\b', description(x), flags=re.I)
-            or match_any_item_in_list(keywords, x) or aviamentos_urban_rural(x, RURAL_LABEL)
-            or cnefe_landuse_ids.farming_establishment == int(x.landuse_id)):
+            or (re.search(r'[a-z]+cultura\b', description(x), flags=re.I)
+                and not match_any_item_in_list(['floricultura'], x))
+            or match_any_item_in_list(keywords, x) or aviamentos_urban_rural(x, RURAL_LABEL)):
         return poi_labels.scheme.farming
     else:
         return poi_labels.scheme.undefined
@@ -87,7 +87,7 @@ def farming_id(x):
 @labeling_function()
 def farming_word_dist(x):
     keywords = ['fazenda', 'plantio', 'plantacao', 'pecuaria', 'agricola', 'criacao', 'criame', 'acude', 'fumo',
-                'sitio', 'corte', 'curral', 'ovelha', 'aviario', 'galpao', 'granja', 'cultivo', 'criatorio', 'gado',
+                'sitio', 'corte', 'curral', 'ovelha', 'aviario', 'granja', 'cultivo', 'criatorio', 'gado',
                 'estufa', 'cultura', 'cultivo', 'vaca', 'suino', 'porco', 'abelha', 'ovino', 'peixe', 'bode',
                 'cabra', 'galinha', 'galinheiro', 'chiqueiro', 'cavalo', 'egua', 'curral']
     if dists.has_any_similar_char_seq(keywords, description(x)):
@@ -99,7 +99,7 @@ def farming_word_dist(x):
 @labeling_function()
 def farming_sound_dist(x):
     keywords = ['fazenda', 'plantio', 'plantacao', 'pecuaria', 'agricola', 'criacao', 'criame', 'acude', 'fumo',
-                'sitio', 'corte', 'curral', 'ovelha', 'aviario', 'galpao', 'granja', 'cultivo', 'criatorio', 'gado',
+                'sitio', 'corte', 'curral', 'ovelha', 'aviario', 'granja', 'cultivo', 'criatorio', 'gado',
                 'estufa', 'cultura', 'cultivo', 'vaca', 'suino', 'porco', 'abelha', 'ovino', 'peixe', 'bode',
                 'cabra', 'galinha', 'galinheiro', 'chiqueiro', 'cavalo', 'egua', 'curral']
     if dists.has_any_similar_phonetic_word(keywords, description(x)):
@@ -112,11 +112,12 @@ def farming_sound_dist(x):
 def extractive_industries_keywords(x):
     keywords = ['extracao de', 'marmore', 'garimpo', 'mineracao', 'metais preciosos',
                 'manganes', 'titanio', 'niobio', 'aluminio', 'moedora de', 'petrobras']
-    if (re.search(r'\bmine(i)?radora\b', description(x), flags=re.I)
+    if ((re.search(r'\bmine(i)?radora\b', description(x), flags=re.I)
             or regex_match_word('carvao', x) or regex_match_word('minerio', x)
             or regex_match_word('cobre', x) or regex_match_word('estanho', x)
             or regex_match_word('areia', x) or regex_match_word('argila', x)
-            or match_any_item_in_list(keywords, x)):
+            or match_any_item_in_list(keywords, x))
+            and not match_any_item_in_list(retail_keywords, x) and not regex_match_word('postos?', x)):
         return poi_labels.scheme.extractive_industries
     else:
         return poi_labels.scheme.undefined
@@ -159,18 +160,18 @@ def manufacturing_industries_keywords(x):
                 'malharia',
                 'metalurgi', 'sederurgi', 'beneficiadora', 'beneficiamento', 'maquinario', 'marcenaria', 'carpintaria',
                 'marceneiro', 'carpinteiro', 'estamparia', 'ferreiro', 'usinagem', 'tecelagem']
-    if (regex_match_word('tear', x) or match_any_item_in_list(keywords, x)
-            or re.search(r'\bconfec(c)?a[o0]\b', description(x), flags=re.I)
+    if ((regex_match_word('tear', x) or match_any_item_in_list(keywords, x)
             or re.search(r'\bbarca(c|ss)a\b', description(x), flags=re.I)
-            or re.search(r'\bindustria\b', description(x), flags=re.I)):
+            or re.search(r'\bindustria\b', description(x), flags=re.I))
+            and not match_any_item_in_list(retail_keywords, x)):
         return poi_labels.scheme.manufacturing_industries
     else:
         return poi_labels.scheme.undefined
 
 
 @labeling_function()
-def manufacturing_industries_empresa_keyword(x):
-    if regex_match_word('empresa', x):
+def manufacturing_industries_empresa_confeccao_keywords(x):
+    if regex_match_word('empresa', x) or re.search(r'\bconfec(c)?a[o0]\b', description(x), flags=re.I):
         return poi_labels.scheme.manufacturing_industries
     else:
         return poi_labels.scheme.undefined
@@ -250,7 +251,7 @@ def water_treatment_keywords(x):
 
 @labeling_function()
 def water_treatment_word_dist(x):
-    keywords = ['esgoto', 'tratamento', 'departamento', 'estacao', 'elevatorio', 'saneamento']
+    keywords = ['esgoto', 'tratamento', 'estacao', 'elevatorio', 'saneamento']
     if dists.has_any_similar_char_seq(keywords, description(x)):
         return poi_labels.scheme.water_treatment
     else:
@@ -259,7 +260,7 @@ def water_treatment_word_dist(x):
 
 @labeling_function()
 def water_treatment_sound_dist(x):
-    keywords = ['esgoto', 'tratamento', 'departamento', 'estacao', 'elevatorio', 'saneamento']
+    keywords = ['esgoto', 'tratamento', 'estacao', 'elevatorio', 'saneamento']
     if dists.has_any_similar_phonetic_word(keywords, description(x)):
         return poi_labels.scheme.water_treatment
     else:
@@ -268,8 +269,8 @@ def water_treatment_sound_dist(x):
 
 @labeling_function()
 def construction_keywords(x):
-    keywords = ['incorporadora', 'construcoes', 'incorporacao', 'empreiteira', 'terraplanagem',
-                'instalacao hidraulica', 'instalacao eletrica', 'construtora']
+    keywords = ['incorporadora', 'construcoes', 'incorporacao', 'empreiteir', 'terraplanagem', 'demolidora',
+                'instalacao hidraulica', 'instalacao eletrica', 'construtora', 'ar condicionado']
     if ((regex_match_word('construcao', x)
          and not regex_match_in_list(['casa', 'em'], x) and not match_any_item_in_list(['mat', 'de construcao'], x))
             or match_any_item_in_list(keywords, x)):
@@ -321,11 +322,11 @@ def retail_keyword(x):
 
 @labeling_function()
 def motor_vehicle_repair_and_retail_keywords(x):
-    car_brands = ['peugeot', 'volkswagen', 'ford', 'fiat', 'toyota', 'mitsubishi']
+    car_brands = ['peugeot', 'volkswagen', 'ford', 'fiat', 'toyota', 'mitsubishi', 'yamaha']
     places = ['consecionaria', 'oficina', '0ficina', '0fissina', 'ofissina', 'mecanica', 'borracha', 'autopecas']
     keywords = ['martelinho de ouro', 'automotivo', 'motor', 'alarme', 'insulfilm', 'veiculo', 'concessionaria',
                 'motores', 'bicicletas']
-    if (match_any_item_in_list(places, x)
+    if (not regex_match_word('postos?', x) or match_any_item_in_list(places, x)
             or match_any_item_in_list(keywords, x)
             or regex_match_in_list(car_brands, x)
             or regex_match_word('pecas', x)
@@ -344,7 +345,7 @@ def motor_vehicle_repair_and_retail_keywords(x):
 
 @labeling_function()
 def motor_vehicle_repair_and_retail_word_dist(x):
-    keywords = ['oficina', 'mecanica', 'ferragem', 'pneu', 'roda', 'funilaria', 'motores', 'bicicletas',
+    keywords = ['oficina', 'mecanica', 'pneu', 'roda', 'funilaria', 'motores', 'bicicletas',
                 'peugeot', 'volkswagen', 'ford', 'fiat', 'toyota', 'mitsubishi', 'consecionaria',
                 'martelinho', 'automotivo', 'motor', 'veiculo', 'borracharia', 'concessionaria', 'escapamentos']
     if dists.has_any_similar_char_seq(keywords, description(x)):
@@ -355,7 +356,7 @@ def motor_vehicle_repair_and_retail_word_dist(x):
 
 @labeling_function()
 def motor_vehicle_repair_and_retail_sound_dist(x):
-    keywords = ['oficina', 'mecanica', 'ferragem', 'pneu', 'roda', 'funilaria', 'motores', 'bicicletar',
+    keywords = ['oficina', 'mecanica', 'pneu', 'roda', 'funilaria', 'motores', 'bicicletar',
                 'peugeot', 'volkswagen', 'ford', 'fiat', 'toyota', 'mitsubishi', 'consecionaria',
                 'martelinho', 'automotivo', 'motor', 'veiculo', 'borracharia', 'concessionaria', 'escapamentos']
     if dists.has_any_similar_phonetic_word(keywords, description(x)):
@@ -509,7 +510,7 @@ def retail_food_beverages_tobacco_sound_dist(x):
 
 @labeling_function()
 def retail_fuel_keyword(x):
-    keywords = ['gasolina', 'ipiranga', 'auto posto', 'texaco', 'diesel']
+    keywords = ['gasolina', 'ipiranga', 'auto posto', 'texaco', 'diesel', 'posto de']
     if (match_any_item_in_list(keywords, x) or regex_match_word('br', x) or regex_match_word('shell', x)
             or re.search(r'\bcombustive(l|is)\b', description(x), flags=re.I)):
         return poi_labels.scheme.retail_fuel
@@ -537,9 +538,9 @@ def retail_fuel_sound_dist(x):
 
 @labeling_function()
 def retail_building_material_keyword(x):
-    keywords = ['vidracaria', 'telhas', 'telhados', 'piscinas', 'ferragem', 'tintas']
-    if (match_any_item_in_list(keywords, x)
-            or re.search(r'\bmat(eria(l|is))?\.? (de )?con(s)?trucao\b', description(x), flags=re.I)):
+    keywords = ['vidracaria', 'telhas', 'telhados', 'piscinas', 'ferragem', 'ferragens', 'tintas', 'piso de']
+    if (match_any_item_in_list(keywords, x) or regex_match_word('pisos', x)
+            or re.search(r'\bmat(eria(l|is))?\.? (de )?con(s)?truc(ao|oes)\b', description(x), flags=re.I)):
         return poi_labels.scheme.retail_building_material
     else:
         return poi_labels.scheme.undefined
@@ -657,16 +658,20 @@ def retail_new_products_non_specified_previously_and_second_hand_keyword(x):
     keywords = ['noiva', 'roupas intimas', 'bijoux', 'fashion', 'presentes', 'calcados', 'bazar', 'jeans', 'vestuario',
                 'brecho', 'loja de relogios', 'joalheria', 'floricultura', 'antiquario', 'antiguidades', 'emporio',
                 'estabelecimento comercial', 'presentes', 'usado', 'shop', 'artesanato', 'camisaria', 'hair',
-                'magazine', 'acessorio', 'joias', 'relojoaria', 'boutique', 'brik', 'loja de gas', 'venda de gas']
-    if (match_any_item_in_list(keywords, x) or match_any_item_in_list(retail_keywords, x)
+                'magazine', 'acessorio', 'joias', 'relojoaria', 'boutique', 'brik', 'loja de gas', 'venda de gas',
+                'copagas', 'copagaz', 'comercio de gas']
+    if (match_any_item_in_list(keywords, x)
             or aviamentos_urban_rural(x, URBAN_LABEL)
             or (match_any_item_in_list(['enxovais', 'enxoval'], x) and match_any_item_in_list(['bebe'], x))
             or re.search(r'\bro(u|p|up)a(s)?\b', description(x), flags=re.I)
             or re.search(r'\bmalha(s)?\b', description(x), flags=re.I)
             or re.search(r'\bmoda(s)?\b', description(x), flags=re.I)
-            or re.search(r'\bl[iae]ngerie\b', description(x), flags=re.I)
             or re.search(r'\bpet\s?shop\b', description(x), flags=re.I)
-            or re.search(r'\bbij(o|u|ou)teria\b', description(x), flags=re.I)):
+            or re.search(r'\bl[iae]ngerie\b', description(x), flags=re.I)
+            or re.search(r'\bbij(o|u|ou)terias?\b', description(x), flags=re.I)
+            or (match_any_item_in_list(retail_keywords, x)
+                and re.search(r'\bconfec(c)?a[o0]\b', description(x), flags=re.I))
+    ):
         return poi_labels.scheme.retail_new_products_non_specified_previously_and_second_hand
     else:
         return poi_labels.scheme.undefined
@@ -790,7 +795,7 @@ def air_transportation_sound_dist(x):
 @labeling_function()
 def storage_auxiliary_transport_activities_keywords(x):
     keywords = ['estacionamento', 'galpao', 'paiol', 'tulha', 'tuia', 'tulia', 'deposito', 'logistica', 'armazena',
-                'armazem de', 'amarzem de', 'armarsem de', 'garagem']
+                'armazem de', 'amarzem de', 'armarsem de', 'garagem', 'paiou']
     if match_any_item_in_list(keywords, x):
         return poi_labels.scheme.storage_auxiliary_transport_activities
     else:
@@ -1070,8 +1075,9 @@ def administrative_activities_complementary_services_sound_dist(x):
 @labeling_function()
 def public_administration_social_security_defence_keywords(x):
     keywords = ['prefeitura', 'delegacia', 'batalhao', 'centro administrativo', 'militar', 'policia', 'vara civel',
-                'civil', 'emater', 'inss', 'previdencia social']
-    if match_any_item_in_list(keywords, x) or regex_match_in_list(['dp', 'bpm', 'detran', 'contran', 'ciretran'], x):
+                'civil', 'emater', 'inss', 'previdencia social', 'ministerio', 'municipal', 'promotoria', 'secretaria',
+                'tribunal', 'fiscaliz']
+    if match_any_item_in_list(keywords, x) or regex_match_in_list(['dp', 'bpm', 'detran', 'contran', 'ciretran', 'sec'], x):
         return poi_labels.scheme.public_administration_social_security_defence
     else:
         return poi_labels.scheme.undefined
@@ -1079,7 +1085,7 @@ def public_administration_social_security_defence_keywords(x):
 
 @labeling_function()
 def public_administration_social_security_defence_word_dist(x):
-    keywords = ['prefeitura', 'delegacia', 'batalhao', 'administrativo', 'militar', 'policia', 'civel', 'civil']
+    keywords = ['prefeitura', 'delegacia', 'batalhao', 'administrativo', 'militar', 'policia', 'departamento']
     if dists.has_any_similar_char_seq(keywords, description(x)):
         return poi_labels.scheme.public_administration_social_security_defence
     else:
@@ -1088,7 +1094,7 @@ def public_administration_social_security_defence_word_dist(x):
 
 @labeling_function()
 def public_administration_social_security_defence_sound_dist(x):
-    keywords = ['prefeitura', 'delegacia', 'batalhao', 'administrativo', 'militar', 'policia', 'civel', 'civil']
+    keywords = ['prefeitura', 'delegacia', 'batalhao', 'administrativo', 'militar', 'policia', 'departamento']
     if dists.has_any_similar_phonetic_word(keywords, description(x)):
         return poi_labels.scheme.public_administration_social_security_defence
     else:
@@ -1389,8 +1395,8 @@ def undefined(x):
 
 @labeling_function()
 def ongoing_construction(x):
-    if (match_any_item_in_list(['em construcao', 'casa construcao'], x)
-            or re.search(r'\b(em )?obras?\b', description(x), flags=re.I)):
+    if (match_any_item_in_list(['em construcao', 'casa construcao', 'em obra'], x)
+            or re.fullmatch(r'\b(em )?obras?\b', description(x), flags=re.I)):
         return poi_labels.scheme.ongoing_construction
     else:
         return poi_labels.scheme.undefined
@@ -1421,35 +1427,38 @@ def get_lfs_list(word_dists, sound_dists):
         vacant_keywords,
         ongoing_construction,
 
-        farming_keywords,
         extractive_industries_keywords,
         manufacturing_industries_keywords,
-        gas_and_electricity_keywords,
         water_treatment_keywords,
+        retail_fuel_keyword,
         administrative_activities_complementary_services_keywords,
-        motor_vehicle_repair_and_retail_keywords,
-        non_specialized_retail_trade_keyword,
         non_specialized_retail_foodstuffs_supermarkets_keyword,
         non_specialized_retail_foodstuffs_grocery_stores_keyword,
         wholesale_trade_keyword,
         eating_places_keywords,
         retail_food_beverages_tobacco_keyword,
-        retail_fuel_keyword,
         retail_building_material_keyword,
         real_estate_activities_keywords,
         retail_computer_communication_household_equipment_keyword,
         retail_sport_culture_recreation_articles_keyword,
         retail_pharmaceuticals_perfumery_cosmetics_optical_orthopedic_medical_articles_keyword,
         retail_new_products_non_specified_previously_and_second_hand_keyword,
+        motor_vehicle_repair_and_retail_keywords,
+        gas_and_electricity_keywords,
+        non_specialized_retail_trade_keyword,
         water_transportation_keywords,
         air_transportation_keywords,
         ground_transportation_keywords,
         storage_auxiliary_transport_activities_keywords,
         mail_and_other_delivery_services_keywords,
         transport_warehousing_mail_keywords,
+        farming_keywords,
         other_service_activities_keywords,
         information_and_communication_keywords,
         accommodation_keywords,
+        construction_keywords,
+        construction_word,
+        retail_keyword,
         financial_activities_insurance_keywords,
         professional_scientific_and_technic_activities_keywords,
         public_administration_social_security_defence_keywords,
@@ -1458,10 +1467,7 @@ def get_lfs_list(word_dists, sound_dists):
         arts_culture_sport_recreation_keywords,
         international_organisms_other_extraterritorial_institutions_keywords,
         churches_temples_religious_activities_keywords,
-        manufacturing_industries_empresa_keyword,
-        construction_keywords,
-        construction_word,
-        retail_keyword,
+        manufacturing_industries_empresa_confeccao_keywords,
         extractive_industries_industria_keyword,
         human_health_id,
         education_id,
@@ -1588,7 +1594,7 @@ all_lfs_dict = {
     37: 'arts_culture_sport_recreation_keywords',
     38: 'international_organisms_other_extraterritorial_institutions_keywords',
     39: 'churches_temples_religious_activities_keywords',
-    40: 'manufacturing_industries_empresa_keyword',
+    40: 'manufacturing_industries_empresa_confeccao_keywords',
     41: 'construction_keywords',
     42: 'construction_word',
     43: 'retail_keyword',
@@ -1713,7 +1719,7 @@ lfs_with_edit_dists = {
     37: 'arts_culture_sport_recreation_keywords',
     38: 'international_organisms_other_extraterritorial_institutions_keywords',
     39: 'churches_temples_religious_activities_keywords',
-    40: 'manufacturing_industries_empresa_keyword',
+    40: 'manufacturing_industries_empresa_confeccao_keywords',
     41: 'construction_keywords',
     42: 'construction_word',
     43: 'retail_keyword',
@@ -1801,7 +1807,7 @@ lfs_with_phonetic_dists = {
     37: 'arts_culture_sport_recreation_keywords',
     38: 'international_organisms_other_extraterritorial_institutions_keywords',
     39: 'churches_temples_religious_activities_keywords',
-    40: 'manufacturing_industries_empresa_keyword',
+    40: 'manufacturing_industries_empresa_confeccao_keywords',
     41: 'construction_keywords',
     42: 'construction_word',
     43: 'retail_keyword',
@@ -1847,4 +1853,55 @@ lfs_with_phonetic_dists = {
     83: 'other_service_activities_sound_dist',
     84: 'construction_sound_dist',
     85: 'churches_temples_religious_activities_sound_dist'
+}
+
+lfs_no_dists = {
+    1: 'vacant_keywords',
+    2: 'ongoing_construction',
+    3: 'farming_keywords',
+    4: 'extractive_industries_keywords',
+    5: 'manufacturing_industries_keywords',
+    6: 'gas_and_electricity_keywords',
+    7: 'water_treatment_keywords',
+    8: 'administrative_activities_complementary_services_keywords',
+    9: 'motor_vehicle_repair_and_retail_keywords',
+    10: 'non_specialized_retail_trade_keyword',
+    11: 'non_specialized_retail_foodstuffs_supermarkets_keyword',
+    12: 'non_specialized_retail_foodstuffs_grocery_stores_keyword',
+    13: 'wholesale_trade_keyword',
+    14: 'eating_places_keywords',
+    15: 'retail_food_beverages_tobacco_keyword',
+    16: 'retail_fuel_keyword',
+    17: 'retail_building_material_keyword',
+    18: 'real_estate_activities_keywords',
+    19: 'retail_computer_communication_household_equipment_keyword',
+    20: 'retail_sport_culture_recreation_articles_keyword',
+    21: 'retail_pharmaceuticals_perfumery_cosmetics_optical_orthopedic_medical_articles_keyword',
+    22: 'retail_new_products_non_specified_previously_and_second_hand_keyword',
+    23: 'ground_transportation_keywords',
+    24: 'water_transportation_keywords',
+    25: 'air_transportation_keywords',
+    26: 'storage_auxiliary_transport_activities_keywords',
+    27: 'mail_and_other_delivery_services_keywords',
+    28: 'transport_warehousing_mail_keywords',
+    29: 'other_service_activities_keywords',
+    30: 'information_and_communication_keywords',
+    31: 'accommodation_keywords',
+    32: 'financial_activities_insurance_keywords',
+    33: 'professional_scientific_and_technic_activities_keywords',
+    34: 'public_administration_social_security_defence_keywords',
+    35: 'education_keywords',
+    36: 'human_health_social_services_keywords',
+    37: 'arts_culture_sport_recreation_keywords',
+    38: 'international_organisms_other_extraterritorial_institutions_keywords',
+    39: 'churches_temples_religious_activities_keywords',
+    40: 'manufacturing_industries_empresa_confeccao_keywords',
+    41: 'construction_keywords',
+    42: 'construction_word',
+    43: 'retail_keyword',
+    44: 'extractive_industries_industria_keyword',
+    45: 'human_health_id',
+    46: 'education_id',
+    47: 'farming_id',
+    48: 'undefined'
 }

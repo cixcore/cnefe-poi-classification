@@ -77,6 +77,8 @@ def get_func_name(args, func_index):
         return lf.lfs_with_edit_dists[func_index+1]
     elif args.phonetic_dist:
         return lf.lfs_with_phonetic_dists[func_index+1]
+    else:
+        return lf.lfs_no_dists[func_index+1]
 
 
 def main():
