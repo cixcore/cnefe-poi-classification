@@ -10,7 +10,7 @@ labeling/__pycache__
 sampling/data/
 sampling/data-raw/
 sampling/BR.csv
-labeling/fix/
+labeling/fix/mismatched-*
 labeling/output/with-dists/
 labeling/output/no-dists/
 labeling/output/just-sound/

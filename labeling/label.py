@@ -11,7 +11,6 @@ import lf
 def parse_args():
     parser = argparse.ArgumentParser()
 
-    # 'shuffle-sample-BR-0.05-37625.csv', 'sample-br-0.05-37625-semduplic-reduced'
     filename_open = 'sample-br-0.05-37625-semdup-manual-fix'
     filename_close = f'labeled-{filename_open}'
     folder = 'dists'
@@ -71,6 +70,15 @@ def label_data(L_train, label_method):
         return preds
 
 
+def get_func_name(args, func_index):
+    if args.edition_dist and args.phonetic_dist:
+        return lf.all_lfs_dict[func_index+1]
+    elif args.edition_dist:
+        return lf.lfs_with_edit_dists[func_index+1]
+    elif args.phonetic_dist:
+        return lf.lfs_with_phonetic_dists[func_index+1]
+
+
 def main():
     args = parse_args()
     df_train = import_csv(args.data_path)
@@ -89,7 +97,7 @@ def main():
     preds_readable = [get_label_name(p) for p in preds]
 
     print(f'Saving labeling to {args.output_path}...')
-    df_train.assign(label=preds_readable, snorkel_category=preds).to_csv(args.output_path, index=False, encoding='utf-8')
+    df_train.assign(pred_label=preds_readable, snorkel_category=preds).to_csv(args.output_path, index=False, encoding='utf-8')
 
     if args.write_lfs:
         print('Writing labeling_funcs_output_readable.json...')
@@ -99,7 +107,7 @@ def main():
                 outputs = []
                 for func_index, func_output in enumerate(L_train[index]):
                     if func_output != -1:
-                        outputs.append({lf.all_lfs_dict[func_index+1]: int(func_output)})
+                        outputs.append(get_func_name(args, func_index))
                 json_obj = {
                     'order': row['order'],
                     'outputs': outputs
@@ -110,6 +118,9 @@ def main():
 
 # python3 label.py -w -e -p -f with-dists -l f -s 37625 -d input/sample-br-0.05-37625-semdup-manual-fix.csv -o output/with-dists/labeled-sample-br-0.05-37625-semdup-manual-fix.csv
 # python3 label.py -w -f no-dists -l f -s 37625 -d input/sample-br-0.05-37625-semdup-manual-fix.csv -o output/no-dists/labeled-no-dists-semdup-manual-fix.csv
+
+# python3 label.py -w -e -f no-manual/just-edit -l f -s 37625 -d input/sample-br-0.05-37625-semdup-manual-fix.csv -o output/no-manual/just-edit/labeled-br-0.05-37625.csv
+# python3 label.py -w -p -f no-manual/just-phonetic -l f -s 37625 -d input/sample-br-0.05-37625-semdup-manual-fix.csv -o output/no-manual/just-phonetic/labeled-br-0.05-37625.csv
 
 
 main()

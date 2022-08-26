@@ -155,7 +155,8 @@ def extractive_industries_industria_keyword(x):
 
 @labeling_function()
 def manufacturing_industries_keywords(x):
-    keywords = ['abatedouro', 'frigorifico', 'abatedor', 'abate', 'fabrica', 'confeccoes', 'ferreir', 'textil', 'malharia',
+    keywords = ['abatedouro', 'frigorifico', 'abatedor', 'abate', 'fabrica', 'confeccoes', 'ferreir', 'textil',
+                'malharia',
                 'metalurgi', 'sederurgi', 'beneficiadora', 'beneficiamento', 'maquinario', 'marcenaria', 'carpintaria',
                 'marceneiro', 'carpinteiro', 'estamparia', 'ferreiro', 'usinagem', 'tecelagem']
     if (regex_match_word('tear', x) or match_any_item_in_list(keywords, x)
@@ -322,7 +323,8 @@ def retail_keyword(x):
 def motor_vehicle_repair_and_retail_keywords(x):
     car_brands = ['peugeot', 'volkswagen', 'ford', 'fiat', 'toyota', 'mitsubishi']
     places = ['consecionaria', 'oficina', '0ficina', '0fissina', 'ofissina', 'mecanica', 'borracha', 'autopecas']
-    keywords = ['martelinho de ouro', 'automotivo', 'motor', 'alarme', 'insulfilm', 'veiculo', 'concessionaria', 'motores', 'bicicletas']
+    keywords = ['martelinho de ouro', 'automotivo', 'motor', 'alarme', 'insulfilm', 'veiculo', 'concessionaria',
+                'motores', 'bicicletas']
     if (match_any_item_in_list(places, x)
             or match_any_item_in_list(keywords, x)
             or regex_match_in_list(car_brands, x)
@@ -704,7 +706,7 @@ def transport_warehousing_mail_keywords(x):
 @labeling_function()
 def ground_transportation_keywords(x):
     keywords = ['estacao de trem', 'estacao de metro', 'estacao rodoviaria', 'teleferico', 'moto taxi', 'mototaxi',
-                'onibus']
+                'onibus', 'transportadora', 'transporte']
     if match_any_item_in_list(keywords, x) or regex_match_word('taxi', x):
         return poi_labels.scheme.ground_transportation
     else:
@@ -713,7 +715,8 @@ def ground_transportation_keywords(x):
 
 @labeling_function()
 def ground_transportation_word_dist(x):
-    keywords = ['trem', 'metro', 'rodoviaria', 'teleferico', 'taxi', 'mototaxi', 'onibus']
+    keywords = ['trem', 'metro', 'rodoviaria', 'teleferico', 'taxi', 'mototaxi', 'onibus', 'transporte',
+                'transportadora']
     if dists.has_any_similar_char_seq(keywords, description(x)):
         return poi_labels.scheme.ground_transportation
     else:
@@ -759,7 +762,7 @@ def water_transportation_sound_dist(x):
 
 @labeling_function()
 def air_transportation_keywords(x):
-    keywords = ['aeroporto']
+    keywords = ['aeroporto', 'aereo']
     if match_any_item_in_list(keywords, x):
         return poi_labels.scheme.air_transportation
     else:
@@ -1438,9 +1441,9 @@ def get_lfs_list(word_dists, sound_dists):
         retail_sport_culture_recreation_articles_keyword,
         retail_pharmaceuticals_perfumery_cosmetics_optical_orthopedic_medical_articles_keyword,
         retail_new_products_non_specified_previously_and_second_hand_keyword,
-        ground_transportation_keywords,
         water_transportation_keywords,
         air_transportation_keywords,
+        ground_transportation_keywords,
         storage_auxiliary_transport_activities_keywords,
         mail_and_other_delivery_services_keywords,
         transport_warehousing_mail_keywords,
@@ -1568,9 +1571,9 @@ all_lfs_dict = {
     20: 'retail_sport_culture_recreation_articles_keyword',
     21: 'retail_pharmaceuticals_perfumery_cosmetics_optical_orthopedic_medical_articles_keyword',
     22: 'retail_new_products_non_specified_previously_and_second_hand_keyword',
-    23: 'ground_transportation_keywords',
-    24: 'water_transportation_keywords',
-    25: 'air_transportation_keywords',
+    23: 'water_transportation_keywords',
+    24: 'air_transportation_keywords',
+    25: 'ground_transportation_keywords',
     26: 'storage_auxiliary_transport_activities_keywords',
     27: 'mail_and_other_delivery_services_keywords',
     28: 'transport_warehousing_mail_keywords',
@@ -1668,4 +1671,180 @@ all_lfs_dict = {
     120: 'other_service_activities_sound_dist',
     121: 'construction_sound_dist',
     122: 'churches_temples_religious_activities_sound_dist'
+}
+
+lfs_with_edit_dists = {
+    1: 'vacant_keywords',
+    2: 'ongoing_construction',
+    3: 'farming_keywords',
+    4: 'extractive_industries_keywords',
+    5: 'manufacturing_industries_keywords',
+    6: 'gas_and_electricity_keywords',
+    7: 'water_treatment_keywords',
+    8: 'administrative_activities_complementary_services_keywords',
+    9: 'motor_vehicle_repair_and_retail_keywords',
+    10: 'non_specialized_retail_trade_keyword',
+    11: 'non_specialized_retail_foodstuffs_supermarkets_keyword',
+    12: 'non_specialized_retail_foodstuffs_grocery_stores_keyword',
+    13: 'wholesale_trade_keyword',
+    14: 'eating_places_keywords',
+    15: 'retail_food_beverages_tobacco_keyword',
+    16: 'retail_fuel_keyword',
+    17: 'retail_building_material_keyword',
+    18: 'real_estate_activities_keywords',
+    19: 'retail_computer_communication_household_equipment_keyword',
+    20: 'retail_sport_culture_recreation_articles_keyword',
+    21: 'retail_pharmaceuticals_perfumery_cosmetics_optical_orthopedic_medical_articles_keyword',
+    22: 'retail_new_products_non_specified_previously_and_second_hand_keyword',
+    23: 'ground_transportation_keywords',
+    24: 'water_transportation_keywords',
+    25: 'air_transportation_keywords',
+    26: 'storage_auxiliary_transport_activities_keywords',
+    27: 'mail_and_other_delivery_services_keywords',
+    28: 'transport_warehousing_mail_keywords',
+    29: 'other_service_activities_keywords',
+    30: 'information_and_communication_keywords',
+    31: 'accommodation_keywords',
+    32: 'financial_activities_insurance_keywords',
+    33: 'professional_scientific_and_technic_activities_keywords',
+    34: 'public_administration_social_security_defence_keywords',
+    35: 'education_keywords',
+    36: 'human_health_social_services_keywords',
+    37: 'arts_culture_sport_recreation_keywords',
+    38: 'international_organisms_other_extraterritorial_institutions_keywords',
+    39: 'churches_temples_religious_activities_keywords',
+    40: 'manufacturing_industries_empresa_keyword',
+    41: 'construction_keywords',
+    42: 'construction_word',
+    43: 'retail_keyword',
+    44: 'extractive_industries_industria_keyword',
+    45: 'human_health_id',
+    46: 'education_id',
+    47: 'farming_id',
+    48: 'undefined',
+    49: 'farming_word_dist',
+    50: 'extractive_industries_word_dist',
+    51: 'manufacturing_industries_word_dist',
+    52: 'gas_and_electricity_word_dist',
+    53: 'water_treatment_word_dist',
+    54: 'motor_vehicle_repair_and_retail_word_dist',
+    55: 'wholesale_word_dist',
+    56: 'non_specialized_retail_trade_word_dist',
+    57: 'non_specialized_retail_foodstuffs_supermarkets_word_dist',
+    58: 'non_specialized_retail_foodstuffs_grocery_stores_word_dist',
+    59: 'retail_food_beverages_tobacco_word_dist',
+    60: 'retail_fuel_word_dist',
+    61: 'retail_building_material_word_dist',
+    62: 'retail_computer_communication_household_equipment_word_dist',
+    63: 'retail_sport_culture_recreation_articles_word_dist',
+    64: 'retail_pharmaceuticals_perfumery_cosmetics_optical_orthopedic_medical_articles_word_dist',
+    65: 'retail_new_products_non_specified_previously_and_second_hand_word_dist',
+    66: 'ground_transportation_word_dist',
+    67: 'water_transportation_word_dist',
+    68: 'air_transportation_word_dist',
+    69: 'storage_auxiliary_transport_activities_word_dist',
+    70: 'mail_and_other_delivery_services_word_dist',
+    71: 'accommodation_word_dist',
+    72: 'eating_places_word_dist',
+    73: 'information_and_communication_word_dist',
+    74: 'financial_activities_insurance_word_dist',
+    75: 'real_estate_activities_word_dist',
+    76: 'professional_scientific_and_technic_activities_word_dist',
+    77: 'administrative_activities_complementary_services_word_dist',
+    78: 'public_administration_social_security_defence_word_dist',
+    79: 'education_word_dist',
+    80: 'human_health_social_services_word_dist',
+    81: 'arts_culture_sport_recreation_word_dist',
+    82: 'international_organisms_other_extraterritorial_institutions_word_dist',
+    83: 'other_service_activities_word_dist',
+    84: 'construction_word_dist',
+    85: 'churches_temples_religious_activities_word_dist'
+}
+
+lfs_with_phonetic_dists = {
+    1: 'vacant_keywords',
+    2: 'ongoing_construction',
+    3: 'farming_keywords',
+    4: 'extractive_industries_keywords',
+    5: 'manufacturing_industries_keywords',
+    6: 'gas_and_electricity_keywords',
+    7: 'water_treatment_keywords',
+    8: 'administrative_activities_complementary_services_keywords',
+    9: 'motor_vehicle_repair_and_retail_keywords',
+    10: 'non_specialized_retail_trade_keyword',
+    11: 'non_specialized_retail_foodstuffs_supermarkets_keyword',
+    12: 'non_specialized_retail_foodstuffs_grocery_stores_keyword',
+    13: 'wholesale_trade_keyword',
+    14: 'eating_places_keywords',
+    15: 'retail_food_beverages_tobacco_keyword',
+    16: 'retail_fuel_keyword',
+    17: 'retail_building_material_keyword',
+    18: 'real_estate_activities_keywords',
+    19: 'retail_computer_communication_household_equipment_keyword',
+    20: 'retail_sport_culture_recreation_articles_keyword',
+    21: 'retail_pharmaceuticals_perfumery_cosmetics_optical_orthopedic_medical_articles_keyword',
+    22: 'retail_new_products_non_specified_previously_and_second_hand_keyword',
+    23: 'ground_transportation_keywords',
+    24: 'water_transportation_keywords',
+    25: 'air_transportation_keywords',
+    26: 'storage_auxiliary_transport_activities_keywords',
+    27: 'mail_and_other_delivery_services_keywords',
+    28: 'transport_warehousing_mail_keywords',
+    29: 'other_service_activities_keywords',
+    30: 'information_and_communication_keywords',
+    31: 'accommodation_keywords',
+    32: 'financial_activities_insurance_keywords',
+    33: 'professional_scientific_and_technic_activities_keywords',
+    34: 'public_administration_social_security_defence_keywords',
+    35: 'education_keywords',
+    36: 'human_health_social_services_keywords',
+    37: 'arts_culture_sport_recreation_keywords',
+    38: 'international_organisms_other_extraterritorial_institutions_keywords',
+    39: 'churches_temples_religious_activities_keywords',
+    40: 'manufacturing_industries_empresa_keyword',
+    41: 'construction_keywords',
+    42: 'construction_word',
+    43: 'retail_keyword',
+    44: 'extractive_industries_industria_keyword',
+    45: 'human_health_id',
+    46: 'education_id',
+    47: 'farming_id',
+    48: 'undefined',
+    49: 'vacant_dists',
+    50: 'farming_sound_dist',
+    51: 'extractive_industries_sound_dist',
+    52: 'manufacturing_industries_sound_dist',
+    53: 'gas_and_electricity_sound_dist',
+    54: 'water_treatment_sound_dist',
+    55: 'motor_vehicle_repair_and_retail_sound_dist',
+    56: 'wholesale_sound_dist',
+    57: 'non_specialized_retail_trade_sound_dist',
+    58: 'non_specialized_retail_foodstuffs_supermarkets_sound_dist',
+    59: 'non_specialized_retail_foodstuffs_grocery_stores_sound_dist',
+    60: 'retail_food_beverages_tobacco_sound_dist',
+    61: 'retail_fuel_sound_dist',
+    62: 'retail_computer_communication_household_equipment_sound_dist',
+    63: 'retail_sport_culture_recreation_articles_sound_dist',
+    64: 'retail_pharmaceuticals_perfumery_cosmetics_optical_orthopedic_medical_articles_sound_dist',
+    65: 'retail_new_products_non_specified_previously_and_second_hand_sound_dist',
+    66: 'ground_transportation_sound_dist',
+    67: 'water_transportation_sound_dist',
+    68: 'air_transportation_sound_dist',
+    69: 'storage_auxiliary_transport_activities_sound_dist',
+    70: 'mail_and_other_delivery_services_sound_dist',
+    71: 'accommodation_sound_dist',
+    72: 'eating_places_sound_dist',
+    73: 'information_and_communication_sound_dist',
+    74: 'financial_activities_insurance_sound_dist',
+    75: 'real_estate_activities_sound_dist',
+    76: 'professional_scientific_and_technic_activities_sound_dist',
+    77: 'administrative_activities_complementary_services_sound_dist',
+    78: 'public_administration_social_security_defence_sound_dist',
+    79: 'education_sound_dist',
+    80: 'human_health_social_services_sound_dist',
+    81: 'arts_culture_sport_recreation_sound_dist',
+    82: 'international_organisms_other_extraterritorial_institutions_sound_dist',
+    83: 'other_service_activities_sound_dist',
+    84: 'construction_sound_dist',
+    85: 'churches_temples_religious_activities_sound_dist'
 }
