@@ -7,6 +7,8 @@ from sklearn import svm
 from numpy import mean, std
 import matplotlib.pyplot as plt
 from nltk.tokenize import word_tokenize
+from transformers import BertTokenizer
+from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.model_selection import train_test_split, cross_val_score, KFold, GridSearchCV
@@ -23,11 +25,11 @@ def description(landuse_description):
 
 
 nltk.download('punkt')
-dir = '../labeling/output/no-manual/just-phonetic'
-file = 'labeled-br-0.05-37625.csv'
+directory = '.'
+file = 'sample-br-0.05-37625-manual-labeled.csv'
 
 cols = ['order', 'urban_rural', 'landuse_id', 'landuse_description', 'manual_label', 'pred_label']
-df = pd.read_csv(f"{dir}/{file}", encoding='utf-8', sep=',', usecols=cols)
+df = pd.read_csv(f"{directory}/{file}", encoding='utf-8', sep=',', usecols=cols)
 
 # ajusta textos
 df['landuse_description'] = df['landuse_description'].str.lower()
@@ -35,7 +37,7 @@ df = df[df['landuse_description'].notna()]
 df['landuse_description'] = df['landuse_description'].str \
     .normalize('NFKD').str.encode('ascii', errors='ignore').str.decode('utf-8')
 df.drop(df[df['landuse_description'].str.isnumeric()].index, axis=0, inplace=True)
-df = df[df['manual_label'].notna()]  # remove linhas que tenham o campo especifico nulo
+df = df[df['manual_label'].notna()]
 df = df.reset_index(drop=True)
 print('Base rotulada:', len(df))
 
@@ -62,7 +64,7 @@ df2 = df.groupby('label').count()
 sns.barplot(x=df2.index, y=df2.manual_label, data=df2)
 plt.show()
 
-# calcula   embeddings esparsas tf-idf
+# calcula embeddings esparsas tf-idf
 docs = list(df['landuse_description'])
 vectorizer = TfidfVectorizer()
 X = vectorizer.fit_transform(docs)
@@ -80,8 +82,21 @@ idx = np.where(a[0] > 0)
 
 # Cross Validation: simples
 seed = 1
-# clf = svm.SVC(kernel='linear', C=1, random_state=1)
-clf = RandomForestClassifier(n_estimators=100, random_state=seed)
+
+choose = 1
+if choose == 1:
+    clf = RandomForestClassifier(n_estimators=100, random_state=seed)
+elif choose == 2:
+    clf = svm.SVC(kernel='linear', C=1, random_state=seed)
+elif choose == 3:
+    clf = LogisticRegression(random_state=seed)
+elif choose == 4:
+    tokenizer = BertTokenizer.from_pretrained('neuralmind/bert-base-portuguese-cased', do_lower_case=False)
+    clf = tokenizer
+elif choose == 4:
+    tokenizer = BertTokenizer.from_pretrained('neuralmind/bert-base-portuguese-cased', do_lower_case=False)
+    clf = tokenizer
+
 metrica = 'accuracy'  # f1_macro
 scores = cross_val_score(clf, X, y, cv=10, scoring=metrica, )
 

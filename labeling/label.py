@@ -34,8 +34,8 @@ def parse_args():
 
 def import_csv(filepath):
     print(f'\nReading from file "{filepath}"...')
-    cols = ['urban_rural', 'landuse_id', 'landuse_description']
-    dtype = {'urban_rural': int, 'landuse_id': int, 'landuse_description': str}
+    cols = ['urban_rural', 'landuse_id', 'landuse_description', 'manual_label']
+    dtype = {'urban_rural': int, 'landuse_id': int, 'landuse_description': str, 'manual_label': str}
 
     df = pd.read_csv(f'{filepath}', encoding='utf-8', dtype=dtype, usecols=cols)
     return df

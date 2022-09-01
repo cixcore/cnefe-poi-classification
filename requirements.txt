@@ -1,5 +1,11 @@
 clavier==0.1.2
-geobr==0.1.10
-pandas==1.1.5
-snorkel==0.9.8
+geobr==0.2.0
+matplotlib==3.5.3
 Metaphone-ptbr @ git+https://github.com/carlosjordao/metaphone-ptbr@e5dae5f160f56298ef143241fbefcf72d78a3300#subdirectory=python
+nltk==3.7
+numpy==1.19.5
+pandas==1.1.5
+scikit_learn==1.1.2
+seaborn==0.11.2
+snorkel==0.9.8
+transformers==4.21.2
