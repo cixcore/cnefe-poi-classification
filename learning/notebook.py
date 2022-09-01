@@ -6,8 +6,10 @@ import seaborn as sns
 from sklearn import svm
 from numpy import mean, std
 import matplotlib.pyplot as plt
-from nltk.tokenize import word_tokenize
 from transformers import BertTokenizer
+from nltk.tokenize import word_tokenize
+from sklearn.compose import ColumnTransformer
+from sklearn.preprocessing import OneHotEncoder
 from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -28,7 +30,7 @@ nltk.download('punkt')
 directory = '.'
 file = 'sample-br-0.05-37625-manual-labeled.csv'
 
-cols = ['order', 'urban_rural', 'landuse_id', 'landuse_description', 'manual_label', 'pred_label']
+cols = ['order', 'urban_rural', 'landuse_id', 'landuse_description', 'manual_label']  # , 'pred_label']
 df = pd.read_csv(f"{directory}/{file}", encoding='utf-8', sep=',', usecols=cols)
 
 # ajusta textos
@@ -65,17 +67,20 @@ sns.barplot(x=df2.index, y=df2.manual_label, data=df2)
 plt.show()
 
 # calcula embeddings esparsas tf-idf
-docs = list(df['landuse_description'])
-vectorizer = TfidfVectorizer()
-X = vectorizer.fit_transform(docs)
+transformer = ColumnTransformer(
+    transformers=[
+        ('description', TfidfVectorizer(), 'landuse_description'),
+        ('id', OneHotEncoder(), ['landuse_id'])
+    ]
+)
+X = transformer.fit_transform(df[['landuse_id', 'landuse_description']])
 y = np.array(df['label'].astype(int))
 
-# X: (linhas: instancias, colunas:palavras)
-X.shape, y.shape, len(vectorizer.vocabulary_)
+# X: (linhas: instancias, colunas:palavras) X.shape, y.shape, len(vectorizer.vocabulary_)
 
-# Verifica documento 10
 d = 10
-print(docs[d])
+# Verifica documento 10
+# print(docs[d])
 # verifica scores da palavras do documento 10
 a = X[d].toarray()
 idx = np.where(a[0] > 0)
@@ -97,10 +102,10 @@ elif choose == 4:
     tokenizer = BertTokenizer.from_pretrained('neuralmind/bert-base-portuguese-cased', do_lower_case=False)
     clf = tokenizer
 
-metrica = 'accuracy'  # f1_macro
-scores = cross_val_score(clf, X, y, cv=10, scoring=metrica, )
+metric = 'accuracy'  # f1_macro
+scores = cross_val_score(clf, X, y, cv=10, scoring=metric, )
 
-print(f'{metrica}: %.3f (%.3f)' % (mean(scores), std(scores)))
+print(f'{metric}: %.3f (%.3f)' % (mean(scores), std(scores)))
 
 # Nested cross validation e gridsearch:
 # para otimizar hiperparametros usar isso para evitar ofertiting
@@ -115,11 +120,11 @@ space = dict()
 space['n_estimators'] = [10, 100]
 # space['max_features'] = [2, 4, 6]
 # define search
-search = GridSearchCV(model, space, scoring=metrica, n_jobs=1, cv=cv_inner, refit=True)
+search = GridSearchCV(model, space, scoring=metric, n_jobs=1, cv=cv_inner, refit=True)
 
 # configure the cross-validation procedure
 cv_outer = KFold(n_splits=10, shuffle=True, random_state=1)
 # execute the nested cross-validation
-scores = cross_val_score(search, X, y, scoring=metrica, cv=cv_outer, n_jobs=-1)
+scores = cross_val_score(search, X, y, scoring=metric, cv=cv_outer, n_jobs=-1)
 # report performance
-print(f'{metrica}: %.3f (%.3f)' % (mean(scores), std(scores)))
+print(f'{metric}: %.3f (%.3f)' % (mean(scores), std(scores)))
