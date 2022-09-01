@@ -4,7 +4,7 @@ from word_dists import dists
 
 
 def main():
-    # dists.test_dists()
+    dists.test_dists()
     print('\nPHONETIC:')
     print(dists.has_any_similar_phonetic_word(
         ['extracao', 'marmore', 'garimpo', 'mineracao', 'metais', 'metais',

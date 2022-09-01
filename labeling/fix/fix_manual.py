@@ -1,7 +1,6 @@
 import pandas as pd
 
-# 'mismatched-1-auto-manual-diff', 'mismatched-2-undefined', 'mismatched-3-no-manual-label'
-
+# 'mismatched-1-auto-manual-diff', 'mismatched-2-undefined', 'mismatched-3-no-manual-label', 'mismatched-4-updated'
 
 def import_csv(filepath, dtype, usecols, final_cols):
     print(f'\nReading from file "{filepath}"...')
@@ -11,19 +10,19 @@ def import_csv(filepath, dtype, usecols, final_cols):
 
 
 final_cols = ['order', 'urban_rural', 'landuse_id', 'landuse_description', 'manual_label']
-labeled_cols = ['order', 'urban_rural', 'landuse_id', 'landuse_description', 'manual_label', 'label', 'snorkel_category']
+labeled_cols = ['order', 'urban_rural', 'landuse_id', 'landuse_description', 'manual_label', 'pred_label', 'snorkel_category']
 original_cols = ['ordem', 'urban_rural', 'landuse_id', 'landuse_description', 'categoria_cnae']
 dtype = {'order': int, 'urban_rural': int, 'landuse_id': int, 'landuse_description': str, 'manual_label': str}
-dtype_labeled = {'order': int, 'urban_rural': int, 'landuse_id': int, 'landuse_description': str, 'manual_label': str, 'label': str, 'snorkel_category': int}
+dtype_labeled = {'order': int, 'urban_rural': int, 'landuse_id': int, 'landuse_description': str, 'manual_label': str, 'pred_label': str, 'snorkel_category': int}
 dtype_original = {'ordem': int, 'urban_rural': int, 'landuse_id': int, 'landuse_description': str, 'categoria_cnae': str}
 
 
 def main():
-    # original = import_csv('../input/sample-br-0.05-37625-semdup-manual-fix.csv', dtype, final_cols, final_cols)
-    original = import_csv('../output/no-manual/labeled-br-0.05-37625-no-manual.csv', dtype_labeled, labeled_cols, labeled_cols)
+    # original = import_csv('../input/sample-br-0.05-37625-fix.csv', dtype, final_cols, final_cols)
+    original = import_csv('../output/no-manual/labeled-br-0.05-37625.csv', dtype_labeled, labeled_cols, labeled_cols)
     # original = import_csv('../input/sample-br-0.05-37625-semdup-manual-fix.csv', dtype_original, original_cols, final_cols)
 
-    for filename in ['mismatched-4-updated']:
+    for filename in ['mismatched-7-updated']:
         file = import_csv(f'./{filename}.csv', dtype, final_cols, final_cols)
         for index, row in file.iterrows():
             original_manual_label = original.loc[original['order'] == row.order].iloc[0]

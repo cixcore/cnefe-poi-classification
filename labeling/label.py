@@ -34,13 +34,10 @@ def parse_args():
 
 def import_csv(filepath):
     print(f'\nReading from file "{filepath}"...')
-    cols = ['order', 'urban_rural', 'landuse_id', 'landuse_description', 'manual_label']
-    dtype = {'order': int, 'urban_rural': int, 'landuse_id': int, 'landuse_description': str, 'manual_label': str}
-    # cols = ['ordem', 'urban_rural', 'landuse_id', 'landuse_description', 'categoria_cnae']
-    # dtype = {'ordem': int, 'urban_rural': int, 'landuse_id': int, 'landuse_description': str, 'categoria_cnae': str}
+    cols = ['urban_rural', 'landuse_id', 'landuse_description']
+    dtype = {'urban_rural': int, 'landuse_id': int, 'landuse_description': str}
 
     df = pd.read_csv(f'{filepath}', encoding='utf-8', dtype=dtype, usecols=cols)
-    # df.columns = ['order', 'urban_rural', 'landuse_id', 'landuse_description', 'manual_label']
     return df
 
 
@@ -90,16 +87,15 @@ def main():
     applier = PandasLFApplier(lfs=lfs)
     L_train = applier.apply(df=df_train)
 
-    with open(f'output/{args.folder_output_path}/lfs-summary.txt', 'w') as f:
-        with pd.option_context('display.max_rows', None, 'display.max_columns', None):
-            print(f'{LFAnalysis(L=L_train, lfs=lfs).lf_summary()}\n', file=f)
+    LFAnalysis(L=L_train, lfs=lfs).lf_summary().to_csv(f'output/{args.folder_output_path}/lfs-summary.csv', index=False, encoding='utf-8')
     # print(df_train.iloc[L_train[:, 2] == poi_labels.scheme.wholesale_trade_except_motor_vehicles].sample(10, random_state=args.seed))
 
     preds = label_data(L_train, args.label_method)
     preds_readable = [get_label_name(p) for p in preds]
 
     print(f'Saving labeling to {args.output_path}...')
-    df_train.assign(pred_label=preds_readable, snorkel_category=preds).to_csv(args.output_path, index=False, encoding='utf-8')
+    df_train.index.name = 'id'
+    df_train.assign(pred_label=preds_readable, snorkel_category=preds).to_csv(args.output_path, encoding='utf-8')
 
     if args.write_lfs:
         print('Writing labeling_funcs_output_readable.json...')
@@ -111,7 +107,7 @@ def main():
                     if func_output != -1:
                         outputs.append(get_func_name(args, func_index))
                 json_obj = {
-                    'order': row['order'],
+                    'index': index,
                     'outputs': outputs
                 }
                 json_arr.append(json_obj)
