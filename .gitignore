@@ -17,4 +17,8 @@ labeling/output/just-sound/
 labeling/output/just-edit/
 labeling/output/br/
 labeling/output/no-manual/
-learning/bert-training/ckpts/
+learning/*-training/
+learning/thingies/
+learning/X_train.joblib
+learning/y_true.joblib
+learning/transformer.joblib

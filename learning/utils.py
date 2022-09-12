@@ -119,3 +119,7 @@ def label_str_to_int(df):
     for int_l in sorted(list(df['label'].unique())):
         print(f'{int_l}: {utils.scheme.name_to_label_2way[int_l]}')
     """
+
+
+def get_label_name(num):
+    return scheme.name_to_label_2way[num]
