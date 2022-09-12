@@ -15,4 +15,6 @@ labeling/output/with-dists/
 labeling/output/no-dists/
 labeling/output/just-sound/
 labeling/output/just-edit/
+labeling/output/br/
 labeling/output/no-manual/
+learning/bert-training/ckpts/
