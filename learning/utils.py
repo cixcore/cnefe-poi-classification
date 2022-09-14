@@ -94,7 +94,7 @@ def description(landuse_description):
                                 re.sub(r'[íĩî1]', 'i',
                                        re.sub(r'[óõô0]', 'o',
                                               re.sub(r'[úũûü]', 'u',
-                                                     re.sub(r'[ç]', 'c', str(landuse_description))))))))
+                                                     re.sub(r'[ç]', 'c', str(landuse_description).lower())))))))
 
 
 def label_to_int(manual_label):

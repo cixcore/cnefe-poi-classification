@@ -1425,7 +1425,6 @@ def get_lfs_list(word_dists, sound_dists):
         # use_manual_label,
         vacant_keywords,
         ongoing_construction,
-
         extractive_industries_keywords,
         manufacturing_industries_keywords,
         water_treatment_keywords,

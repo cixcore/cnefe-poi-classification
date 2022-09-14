@@ -19,7 +19,7 @@ def parse_args():
 
 
 if __name__ == '__main__':
-    output_file = 'shuffled-sample-classified-br.csv'
+    output_file = 'new-sample-classified-br.csv'
     args = parse_args()
     classifiers = ['rf', 'svc', 'lr']
     snorkel_output = '../labeling/output/br/snorkel-just-phonetic/labeled.csv'
@@ -37,6 +37,7 @@ if __name__ == '__main__':
     if not args.do_previous_append:
         df = pd.DataFrame()
     else:
+        print(f'Starting from previous {output_file}...')
         df = pd.read_csv(f'./{output_file}', encoding='utf-8',
                          dtype={'order': int, 'id': int, 'urban_rural': int, 'landuse_id': int,
                                 'landuse_description': str, 'label': str, 'clf': str},
@@ -71,14 +72,18 @@ if __name__ == '__main__':
 
             for label in labels:
                 df1 = clf_df[clf_df.label == label]
-                df1 = df1[~df1.landuse_description.isin(df.landuse_description)]
+                df1 = df1[~df1.landuse_description.isin(manual_df.landuse_description)]
                 if len(df1) > 80:
                     df2 = df1.sample(80, random_state=1)
                 else:
                     df2 = df1
                 df2['landuse_description'] = df2['landuse_description'].drop_duplicates()
                 df2 = df2[df2['landuse_description'].notna()]
-                df = pd.concat([df, df2.sample(10, random_state=1)])
+                if len(df2) < 10:
+                    sample = df2.sample(frac=1)
+                else:
+                    sample = df2.sample(10)
+                df = pd.concat([df, sample])
 
     if args.do_bert_append:
         time_to_import_csv = time()
@@ -88,17 +93,20 @@ if __name__ == '__main__':
         labels = list(bert_df['label'].unique())
         for label in labels:
             df1 = bert_df[bert_df.label == label]
-            df1 = df1[~df1.landuse_description.isin(df.landuse_description)]
+            df1 = df1[~df1.landuse_description.isin(manual_df.landuse_description)]
             if len(df1) > 80:
                 df2 = df1.sample(80, random_state=1)
             else:
                 df2 = df1
             df2['landuse_description'] = df2['landuse_description'].drop_duplicates()
             df2 = df2[df2['landuse_description'].notna()]
-            df = pd.concat([df, df2.sample(10, random_state=1)])
+            if len(df2) < 10:
+                sample = df2.sample(frac=1)
+            else:
+                sample = df2.sample(10)
+            df = pd.concat([df, sample])
 
     print('Saving sample csv...')
-    df = df.sample(frac=1)
     df.reset_index(drop=True, inplace=True)
     df.index.name = 'order'
     df.to_csv(f'./{output_file}', encoding='utf-8')

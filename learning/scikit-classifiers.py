@@ -46,19 +46,26 @@ def import_csv(filepath, has_manual):
         print(plot_count_tokens)
         sns.barplot(x=plot_count_tokens.index, y=plot_count_tokens.landuse_description, data=plot_count_tokens)
         plt.savefig('token_count.pdf')
+
+    if has_manual:
+        print("Generating label count csv...")
+        dfc = df.groupby('manual_label').count()
+        dfc.to_csv(f'./manual-annotation-distribution.csv', encoding='utf-8', index=False)
     return df
 
 
 nltk.download('punkt')
 
 directory = '.'
-file = 'sample-br-0.05-37625-manual-labeled.csv'
+file = 'manual-annotation-0.05-37625.csv'
 print(f'\n# Open and clean up {file}...')
 df_manual = import_csv(f'{directory}/{file}', has_manual=True)
 
 # string classes to int
 utils.label_str_to_int(df_manual)
 df_manual.reset_index(drop=True, inplace=True)
+df_manual = df_manual.drop_duplicates(['landuse_id', 'landuse_description', 'manual_label'])
+print(len(df_manual))
 
 df2 = df_manual.groupby('label').count()
 sns.barplot(x=df2.index, y=df2.manual_label, data=df2)
@@ -82,16 +89,17 @@ if should_generate_train:
     dump(X_train, './X_train.joblib')
     dump(y_true, './y_true.joblib')
     dump(transformer, './transformer.joblib')
+else:
+    print(f'Loading X_train, y_true...')
+    X_train = load('./X_train.joblib')
+    y_true = load('./y_true.joblib')
+    transformer = load('./transformer.joblib')
 
-print(f'Loading X_train, y_true...')
-X_train = load('./X_train.joblib')
-y_true = load('./y_true.joblib')
-transformer = load('./transformer.joblib')
 print(X_train.shape)
 print(len(y_true))
 
 seed = 1
-choose = 1
+choose = 3
 if choose == 3:
     clf = RandomForestClassifier(random_state=seed)
     param_grid = {'n_estimators': [100]}
@@ -112,8 +120,7 @@ metric = ['accuracy', 'f1_macro', 'f1_micro']
 
 cv = 1
 gridsr = 2
-choice = 3
-
+choice = 1
 if choice == cv:
     print('# Cross Validation predict...')
     time_cv = time()
