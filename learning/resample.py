@@ -65,6 +65,7 @@ if __name__ == '__main__':
             print(f'\nImporting {clf.upper()} labeled instances...')
             time_to_import_csv = time()
             clf_df = pd.read_csv(f'./{clf}-training/labeled-br.csv', encoding='utf-8', dtype=dtype, usecols=cols)
+            print(len(clf_df))
             print(f'Finished importing {clf.upper()} labeled instances csv. (took {time() - time_to_import_csv}s)')
 
             clf_df['clf'] = clf
@@ -109,6 +110,6 @@ if __name__ == '__main__':
     print('Saving sample csv...')
     df.reset_index(drop=True, inplace=True)
     df.index.name = 'order'
-    df.to_csv(f'./{output_file}', encoding='utf-8')
+    df.to_csv(f'./{output_file}-bert', encoding='utf-8')
 
     print('Done :).')

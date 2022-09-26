@@ -27,16 +27,16 @@ if __name__ == '__main__':
     df['label'] = df['manual_label'].apply(lambda x: utils.label_to_int(x))
 
     df2 = df.groupby('label').count()
-    df2 = df2.rename(columns={'landuse_description': 'Count (by million)'})
+    df2 = df2.rename(columns={'landuse_description': 'Count'})
     df2.index.name = 'Label'
     print(df2)
     df2.to_csv(f'./manual_label_dist_br.csv', encoding='utf-8')
-    sns.barplot(x=df2.index, y=df2['Count (by million)'], data=df2).tick_params(labelsize=5)
+    sns.barplot(x=df2.index, y=df2['Count'], data=df2).tick_params(labelsize=5)
     plt.savefig('manual_label_dist.pdf')
     #######
+
     """
-    
-    df = pd.read_csv('./svc-training/labeled-br.csv', encoding='utf-8',
+    df = pd.read_csv('./bert-training/labeled-br.csv', encoding='utf-8',
                      dtype={'landuse_description': str, 'label': str, 'pred_label': int},
                      usecols=['landuse_description', 'label', 'pred_label'])
 
@@ -47,12 +47,12 @@ if __name__ == '__main__':
     df2 = df2.rename(columns={'label': 'Count (by million)'})
     df2.index.name = 'Label'
     print(df2)
-    df2.to_csv(f'./svc-training/label_dist_svm_br.csv', encoding='utf-8')
+    df2.to_csv(f'./bert-training/label_dist_bert_br.csv', encoding='utf-8')
     sns.barplot(x=df2.index, y=df2['Count (by million)'], data=df2).tick_params(labelsize=5)
-    plt.savefig('./svc-training/label_dist_svm_br.pdf')
+    plt.savefig('./bert-training/label_dist_bert_br.pdf')
     #######
-    """
 
+    """
     df = pd.read_csv('../labeling/output/br/snorkel-just-phonetic/labeled.csv', encoding='utf-8',
                      dtype={'landuse_description': str, 'label': str},
                      usecols=['landuse_description', 'label'])

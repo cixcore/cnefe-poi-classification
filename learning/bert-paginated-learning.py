@@ -148,6 +148,8 @@ batch_size = 32
 epochs = 3
 MAX_STEPS = math.ceil(len(train) / batch_size) * epochs
 eval_steps = math.ceil(MAX_STEPS / min(25, len(train)))
+print(f'MAX_STEPS: {MAX_STEPS}')
+print(f'eval_steps: {eval_steps}')
 hidden_dropout_prob = 0.1
 learning_rate = 4e-05
 attention_probs_dropout_prob = hidden_dropout_prob
