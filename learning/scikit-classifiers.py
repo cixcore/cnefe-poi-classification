@@ -99,7 +99,7 @@ print(X_train.shape)
 print(len(y_true))
 
 seed = 1
-choose = 3
+choose = 2
 if choose == 3:
     clf = RandomForestClassifier(random_state=seed)
     param_grid = {'n_estimators': [100]}
@@ -120,7 +120,7 @@ metric = ['accuracy', 'f1_macro', 'f1_micro']
 
 cv = 1
 gridsr = 2
-choice = 1
+choice = 3
 if choice == cv:
     print('# Cross Validation predict...')
     time_cv = time()
@@ -148,10 +148,12 @@ if choice == cv:
             }
         }
         json.dump(scores, f)
-else:  # choice == gridsr
+elif choice == gridsr:
     estimator = clf
     clf = GridSearchCV(estimator=estimator, param_grid=param_grid, verbose=3, n_jobs=-1,
                        scoring=('accuracy', 'f1_macro', 'f1_micro'), refit='f1_macro')
+else:
+    pass
 
 print('# Fitting whole training set...')
 time_learning = time()

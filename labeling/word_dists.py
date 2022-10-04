@@ -34,6 +34,25 @@ class WordDistanceMeasurer:
         return False
 
     def test_dists(self):
+        fut_dist = self.keyboard.word_distance('construcao', 'contrucao')
+        max_len = max(len('construcao'), len('futebol'))
+        print(f'futebol-fotebol dist: {fut_dist} '
+              f'| max len: {max_len} | percentage: {fut_dist/max_len}')
+
+        ou_dist = self.keyboard.char_distance('l', 'u')
+        ie_dist = self.keyboard.char_distance('i', 'e')
+        ao_dist = self.keyboard.char_distance('a', 'o')
+        ul_dist = self.keyboard.char_distance('u', 'l')
+        print(f'o-l: {ou_dist} | i-e: {ie_dist} | a-o: {ao_dist} | u-l: {ul_dist}')
+
+        lanche_dist = self.keyboard.word_distance('lanche', 'lancha')
+        max_len = max(len('lanche'), len('lancha'))
+        print(f'lanche-lancha dist: {lanche_dist} '
+              f'| max len: {max_len} | percentage: {lanche_dist/max_len}')
+
+        ea_dist = self.keyboard.char_distance('a', 'e')
+        print(f'a-e: {ea_dist}')
+
         print(self.keyboard.word_distance("lancha", "lanche"))
         print(self.keyboard.word_distance("lancho", "lanchi"))
         print(self.keyboard.word_distance("lancho", "lancha"))
@@ -58,4 +77,5 @@ class WordDistanceMeasurer:
 
 
 dists = WordDistanceMeasurer()
+dists.test_dists()
 
